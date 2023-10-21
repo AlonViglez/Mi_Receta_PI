@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtmedicamento1"
+            android:layout_width="170dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:lineSpacingExtra="-7sp"
+            android:text="Medicamento"
+            android:textAlignment="center"
+            android:textColor="#828282"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/image_remove"
+            android:layout_width="52dp"
+            android:layout_height="41dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="-35dp"
+            android:background="@drawable/image_55"
+            android:backgroundTint="#FFFFFF"
+            android:onClick="showHideContent"
+            app:srcCompat="@drawable/image_56"/>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner1"
+            android:layout_width="155dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/diseno_background"
+            android:textAlignment="center"
+            android:textColor="#736A6A" />
+
+        <EditText
+            android:id="@+id/editDosis"
+            android:layout_width="155dp"
+            android:layout_height="37dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Dosis"
+            android:textSize="12sp"
+            android:background="@drawable/diseno_background"
+            android:textAlignment="center"
+            android:textColor="#736A6A"
+            tools:ignore="RtlCompat" />
+
+        <EditText
+            android:id="@+id/editDuracion"
+            android:layout_width="155dp"
+            android:layout_height="37dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:hint="Duración"
+            android:textSize="12sp"
+            android:background="@drawable/diseno_background"
+            android:textAlignment="center"
+            android:textColor="#736A6A"
+            tools:ignore="RtlCompat"/>
+
+        <EditText
+            android:id="@+id/editIntervalo"
+            android:layout_width="155dp"
+            android:layout_height="37dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Intervalo"
+            android:textSize="12sp"
+            android:background="@drawable/diseno_background"
+            android:textAlignment="center"
+            android:textColor="#736A6A"
+            tools:ignore="RtlCompat"/>
+
+        <EditText
+            android:id="@+id/editEspecificaciones"
+            android:layout_width="330dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:hint="Especificaciones"
+            android:textSize="12sp"
+            android:background="@drawable/diseno_background"
+            android:textAlignment="center"
+            android:textColor="#736A6A" />
+
+    </LinearLayout>
+
+</LinearLayout>

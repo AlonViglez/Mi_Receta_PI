@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738457725734",
+    "project_id": "proyectointegrador-15f59",
+    "storage_bucket": "proyectointegrador-15f59.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738457725734:android:9b39aad5ac75a021392fe7",
+        "android_client_info": {
+          "package_name": "com.example.nav_drawer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAez8Qa_F1vfrJeuB9pBMGTjjZ7Lyru4nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

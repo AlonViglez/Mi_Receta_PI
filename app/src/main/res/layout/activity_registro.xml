@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registro">
+
+    <ImageView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/rectangle1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:id="@+id/l1"
+        android:layout_below="@id/header"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/mr"
+            android:layout_width="300dp"
+            android:layout_height="155dp"
+            android:background="@drawable/mr" />
+
+        <TextView
+            android:text="@string/registro"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/mireceta" />
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/l1"
+        android:id="@+id/scroll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/l2">
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Nombre"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nombre"
+                    android:hint="Ingrese su nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Correo Electrónico"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
+                    android:hint="@string/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Fecha de nacimiento"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/fecha"
+                    android:hint="Seleccionar fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutSexo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_marginTop="2dp"
+                    android:text="Sexo"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"/>
+
+                <RadioButton
+                    android:id="@+id/radioMasculino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masculino"
+                    android:layout_marginBottom="2dp" />
+
+                <RadioButton
+                    android:id="@+id/radioFemenino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Femenino"
+                    android:layout_marginBottom="2dp" />
+                <RadioButton
+                    android:id="@+id/radioOtros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Otros"
+                    android:layout_marginBottom="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Contraseña"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="start">
+
+                <!-- TextInputLayout con el EditText para la contraseña -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        android:hint="@string/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- TextView para mostrar el mensaje de error -->
+                <TextView
+                    android:id="@+id/textViewErrorPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseñas incorrectas"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Repetir Contraseña"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="start">
+
+                <!-- TextInputLayout con el EditText para la contraseña -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/repetirPassword"
+                        android:hint="@string/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- TextView para mostrar el mensaje de error -->
+                <TextView
+                    android:id="@+id/textViewErrorRepetirPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseñas incorrectas"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/textViewCampos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debe llenar todos los campos"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone" />
+            <ProgressBar
+                android:id="@+id/progressBarr"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:text="@string/registro"
+                android:id="@+id/btn_registro"
+                android:layout_marginTop="20dp"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="@color/buttonmireceta"/>
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:id="@+id/loginNow"
+                android:text="@string/inicio_de_sesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/mireceta" />
+
+
+            <ImageView
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/rectangle2" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
