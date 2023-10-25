@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+//buenos dias
+
 public class ActivityCricketers extends AppCompatActivity {
 
     RecyclerView recyclerCricketers;
