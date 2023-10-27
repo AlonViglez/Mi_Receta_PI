@@ -27,15 +27,23 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
+    String admin = "jvilla14@ucol.mx";
 
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
+            String userEmail = currentUser.getEmail();
+            if(userEmail != null && userEmail.equals(admin)){
+                Intent adminCheck = new Intent(getApplicationContext(), ViewAdmin.class);
+                startActivity(adminCheck);
+                finish();
+            }else{
+                Intent userCheck = new Intent(getApplicationContext(), ViewPacient.class);
+                startActivity(userCheck);
+                finish();
+            }
         }
     }
 
@@ -54,7 +62,7 @@ public class Login extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Registro.class);
+                Intent intent = new Intent(getApplicationContext(), IdentifyRegister.class);
                 startActivity(intent);
                 finish();
             }
@@ -83,12 +91,17 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
+                                if (task.isSuccessful() && email.equals(admin)) {
+                                    Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso", Toast.LENGTH_SHORT).show();;
+                                    Intent ad = new Intent(getApplicationContext(),ViewAdmin.class);
+                                    startActivity(ad);
+                                    finish();
+                                }else if(task.isSuccessful()){
                                     Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso", Toast.LENGTH_SHORT).show();;
                                     Intent intent = new Intent(getApplicationContext(),ViewPacient.class);
                                     startActivity(intent);
                                     finish();
-                                } else {
+                                }else {
                                     Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.",
                                             Toast.LENGTH_SHORT).show();
                                 }
