@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CricketerAdapter extends RecyclerView.Adapter<CricketerAdapter.CricketerView> {
-
+    //Hola soy messi
     ArrayList<Cricketer> cricketersList = new ArrayList<>();
 
     public CricketerAdapter(ArrayList<Cricketer> cricketersList) {
