@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Registro">
-
+    tools:context=".RegistroDoctor">
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -37,8 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/mireceta" />
-
-
     </LinearLayout>
 
     <ScrollView
@@ -134,7 +131,6 @@
                         android:layout_height="wrap_content"
                         android:text="Masculino"
                         android:layout_marginBottom="2dp" />
-
                     <RadioButton
                         android:id="@+id/radioFemenino"
                         android:layout_width="wrap_content"
@@ -200,7 +196,6 @@
                 android:orientation="vertical"
                 android:gravity="start">
 
-                <!-- TextInputLayout con el EditText para la contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="350dp"
                     android:layout_height="wrap_content">
@@ -220,8 +215,85 @@
                     android:text="Contraseñas incorrectas"
                     android:textColor="@android:color/holo_red_dark"
                     android:visibility="gone" />
-
             </LinearLayout>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Número de teléfono"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/telefonoCelular"
+                    android:hint="Número de Teléfono Celular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:digits="0123456789" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Subir Foto de INE u otra Identificación Oficial"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" />
+            <Button
+                android:id="@+id/btnSubirINE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/buttonmireceta"
+                android:text="Subir INE"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_gravity="start" />
+            <ImageView
+                android:id="@+id/imagenINE"
+                android:layout_width="400dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Subir Foto de la Cédula Profesional"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" />
+            <Button
+                android:id="@+id/btnSubirCedula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/buttonmireceta"
+                android:text="Subir Cédula Profesional"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_gravity="start" />
+            <ImageView
+                android:id="@+id/imagenCedula"
+                android:layout_width="400dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Especialidad Médica"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" />
+            <Spinner
+                android:id="@+id/especialidadMedicaSpinner"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:entries="@array/especialidades_medicas"
+                android:background="@drawable/spinner_border"
+            />
             <TextView
                 android:id="@+id/textViewCampos"
                 android:layout_width="wrap_content"
@@ -253,8 +325,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mireceta" />
-
-
             <ImageView
                 android:id="@+id/footer"
                 android:layout_width="match_parent"
@@ -262,9 +332,6 @@
                 android:layout_alignParentBottom="true"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/rectangle2" />
-
         </LinearLayout>
-
     </ScrollView>
-
 </RelativeLayout>
