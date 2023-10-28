@@ -27,20 +27,20 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
-    String admin = "jvilla14@ucol.mx";
+    String admin = "jvilla14@ucol.mx"; //ADMIN USER
 
     @Override
-    public void onStart() {
+    public void onStart() { //AL INICIAR LA APP SI ESTA UNA CUENTA ACTIVA TE REDIRECCIONA AUTOMATICAMENTE
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             String userEmail = currentUser.getEmail();
             if(userEmail != null && userEmail.equals(admin)){
-                Intent adminCheck = new Intent(getApplicationContext(), ViewAdmin.class);
+                Intent adminCheck = new Intent(getApplicationContext(), ViewAdmin.class); //VISTA ADMIN
                 startActivity(adminCheck);
                 finish();
             }else{
-                Intent userCheck = new Intent(getApplicationContext(), ViewPacient.class);
+                Intent userCheck = new Intent(getApplicationContext(), ViewPacient.class); //VISTA PACIENTE
                 startActivity(userCheck);
                 finish();
             }
@@ -62,7 +62,7 @@ public class Login extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), IdentifyRegister.class);
+                Intent intent = new Intent(getApplicationContext(), RegistroDoctor.class);//Mandar al activity para registrar si es doctor o usuario(IdentifyRegister)
                 startActivity(intent);
                 finish();
             }
@@ -91,17 +91,17 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful() && email.equals(admin)) {
+                                if (task.isSuccessful() && email.equals(admin)) { //USUARIO ADMIN
                                     Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso", Toast.LENGTH_SHORT).show();;
                                     Intent ad = new Intent(getApplicationContext(),ViewAdmin.class);
                                     startActivity(ad);
                                     finish();
-                                }else if(task.isSuccessful()){
+                                }else if(task.isSuccessful()){ //USUARIO NORMAL
                                     Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso", Toast.LENGTH_SHORT).show();;
                                     Intent intent = new Intent(getApplicationContext(),ViewPacient.class);
                                     startActivity(intent);
                                     finish();
-                                }else {
+                                }else { //ERROR
                                     Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.",
                                             Toast.LENGTH_SHORT).show();
                                 }

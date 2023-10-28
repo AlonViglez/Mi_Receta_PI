@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.Application;
 import com.google.firebase.FirebaseApp;
@@ -44,6 +46,7 @@ public class Registro extends AppCompatActivity {
     TextInputEditText editTextEmail,editTextPassword,editNombre,editRepetirPass;
     LinearLayout linearLayoutSexo;
     RadioButton radioMasculino, radioFemenino, radioOtros;
+    RadioGroup sexoRadioGroup;
     EditText editFecha;
     Button buttonReg;
     ProgressBar progressBar;
@@ -70,23 +73,19 @@ public class Registro extends AppCompatActivity {
         radioMasculino = findViewById(R.id.radioMasculino);
         radioFemenino = findViewById(R.id.radioFemenino);
         radioOtros = findViewById(R.id.radioOtros);
+        sexoRadioGroup = findViewById(R.id.sexoRadioGroup);
         //SELECCIONAR SEXO
-        radioMasculino.setOnClickListener(new View.OnClickListener() {
+        sexoRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                sexo = "Masculino";
-            }
-        });
-        radioFemenino.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sexo = "Femenino";
-            }
-        });
-        radioOtros.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sexo = "Otros";
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Verificar cuál RadioButton se ha seleccionado
+                if(checkedId == R.id.radioFemenino){
+                    sexo = "Femenino";
+                } else if (checkedId == R.id.radioMasculino) {
+                    sexo = "Masculino";
+                } else if (checkedId == R.id.radioOtros) {
+                    sexo = "Otros";
+                }
             }
         });
         //MOSTRAR PICKER DE CALENDARIO EN FECHA DE NACIMIENTO
@@ -203,6 +202,7 @@ public class Registro extends AppCompatActivity {
     //GUARDAR DATOS EN FIRESTORE
     private void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo) {
         Map<String, Object> userData = new HashMap<>();
+        userData.put("id", null);
         userData.put("nombre", nombre);
         userData.put("correo", email);
         userData.put("password", password);
@@ -210,15 +210,34 @@ public class Registro extends AppCompatActivity {
         userData.put("fechanac", timestamp);
         userData.put("sexo", sexo);
 
-        mFirestore.collection("users").document(email)
-                .set(userData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        mFirestore.collection("users")
+                .add(userData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(DocumentReference documentReference) {
                         // Usuario registrado con éxito en Firebase y datos guardados en Firestore
-                        finish();
-                        startActivity(new Intent(Registro.this, MainActivity.class));
-                        Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                        String documentId = documentReference.getId(); // Obtén el ID generado por Firebase
+
+                        // Actualiza el campo "id" con el valor del ID generado
+                        mFirestore.collection("users").document(documentId)
+                                .update("id", documentId)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // Campo "id" actualizado con éxito
+                                        finish();
+                                        startActivity(new Intent(Registro.this, MainActivity.class));
+                                        Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Error al actualizar el campo "id"
+                                        Log.e("Registro", "Error al actualizar el campo 'id'", e);
+                                        Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
