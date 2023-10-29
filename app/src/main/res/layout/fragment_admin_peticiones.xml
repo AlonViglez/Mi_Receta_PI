@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminPeticiones">
+    <!-- Título principal "Peticiones" centrado -->
+    <TextView
+        android:id="@+id/titlePeticiones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Peticiones"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <!-- Contenedor de tarjetas de doctores -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titlePeticiones">
+
+        <LinearLayout
+            android:id="@+id/doctorsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <!-- Elementos de tu tarjeta (ImageView, TextView, Button, etc.) -->
+        <ImageView
+            android:id="@+id/doctorIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/paciente1"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/doctorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/doctorIcon"
+            android:layout_marginStart="16dp"
+            android:text=""
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="9dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/especialidadMedica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/doctorIcon"
+            android:layout_below="@id/doctorName"
+            android:layout_marginStart="16dp"
+            android:text=""
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"/>
+        <Button
+            android:id="@+id/verButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Ver"
+            android:backgroundTint="@color/buttonmireceta" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nav_drawer.viewpaciente.HomePaciente;
 import com.example.nav_drawer.viewpaciente.ViewPacient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
         if(currentUser != null){
             String userEmail = currentUser.getEmail();
             if(userEmail != null && userEmail.equals(admin)){
-                Intent adminCheck = new Intent(getApplicationContext(), ViewAdmin.class); //VISTA ADMIN
+                Intent adminCheck = new Intent(getApplicationContext(), MainActivity.class); //VISTA ADMIN
                 startActivity(adminCheck);
                 finish();
             }else{
@@ -70,7 +71,6 @@ public class Login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 progressBar.setVisibility(View.VISIBLE);
                 String email, password;
                 email = String.valueOf(editTextEmail.getText());
@@ -93,7 +93,7 @@ public class Login extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful() && email.equals(admin)) { //USUARIO ADMIN
                                     Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso", Toast.LENGTH_SHORT).show();;
-                                    Intent ad = new Intent(getApplicationContext(),ViewAdmin.class);
+                                    Intent ad = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(ad);
                                     finish();
                                 }else if(task.isSuccessful()){ //USUARIO NORMAL
