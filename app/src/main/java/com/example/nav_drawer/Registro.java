@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nav_drawer.viewpaciente.ViewPacient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -226,7 +227,7 @@ public class Registro extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         // Campo "id" actualizado con éxito
                                         finish();
-                                        startActivity(new Intent(Registro.this, MainActivity.class));
+                                        startActivity(new Intent(Registro.this, ViewPacient.class));
                                         Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
                                     }
                                 })

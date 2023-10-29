@@ -50,7 +50,8 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_administrador);
-
+        auth = FirebaseAuth.getInstance();
+        user = auth .getCurrentUser();
         if (user == null){
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);

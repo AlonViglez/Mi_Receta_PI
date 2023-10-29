@@ -285,7 +285,7 @@ public class RegistroDoctor extends AppCompatActivity {
                                                 // Campo "id" actualizado con éxito
                                                 finish();
                                                 startActivity(new Intent(RegistroDoctor.this, MainActivity.class));
-                                                Toast.makeText(RegistroDoctor.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(RegistroDoctor.this, "Doctor registrado con éxito", Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
