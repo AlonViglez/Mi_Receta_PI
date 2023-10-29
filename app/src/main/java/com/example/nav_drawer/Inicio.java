@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
+//CODIGO PARA LA ANIMACION DEL PRINCIPIO DE LA APP
 public class Inicio extends AppCompatActivity {
 
     @Override
