@@ -77,16 +77,16 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     //fragmentos del nav
                     int itemId = item.getItemId();
-                    if(itemId == R.id.bottom_citas_pacientes) {
-                        openFragment(new CitasPacientes());
+                    if(itemId == R.id.bottom_chats_paciente) {
+                        openFragment(new FragmentChatPaciente());
                         return true;
-                    }else if(itemId == R.id.bottom_diagnosticar_pacientes){
-                        openFragment(new DiagnosticarPaciente());
+                    }else if(itemId == R.id.bottom_doctores_paciente){
+                        openFragment(new FragmentDoctoresPaciente());
                         return true;
-                    }else if(itemId == R.id.bottom_recetas_paciente){
-                        openFragment(new RecetaPaciente());
+                    }else if(itemId == R.id.bottom_tratamiento_paciente){
+                        openFragment(new FragmentTratamientoPaciente());
                         return true;
-                    }else if(itemId == R.id.bottom_historial_pacientes){
+                    }else if(itemId == R.id.bottom_historial_paciente){
                         openFragment(new HistorialPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_perfil_paciente){
@@ -94,6 +94,11 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                         return true;
                     }
                     return false;
+                    /*verificar si se deben elimninar:
+                    *CitasPacientes()
+                    * DiagnosticarPaciente()
+                    * RecetaPaciente()
+                     */
                 }
             });
             //al entrar te mandara a esta primero

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_citas_pacientes"
-        android:title="Citas"
-        android:icon="@drawable/citas"
+        android:id="@+id/bottom_chats_paciente"
+        android:title="Chats"
+        android:icon="@drawable/icon_message"
         android:checkable="true"
         android:background="@drawable/selector_icon_background"/>
     <item
-        android:id="@+id/bottom_diagnosticar_pacientes"
-        android:title="Diagnosticar"
-        android:icon="@drawable/diagnosticar"
+        android:id="@+id/bottom_doctores_paciente"
+        android:title="Doctores"
+        android:icon="@drawable/icon_doctor"
         android:checkable="true"
         android:background="@drawable/selector_icon_background"/>
     <item
-        android:id="@+id/bottom_recetas_paciente"
-        android:title="Receta"
-        android:icon="@drawable/recetar"
+        android:id="@+id/bottom_tratamiento_paciente"
+        android:title="Tratamientos"
+        android:icon="@drawable/icon_tratamiento"
         android:checkable="true"
         android:background="@drawable/selector_icon_background"/>
     <item
-        android:id="@+id/bottom_historial_pacientes"
+        android:id="@+id/bottom_historial_paciente"
         android:title="Historial"
         android:icon="@drawable/historial"
         android:checkable="true"

@@ -124,7 +124,7 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
 
     private void openFragment(Fragment fragment){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container_pacient, fragment);
+        transaction.replace(R.id.fragment_container_admin, fragment);
         transaction.commit();
     }
 }
