@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_solicitud"
+        android:title="Solicitud"
+        android:icon="@drawable/citas"
+        android:checkable="true"
+        android:background="@drawable/selector_icon_background"/>
+    <item
+        android:id="@+id/bottom_doctores"
+        android:title="Doctores"
+        android:icon="@drawable/diagnosticar"
+        android:checkable="true"
+        android:background="@drawable/selector_icon_background"/>
+
+    <item
+        android:id="@+id/bottom_perfil_administrador"
+        android:title="Perfil"
+        android:icon="@drawable/icon_perfil"
+        android:checkable="true"
+        android:background="@drawable/selector_icon_background"/>
+</menu>

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Navdrawer"
         tools:targetApi="31">
         <activity
+            android:name=".viewAdmin.ViewAdministrador"
+            android:exported="false" />
+        <activity
             android:name=".IdentifyRegister"
             android:exported="false" />
         <activity
