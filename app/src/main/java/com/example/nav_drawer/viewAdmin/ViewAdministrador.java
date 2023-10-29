@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.nav_drawer.AdminPeticiones;
 import com.example.nav_drawer.ContactarFragment;
 import com.example.nav_drawer.GuiaFragment;
 import com.example.nav_drawer.HistoryFragment;
@@ -76,7 +77,7 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
                     //fragmentos del nav
                     int itemId = item.getItemId();
                     if(itemId == R.id.bottom_solicitud) {
-                        openFragment(new FragmentSolicitud());
+                        openFragment(new AdminPeticiones());
                         return true;
                     }else if(itemId == R.id.bottom_doctores){
                         openFragment(new FragmentDoctores());
@@ -90,7 +91,7 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
             });
             //al entrar te mandara a esta primero
             fragmentManager = getSupportFragmentManager();
-            openFragment(new HomePaciente());
+            openFragment(new AdminPeticiones());
         /*
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
