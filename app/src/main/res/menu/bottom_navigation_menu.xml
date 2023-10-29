@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_home"
-        android:title="Citas"
-        android:icon="@drawable/icon_file"
+        android:id="@+id/bottom_notify"
+        android:title="Notificaciones"
+        android:icon="@drawable/icon_notify"
         android:checkable="true"
         android:background="@drawable/selector_icon_background"/>
     <item
-        android:id="@+id/bottom_recetas"
-        android:title="recetar"
-        android:icon="@drawable/icon_realizado"
-        android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
-    <item
-        android:id="@+id/bottom_recetar"
-        android:title="Recetar"
-        android:icon="@drawable/baseline_add_circle_24"
-        android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
-    <item
-        android:id="@+id/bottom_diagnosticar"
-        android:title="Diagnosticar"
-        android:icon="@drawable/icon_search"
+        android:id="@+id/bottom_chats"
+        android:title="Chats"
+        android:icon="@drawable/icon_message"
         android:checkable="true"
         android:background="@drawable/selector_icon_background"/>
     <item

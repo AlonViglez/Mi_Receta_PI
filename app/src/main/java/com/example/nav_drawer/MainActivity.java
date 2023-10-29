@@ -72,25 +72,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     int itemId = item.getItemId();
-                    if(itemId == R.id.bottom_home) {
+                    if(itemId == R.id.bottom_notify) {
                         openFragment(new CitasFragment());
                         return true;
-                    }else if(itemId == R.id.bottom_recetas){
+                    }else if(itemId == R.id.bottom_chats){
                         openFragment(new RecetarFragment());
-                        return true;
-                    }else if(itemId == R.id.bottom_diagnosticar){
-                        openFragment(new DiagnosticarFragment());
                         return true;
                     }else if(itemId == R.id.bottom_perfil){
                         openFragment(new PerfilFragment());
-                        return true;
-                    }else if(itemId == R.id.bottom_recetar){
-                        openFragment(new AddFragment());
                         return true;
                     }
                     return false;
                 }
             });
+            /* archivos que se tiene verificar para eliminar o no
+            * DiagnosticarFragment()
+            * AddFragment()
+            * CitasFragment()
+            * RecetarFragment()
+            * */
 
             fragmentManager = getSupportFragmentManager();
             openFragment(new HomeFragment());
