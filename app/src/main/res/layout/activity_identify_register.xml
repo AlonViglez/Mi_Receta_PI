@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IdentifyRegister">
+
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/rectangle1" />
+
+    <!-- Contenedor vertical para el TextView y los botones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,26 +31,74 @@
 
         <TextView
             android:text="Selecciona tu opción de
-            registro:"
+             registro:"
             android:textSize="25sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/mireceta" />
-    </LinearLayout>
-    <Button
-        android:id="@+id/btn_doctor"
-        android:layout_below="@id/l1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:backgroundTint="@color/buttonmireceta"
-        android:gravity="center">
-    </Button>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/btn_usuario"
+                    android:layout_width="120dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/grupo" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Usuario"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif"
+                    android:textColor="@color/mireceta"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/btn_doctor"
+                    android:layout_width="120dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/equipo_medico" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Doctor"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif"
+                    android:textColor="@color/mireceta"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
     <ImageView
         android:id="@+id/footer"
         android:layout_width="match_parent"

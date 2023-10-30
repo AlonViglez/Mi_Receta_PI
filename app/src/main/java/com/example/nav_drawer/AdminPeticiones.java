@@ -8,14 +8,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.nav_drawer.viewAdmin.FragmentDetails;
+import com.example.nav_drawer.viewAdmin.FragmentPerfilAdmin;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.example.nav_drawer.R;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,14 +71,11 @@ public class AdminPeticiones extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_peticiones, container, false);
-
-        // Inicializa Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Obtén una referencia al contenedor de tarjetas
+        // Obtener una referencia al contenedor de tarjetas
         LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainer);
 
-        // Realiza una consulta para obtener los datos de los doctores
+        // Realizar una consulta para obtener los datos de los doctores
         db.collection("doctor")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -82,16 +83,35 @@ public class AdminPeticiones extends Fragment {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String nombreDoctor = document.getString("nombre");
                             String especialidadMedica = document.getString("especialidad");
-
-                            // Infla el diseño de la tarjeta personalizado
+                            String idDoctor = document.getString("id");
+                            // Inflar el diseño de la tarjeta personalizado
                             View cardView = getLayoutInflater().inflate(R.layout.doctor_card, null);
+                            //Boton
+                            Button verButton = cardView.findViewById(R.id.verButton);
+                            verButton.setTag(idDoctor); // Establece el ID del doctor como etiqueta en el botón
+                            verButton.setOnClickListener(View -> {
+                                // Crear una instancia del fragmento de destino (DoctorDetailFragment)
+                                FragmentDetails doctorDetailFragment = new FragmentDetails();
 
-                            // Encuentra las vistas dentro de la tarjeta
+                                // Pasa cualquier dato al nuevo fragmento si es necesario
+                                // Por ejemplo, puedes pasar el ID del doctor u otra información relevante:
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", idDoctor); // Reemplazar con el ID del doctor real
+                                doctorDetailFragment.setArguments(bundle);
+
+                                // Reemplazar el fragmento actual con el nuevo fragmento
+                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.doctorsContainer, doctorDetailFragment);
+                                transaction.addToBackStack(null); // Agregar la transacción a la pila de retroceso para habilitar la navegación hacia atrás
+                                transaction.commit();
+                                // Ocultar las tarjetas (cards)
+                                doctorsContainer.setVisibility(View.GONE);
+                            });
+                            // Encontrar las vistas dentro de la tarjeta
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
-
-                            // Configura los elementos de la tarjeta
+                            // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
 
@@ -99,10 +119,9 @@ public class AdminPeticiones extends Fragment {
                             doctorsContainer.addView(cardView);
                         }
                     } else {
-                        // Maneja el caso de error aquí
+                        // Si hubiera un error
                     }
                 });
-
         return view;
     }
 }
