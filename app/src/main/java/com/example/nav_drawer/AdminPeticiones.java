@@ -95,14 +95,19 @@ public class AdminPeticiones extends Fragment {
 
                             // Establecer un OnClickListener para el botón de "Detalles"
                             ver.setOnClickListener(v -> {
-                                // Ocultar el fragmento actual (AdminPeticiones)
+                                // Crear una instancia del fragmento FragmentDetails
+                                FragmentDetails fragmentDetails = new FragmentDetails();
+
+                                // Obtener el FragmentManager y comenzar una transacción
                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                // Ocultar el fragmento actual (AdminPeticiones)
                                 fragmentTransaction.hide(this);  // Ocultar el fragmento actual
                                 fragmentTransaction.addToBackStack(null);
 
                                 // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
-                                fragmentTransaction.replace(R.id.fragmentContainerDetails, new FragmentDetails());
+                                fragmentTransaction.replace(R.id.fragmentContainerDetails, fragmentDetails);
                                 fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
                             });
