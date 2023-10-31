@@ -3,6 +3,8 @@ package com.example.nav_drawer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import com.example.nav_drawer.AdminPeticiones;
+import com.example.nav_drawer.viewAdmin.FragmentDetails;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.nav_drawer.viewAdmin.FragmentDetails;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,21 +97,13 @@ public class AdminPeticiones extends Fragment {
 
                             // Establecer un OnClickListener para el botón de "Detalles"
                             ver.setOnClickListener(v -> {
-                                // Crear una instancia del fragmento FragmentDetails
-                                FragmentDetails fragmentDetails = new FragmentDetails();
+                                FragmentManager fragmentManager = getChildFragmentManager(); // Usar getChildFragmentManager() en lugar de getSupportFragmentManager() cuando trabajas con Fragmentos
 
-                                // Obtener el FragmentManager y comenzar una transacción
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                                // Ocultar el fragmento actual (AdminPeticiones)
-                                fragmentTransaction.hide(this);  // Ocultar el fragmento actual
-                                fragmentTransaction.addToBackStack(null);
-
-                                // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
-                                fragmentTransaction.replace(R.id.fragmentContainerDetails, fragmentDetails);
-                                fragmentTransaction.addToBackStack(null);
-                                fragmentTransaction.commit();
+                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                transaction.replace(R.id.doctorsContainer, new FragmentDetails()); // Reemplaza FragmentoA por FragmentoB
+                                doctorsContainer.setVisibility(view.INVISIBLE);
+                                transaction.addToBackStack(null); // Opcional: permite agregar transacciones a la pila de retroceso para navegar hacia atrás
+                                transaction.commit();
                             });
 
                             // Agrega la tarjeta al contenedor

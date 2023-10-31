@@ -3,13 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragmentContainerDetails"
     tools:context=".viewAdmin.FragmentDetails">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:id="@+id/fragmentContainerDetails"
+        tools:context=".viewAdmin.FragmentDetails">
+
+        <!-- Aquí puedes agregar elementos de interfaz de usuario, como un título, una imagen, botones, etc. -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detalles del Doctor"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <!-- Puedes agregar más elementos según tus necesidades -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/paciente2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Doctor: Dr. John Doe" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Especialidad Médica: Cardiología" />
+
+        <!-- Puedes agregar botones, listas o cualquier otro elemento necesario aquí -->
+
+    </LinearLayout>
 
 </FrameLayout>
