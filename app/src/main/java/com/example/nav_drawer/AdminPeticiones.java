@@ -2,7 +2,6 @@ package com.example.nav_drawer;
 
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,11 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.nav_drawer.viewAdmin.FragmentDetails;
-import com.example.nav_drawer.viewAdmin.FragmentPerfilAdmin;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.example.nav_drawer.R;
+
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 /**
@@ -86,34 +84,28 @@ public class AdminPeticiones extends Fragment {
                             String idDoctor = document.getString("id");
                             // Inflar el diseño de la tarjeta personalizado
                             View cardView = getLayoutInflater().inflate(R.layout.doctor_card, null);
-                            //Boton
-                            Button verButton = cardView.findViewById(R.id.verButton);
-                            verButton.setTag(idDoctor); // Establece el ID del doctor como etiqueta en el botón
-                            verButton.setOnClickListener(View -> {
-                                // Crear una instancia del fragmento de destino (DoctorDetailFragment)
-                                FragmentDetails doctorDetailFragment = new FragmentDetails();
-
-                                // Pasa cualquier dato al nuevo fragmento si es necesario
-                                // Por ejemplo, puedes pasar el ID del doctor u otra información relevante:
-                                Bundle bundle = new Bundle();
-                                bundle.putString("id", idDoctor); // Reemplazar con el ID del doctor real
-                                doctorDetailFragment.setArguments(bundle);
-
-                                // Reemplazar el fragmento actual con el nuevo fragmento
-                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.doctorsContainer, doctorDetailFragment);
-                                transaction.addToBackStack(null); // Agregar la transacción a la pila de retroceso para habilitar la navegación hacia atrás
-                                transaction.commit();
-                                // Ocultar las tarjetas (cards)
-                                doctorsContainer.setVisibility(View.GONE);
-                            });
                             // Encontrar las vistas dentro de la tarjeta
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
+                            Button ver = cardView.findViewById(R.id.verButton); // Agrega el botón de detalles
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
+
+                            // Establecer un OnClickListener para el botón de "Detalles"
+                            ver.setOnClickListener(v -> {
+                                // Ocultar el fragmento actual (AdminPeticiones)
+                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.hide(this);  // Ocultar el fragmento actual
+                                fragmentTransaction.addToBackStack(null);
+
+                                // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
+                                fragmentTransaction.replace(R.id.fragmentContainerDetails, new FragmentDetails());
+                                fragmentTransaction.addToBackStack(null);
+                                fragmentTransaction.commit();
+                            });
 
                             // Agrega la tarjeta al contenedor
                             doctorsContainer.addView(cardView);

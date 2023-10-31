@@ -3,97 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragmentContainerDetails"
     tools:context=".viewAdmin.FragmentDetails">
-    <ScrollView
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
 
-            <!-- Nombre -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewNombre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp" />
-
-            <!-- Especialidad -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Especialidad:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewEspecialidad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp" />
-
-            <!-- Fecha de Nacimiento -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Fecha de Nacimiento:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewFechaNacimiento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp" />
-
-            <!-- Sexo -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sexo:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewSexo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp" />
-
-            <!-- Teléfono -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Teléfono:"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewTelefono"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="hola este es detalles"
-                android:textSize="16sp" />
-
-            <!-- Imagen INE -->
-            <ImageView
-                android:id="@+id/imagenINE"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Imagen de la Cédula -->
-            <ImageView
-                android:id="@+id/imagenCedula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </ScrollView>
 </FrameLayout>
