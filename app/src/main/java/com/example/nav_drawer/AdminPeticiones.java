@@ -1,10 +1,10 @@
 package com.example.nav_drawer;
+import com.example.nav_drawer.viewAdmin.DetallesDoctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import com.example.nav_drawer.AdminPeticiones;
-import com.example.nav_drawer.viewAdmin.FragmentDetails;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,13 +97,9 @@ public class AdminPeticiones extends Fragment {
 
                             // Establecer un OnClickListener para el botón de "Detalles"
                             ver.setOnClickListener(v -> {
-                                FragmentManager fragmentManager = getChildFragmentManager(); // Usar getChildFragmentManager() en lugar de getSupportFragmentManager() cuando trabajas con Fragmentos
-
-                                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                transaction.replace(R.id.doctorsContainer, new FragmentDetails()); // Reemplaza FragmentoA por FragmentoB
                                 doctorsContainer.setVisibility(view.INVISIBLE);
-                                transaction.addToBackStack(null); // Opcional: permite agregar transacciones a la pila de retroceso para navegar hacia atrás
-                                transaction.commit();
+                                Intent intent = new Intent(getActivity(), DetallesDoctor.class);
+                                startActivity(intent);
                             });
 
                             // Agrega la tarjeta al contenedor
