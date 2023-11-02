@@ -38,7 +38,8 @@
                 android:layout_gravity="bottom"
                 android:backgroundTint="@color/white"
                 app:fabCradleMargin="10dp"
-                app:fabCradleRoundedCornerRadius="50dp">
+                app:fabCradleRoundedCornerRadius="50dp"
+                android:background="@drawable/selector_icon_background">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:layout_width="wrap_content"
@@ -46,7 +47,7 @@
                     android:id="@+id/bottom_navigation_pacient"
                     app:labelVisibilityMode="labeled"
                     app:menu="@menu/bottom_navigation_menu_paciente"
-                    android:background="@android:color/transparent"/>
+                  />
 
             </com.google.android.material.bottomappbar.BottomAppBar>
             <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton

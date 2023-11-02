@@ -5,31 +5,29 @@
         android:title="Chats"
         android:icon="@drawable/icon_message"
         android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
+        />
     <item
         android:id="@+id/bottom_doctores_paciente"
         android:title="Doctores"
         android:icon="@drawable/icon_doctor"
         android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
+        />
     <item
         android:id="@+id/bottom_tratamiento_paciente"
         android:title="Tratamientos"
         android:icon="@drawable/icon_tratamiento"
-        android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
+        android:checkable="true" />
     <item
         android:id="@+id/bottom_historial_paciente"
         android:title="Historial"
         android:icon="@drawable/historial"
-        android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
+        android:checkable="true" />
 
     <item
         android:id="@+id/bottom_perfil_paciente"
         android:title="Perfil"
         android:icon="@drawable/icon_perfil"
         android:checkable="true"
-        android:background="@drawable/selector_icon_background"/>
+        />
 
 </menu>
