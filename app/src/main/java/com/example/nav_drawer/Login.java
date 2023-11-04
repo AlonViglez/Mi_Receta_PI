@@ -1,13 +1,16 @@
 package com.example.nav_drawer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +41,7 @@ import java.security.NoSuchAlgorithmException;
 public class Login extends AppCompatActivity {
 
     TextInputEditText editTextEmail,editTextPassword;
+    TextView olvido_contrasena;
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -98,7 +102,8 @@ public class Login extends AppCompatActivity {
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         identify = findViewById(R.id.nuevoregistro);
-
+        olvido_contrasena = findViewById(R.id.olvido_contrasena);
+        //BOTON DE REGISTRAR
         identify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +112,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
+        //LOGIN BOTON
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +176,56 @@ public class Login extends AppCompatActivity {
                         });
             }
         });
+        //RECUPERAR CONTRASEÑA (TEXTVIEW)
+        olvido_contrasena.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showResetPasswordDialog();
+            }
+        });
+    }
+    private void showResetPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+        EditText resetEmail = dialogView.findViewById(R.id.resetEmail);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        Button btnEnviar = dialogView.findViewById(R.id.btnEnviar);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cerrar el cuadro de diálogo cuando se hace clic en "Cancelar"
+                dialog.dismiss();
+            }
+        });
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = resetEmail.getText().toString();
+                if (!email.isEmpty()) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        // Envío de correo electrónico de restablecimiento de contraseña exitoso
+                                        Toast.makeText(getApplicationContext(), "Se ha enviado un correo electrónico de restablecimiento de contraseña a " + email, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Si hay un error en el envío del correo electrónico de restablecimiento de contraseña
+                                        Toast.makeText(getApplicationContext(), "No se pudo enviar el correo electrónico de restablecimiento de contraseña. Verifica la dirección de correo electrónico.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                    // Cerrar el cuadro de diálogo después de enviar el correo electrónico
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Ingresa tu dirección de correo electrónico", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setView(dialogView);
+        dialog.show();
     }
     //HASHEAR CONTRASEÑA
     private String hashPassword(String password) {
@@ -190,4 +246,5 @@ public class Login extends AppCompatActivity {
             return null;
         }
     }
+
 }
