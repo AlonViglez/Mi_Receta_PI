@@ -1,5 +1,5 @@
-package com.example.nav_drawer;
-import com.example.nav_drawer.viewAdmin.DetallesDoctor;
+package com.example.nav_drawer.viewAdmin;
+import com.example.nav_drawer.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,6 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 
 /**
@@ -76,7 +73,7 @@ public class AdminPeticiones extends Fragment {
         LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainer);
 
         // Realizar una consulta para obtener los datos de los doctores
-        db.collection("doctor")
+        db.collection("doctorpendiente")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -95,10 +92,10 @@ public class AdminPeticiones extends Fragment {
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
 
-                            // Establecer un OnClickListener para el botón de "Detalles"
+                            //Establecer un OnClickListener para el botón de "Detalles"
                             ver.setOnClickListener(v -> {
-                                doctorsContainer.setVisibility(view.INVISIBLE);
                                 Intent intent = new Intent(getActivity(), DetallesDoctor.class);
+                                intent.putExtra("doctorId", idDoctor); //Paso el ID del doctor
                                 startActivity(intent);
                             });
 

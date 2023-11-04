@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/framepeticiones"
-    tools:context=".AdminPeticiones">
+    tools:context=".viewAdmin.AdminPeticiones">
     <!-- Título principal "Peticiones" centrado -->
     <!-- Contenedor de tarjetas de doctores -->
     <ScrollView
@@ -15,8 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            >
+            android:padding="16dp">
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
