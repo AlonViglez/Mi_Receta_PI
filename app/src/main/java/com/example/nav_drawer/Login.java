@@ -169,7 +169,8 @@ public class Login extends AppCompatActivity {
                                         });
                                     }
                                 } else {
-                                    // Error de inicio de sesión
+                                    //LOGUEO CON EL OTRO TIPO DE HASH(SI ES QUE LE DIO A RECUPERAR CONTRASEÑA)
+
                                     Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.", Toast.LENGTH_SHORT).show();
                                 }
                             }

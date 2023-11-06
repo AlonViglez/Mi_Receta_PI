@@ -152,7 +152,7 @@ public class RegistroDoctor extends AppCompatActivity {
                 String especialidadSeleccionada = especialidadMedicaSpinner.getSelectedItem().toString(); //Especialidad medica seleccionada
                 String telefono = editTelefono.getText().toString().trim();
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || fechaNacimiento.isEmpty() || sexo.isEmpty() || repass.isEmpty() || especialidadSeleccionada.isEmpty() || telefono.isEmpty() || imagenINEUri != null || imagenCedulaUri != null) {
+                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimiento.isEmpty() && sexo.isEmpty() && repass.isEmpty() && especialidadSeleccionada.isEmpty() && telefono.isEmpty() && imagenINEUri != null && imagenCedulaUri != null) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
