@@ -181,9 +181,10 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showResetPasswordDialog();
-            }
+            }//MANDO A LA FUNCION
         });
     }
+    //FUNCION PARA RECUPERAR CONTRASEÑA
     private void showResetPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);

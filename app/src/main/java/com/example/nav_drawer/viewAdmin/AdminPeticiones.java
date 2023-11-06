@@ -87,7 +87,7 @@ public class AdminPeticiones extends Fragment {
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
-                            Button ver = cardView.findViewById(R.id.verButton); // Agrega el botón de detalles
+                            Button ver = cardView.findViewById(R.id.verButton); // Agregar el botón de detalles
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);

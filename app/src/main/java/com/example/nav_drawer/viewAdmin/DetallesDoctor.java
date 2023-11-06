@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,6 +31,7 @@ public class DetallesDoctor extends AppCompatActivity {
     TextView nombreDoctorTextView,especialidadMedicaTextView,sexoTextView,telefonoTextView;
     ImageButton btnRechazar, btnAceptar;
     String pass,email;
+    String destinatario, asunto, mensaje;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,10 @@ public class DetallesDoctor extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                destinatario = email;
+                                asunto = "Rechazado a MiReceta APP";
+                                mensaje = "No ha sido aceptado";
+                                enviarEmail(destinatario,asunto,mensaje);
                                 AdminPeticiones adminPeticionesFragment = new AdminPeticiones();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.framepeticiones, adminPeticionesFragment)
@@ -148,6 +154,11 @@ public class DetallesDoctor extends AppCompatActivity {
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
                                                                                 public void onSuccess(Void aVoid) {
+                                                                                    //ENVIO DE EMAIL
+                                                                                    destinatario = email;
+                                                                                    asunto = "Aceptado a MiReceta APP";
+                                                                                    mensaje = "Ha sido aceptado";
+                                                                                    enviarEmail(destinatario,asunto,mensaje);
                                                                                     AdminPeticiones adminPeticionesFragment = new AdminPeticiones();
                                                                                     getSupportFragmentManager().beginTransaction()
                                                                                             .replace(R.id.framepeticiones, adminPeticionesFragment)
@@ -190,6 +201,21 @@ public class DetallesDoctor extends AppCompatActivity {
                         });
             }
         });
+    }
+    //FUNCION PARA ENVIAR EMAIL
+    private void enviarEmail(String destinatario, String asunto, String mensaje) {
+        //String remitente = "jvilla14@ucol.mx";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{destinatario});
+        intent.putExtra(Intent.EXTRA_SUBJECT, asunto);
+        intent.putExtra(Intent.EXTRA_TEXT, mensaje);
+        //intent.putExtra(Intent.EXTRA_SENDER, remitente);
+        try {
+            startActivity(Intent.createChooser(intent, "Enviar correo electrónico"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.e("Correo", "No se pudo enviar el correo");
+        }
     }
     @Override
     public void onBackPressed() {

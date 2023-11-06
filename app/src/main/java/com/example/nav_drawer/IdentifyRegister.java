@@ -15,7 +15,15 @@ public class IdentifyRegister extends AppCompatActivity {
         setContentView(R.layout.activity_identify_register);
         ImageView btnUsuario = findViewById(R.id.btn_usuario);
         ImageView btnDoctor = findViewById(R.id.btn_doctor);
-
+        ImageView btnregresar = findViewById(R.id.btnatras);
+        //BOTON DE ATRAS
+        btnregresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(IdentifyRegister.this, Login.class);
+                startActivity(intent);
+            }
+        });
         //Boton USUARIO
         btnUsuario.setOnClickListener(new View.OnClickListener() {
             @Override

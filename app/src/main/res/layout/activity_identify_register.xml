@@ -5,14 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IdentifyRegister">
-
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/rectangle1" />
-
+    <RelativeLayout
+        android:id="@+id/r3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/btnatras"
+            android:layout_width="80dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="-10dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/flecha_hacia_atras"
+            android:padding="16dp"
+            android:layout_marginTop="7dp"/>
+    </RelativeLayout>
     <!-- Contenedor vertical para el TextView y los botones -->
     <LinearLayout
         android:layout_width="match_parent"
