@@ -109,13 +109,13 @@ public class Registro extends AppCompatActivity {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
                 String nombre = editNombre.getText().toString().trim();  // Agrega el nombre obtenido
-                String fechaNacimiento = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
+                String fechaNacimientoStr = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
                 String repass = editRepetirPass.getText().toString().trim();
                 TextView textViewErrorPass = findViewById(R.id.textViewErrorPassword);
                 TextView textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
                 TextView textViewCamp = findViewById(R.id.textViewCampos);
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimiento.isEmpty() && sexo.isEmpty() && repass.isEmpty()) {
+                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimientoStr.isEmpty() && sexo.isEmpty() && repass.isEmpty()) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
@@ -129,12 +129,27 @@ public class Registro extends AppCompatActivity {
                     textViewErrorPassRep.setVisibility(View.VISIBLE);
                     editTextPassword.setText("");  // Limpiar contraseñas
                     editRepetirPass.setText("");  // Limpiar contraseñas repetidas
-                }else {
-                    textViewCamp.setVisibility(View.GONE);  // Ocultar mensaje de error si estaba visible
-                    textViewErrorPass.setVisibility(View.GONE);
-                    textViewErrorPassRep.setVisibility(View.GONE);
-                    hashedPassword = hashPassword(password);
-                    registerUser(nombre, email, hashedPassword, fechaNacimiento, sexo);
+                } else if(fechaNacimientoStr.isEmpty()) {
+                    textViewCamp.setText("Ingrese la fecha de nacimiento");
+                    textViewCamp.setVisibility(View.VISIBLE);
+                } else{
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+                        Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
+                        if (validarEdad(fechaNacimiento)) {
+                            textViewCamp.setVisibility(View.GONE); // Ocultar mensaje de error si estaba visible
+                            textViewErrorPass.setVisibility(View.GONE);
+                            textViewErrorPassRep.setVisibility(View.GONE);
+                            hashedPassword = hashPassword(password);
+                            registerUser(nombre, email, hashedPassword, fechaNacimientoStr, sexo);
+                        } else {
+                            textViewCamp.setText("Debe ser mayor de 18 años para registrarse");
+                            textViewCamp.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Registro.this, "Error al procesar la fecha.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -145,7 +160,6 @@ public class Registro extends AppCompatActivity {
         // Obtiene la fecha actual
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -18); // Resta 18 años para obtener la fecha mínima de nacimiento
-
         // Compara la fecha de nacimiento con la fecha actual - 18 años
         return !fechaNacimiento.after(calendar.getTime());
     }

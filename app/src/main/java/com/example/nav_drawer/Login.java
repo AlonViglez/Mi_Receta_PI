@@ -170,8 +170,54 @@ public class Login extends AppCompatActivity {
                                     }
                                 } else {
                                     //LOGUEO CON EL OTRO TIPO DE HASH(SI ES QUE LE DIO A RECUPERAR CONTRASEÑA)
-
-                                    Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.", Toast.LENGTH_SHORT).show();
+                                    mAuth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    if (task.isSuccessful()) {
+                                                        // Verificar si el usuario es un administrador
+                                                        if (email.equals(admin)) {
+                                                            // El usuario es un administrador
+                                                            Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso (Admin)", Toast.LENGTH_SHORT).show();
+                                                            Intent adminIntent = new Intent(getApplicationContext(), ViewAdministrador.class);
+                                                            startActivity(adminIntent);
+                                                            finish();
+                                                        } else {
+                                                            // Verificar si el usuario es un doctor
+                                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                            CollectionReference doctorsRef = db.collection("altadoctores");
+                                                            Query query = doctorsRef.whereEqualTo("correo", email);
+                                                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        if (!task.getResult().isEmpty()) {
+                                                                            // El usuario es un doctor
+                                                                            Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso (Doctor)", Toast.LENGTH_SHORT).show();
+                                                                            Intent doctorIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                                                            startActivity(doctorIntent);
+                                                                            finish();
+                                                                        } else {
+                                                                            // El usuario no es un doctor, por lo tanto, se asume que es un paciente
+                                                                            Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso (Paciente)", Toast.LENGTH_SHORT).show();
+                                                                            Intent patientIntent = new Intent(getApplicationContext(), ViewPacient.class);
+                                                                            startActivity(patientIntent);
+                                                                            finish();
+                                                                        }
+                                                                    } else {
+                                                                        // Mostrar error
+                                                                        Toast.makeText(getApplicationContext(), "Error al verificar el tipo de usuario", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                    //Toast.makeText(Login.this, "Oops, hubo un error de Autenticacion.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
