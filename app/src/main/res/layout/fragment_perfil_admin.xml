@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".viewAdmin.FragmentPerfilAdmin"
-    android:background="#87C4FF">
+    >
     <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:layout_width="100dp"
@@ -39,7 +39,6 @@
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="#87C4FF"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="30dp"
