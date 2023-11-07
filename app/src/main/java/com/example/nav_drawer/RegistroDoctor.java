@@ -196,13 +196,23 @@ public class RegistroDoctor extends AppCompatActivity {
     }
 
     //VALIDACION DE FECHA DE NACIMIENTO
-    private boolean validarEdad(Date fechaNacimiento) {
+    private boolean validarEdadmenor(Date fechaNacimiento) {
         // Obtener la fecha actual
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -18); // Resta 18 años para obtener la fecha mínima de nacimiento
+        calendar.add(Calendar.YEAR, -18);
+        // Resta 18 años para obtener la fecha mínima de nacimiento
 
         // Comparar la fecha de nacimiento con la fecha actual - 18 años
         return !fechaNacimiento.after(calendar.getTime());
+    }
+    private boolean validarEdadmayor(Date fechaNacimiento) {
+        // Obtener la fecha actual
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -99);
+        // Resta 18 años para obtener la fecha mínima de nacimiento
+
+        // Comparar la fecha de nacimiento con la fecha actual - 18 años
+        return !fechaNacimiento.before(calendar.getTime());
     }
     //FUNCION PARA MOSTRAR EL CALENDARIO
     private void mostrarDatePickerDialog() {
@@ -229,10 +239,11 @@ public class RegistroDoctor extends AppCompatActivity {
                             Date fechaNacimiento = dateFormat.parse(selectedDateStr);
 
                             // Validar la edad del usuario
-                            if (validarEdad(fechaNacimiento)) {
+                            if (validarEdadmenor(fechaNacimiento) && !validarEdadmayor(fechaNacimiento)) {
                                 editFecha.setText(selectedDateStr);
                             } else {
-                                Toast.makeText(RegistroDoctor.this, "Debe ser mayor de 18 años para registrarse.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegistroDoctor.this, "La edad debe estar entre 18 y 99 años para registrarse.", Toast.LENGTH_SHORT).show();
+                                editFecha.setText("");
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -259,14 +270,15 @@ public class RegistroDoctor extends AppCompatActivity {
                 userData.put("nombre", nombre);
                 userData.put("correo", email);
                 userData.put("password", password);
-                long timestamp = obtenerTimestamp(fechaNacimiento);
-                userData.put("fechanac", timestamp);
                 userData.put("sexo", sexo);
                 userData.put("telefono", telefono);
                 userData.put("especialidad",especialidadSeleccionada);
                 userData.put("imagenINE", imagenINEUrl);
                 userData.put("imagenCedula", imagenCedulaUrl);
                 userData.put("cuenta",cuentadoctor);
+                if (fechaNacimiento != null && !fechaNacimiento.isEmpty()) {
+                    long timestamp = obtenerTimestamp(fechaNacimiento);
+                    userData.put("fechanac", timestamp);
 
                 mFirestore.collection("doctor")
                         .add(userData)
@@ -298,6 +310,7 @@ public class RegistroDoctor extends AppCompatActivity {
                                         });
                             }
                         })
+
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
@@ -305,7 +318,11 @@ public class RegistroDoctor extends AppCompatActivity {
                                 Log.e("Registro", "Error al guardar en Firestore", e);
                                 Toast.makeText(RegistroDoctor.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        });}
+                else {
+                    // La variable fechaNacimiento está vacía o es null
+                    Toast.makeText(RegistroDoctor.this, "La fecha de nacimiento no ha sido proporcionada.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
