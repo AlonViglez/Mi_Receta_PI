@@ -1,8 +1,10 @@
 package com.example.nav_drawer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -35,6 +37,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,11 +68,11 @@ public class RegistroDoctor extends AppCompatActivity {
     Button btnSubirINE,btnSubirCedula;
     ImageView imagenINE,imagenCedula;
     Spinner especialidadMedicaSpinner;
+    TextView textViewErrorPass,textViewErrorPassRep,textViewCamp;
     private static final int PICK_IMAGE = 1;
     private boolean subirINEActivo = true;
-    private Uri imagenINEUri;
-    private Uri imagenCedulaUri;
-    String cuentadoctor = "desactivada";
+    private Uri imagenINEUri = null;
+    private Uri imagenCedulaUri = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +102,9 @@ public class RegistroDoctor extends AppCompatActivity {
         radioOtros = findViewById(R.id.radioOtros);
         sexoRadioGroup = findViewById(R.id.sexoRadioGroup);
         especialidadMedicaSpinner = findViewById(R.id.especialidadMedicaSpinner);
+        textViewErrorPass = findViewById(R.id.textViewErrorPassword);
+        textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
+        textViewCamp = findViewById(R.id.textViewCampos);
         //SELECCIONAR SEXO
         sexoRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -143,12 +153,12 @@ public class RegistroDoctor extends AppCompatActivity {
                 String repass = editRepetirPass.getText().toString().trim();
                 String especialidadSeleccionada = especialidadMedicaSpinner.getSelectedItem().toString(); //Especialidad medica seleccionada
                 String telefono = editTelefono.getText().toString().trim();
-                TextView textViewErrorPass = findViewById(R.id.textViewErrorPassword);
-                TextView textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
-                TextView textViewCamp = findViewById(R.id.textViewCampos);
+                String[] dominiosPopulares = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com", "live.com", "ucol.mx"};
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimiento.isEmpty() && sexo.isEmpty() && repass.isEmpty() && especialidadSeleccionada.isEmpty() && telefono.isEmpty()) {
+                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || fechaNacimiento.isEmpty() || sexo.isEmpty() || repass.isEmpty() || especialidadSeleccionada.isEmpty() || telefono.isEmpty() || (imagenCedulaUri == null) || (imagenCedulaUri == null)) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
+                    textViewErrorPass.setVisibility(View.GONE);
+                    textViewErrorPassRep.setVisibility(View.GONE);
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
                 } else if (!password.equals(repass)) {
@@ -161,11 +171,41 @@ public class RegistroDoctor extends AppCompatActivity {
                     textViewErrorPassRep.setVisibility(View.VISIBLE);
                     editTextPassword.setText("");  // Limpiar contraseñas
                     editRepetirPass.setText("");  // Limpiar contraseñas repetidas
-                }else {
-                    textViewCamp.setVisibility(View.GONE);  // Ocultar mensaje de error si estaba visible
-                    textViewErrorPass.setVisibility(View.GONE);
-                    textViewErrorPassRep.setVisibility(View.GONE);
-                    saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo, especialidadSeleccionada,telefono,imagenINEUri,imagenCedulaUri,cuentadoctor);//Guardar datos en Firestore
+                } else if (telefono.isEmpty() || telefono.length() != 10) {
+                    //VALIDACION DE DIGITOS DEL TELEFONO 10
+                    textViewCamp.setText("El número de teléfono debe tener 10 dígitos");
+                    textViewCamp.setVisibility(View.VISIBLE);
+                } else {
+                    //VALIDACION DE DOMINIO CORREO ELECTRONICO
+                    boolean emailValido = false;
+                    for (String dominio : dominiosPopulares) {
+                        if (email.endsWith("@" + dominio)) {
+                            emailValido = true;
+                            break;
+                        }
+                    }
+                    //VALIDACION DE QUE NO ESTE VACIO ANTES DE LA ARROBA
+                    if (emailValido && email.indexOf("@") > 0) {
+                        // Validación de imágenes
+                        boolean imagenCedulaValida = validarImagen(imagenCedulaUri);
+                        boolean imagenINEValida = validarImagen(imagenINEUri);
+                        if (imagenCedulaValida && imagenINEValida) {
+                            // IMAGENES SON VALIDAS
+                            // OCULTAR MENSAJES DE ERROR
+                            textViewCamp.setVisibility(View.GONE);
+                            textViewErrorPass.setVisibility(View.GONE);
+                            textViewErrorPassRep.setVisibility(View.GONE);
+                            // GUARDAR EN FIRESTORE
+                            saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo, especialidadSeleccionada, telefono, imagenINEUri, imagenCedulaUri);
+                        } else {
+                            // Al menos una de las imágenes no es válida
+                            textViewCamp.setText("Imagen(es) no válidas");
+                            textViewCamp.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textViewCamp.setText("El correo debe ser válido y utilizar un dominio correcto(ejemplo: gmail.com)");
+                        textViewCamp.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -194,25 +234,29 @@ public class RegistroDoctor extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE);
     }
+    //VALIDAR IMAGENES
+    private boolean validarImagen(Uri imagenUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imagenUri);// Abre un flujo de entrada para la URI de la imagen
+            BitmapFactory.Options options = new BitmapFactory.Options(); // Crea un objeto BitmapFactory.Options
+            options.inJustDecodeBounds = true;// Establece la propiedad inJustDecodeBounds en true para obtener solo las dimensiones de la imagen
+            BitmapFactory.decodeStream(inputStream, null, options);// Intenta decodificar las dimensiones de la imagen sin cargar completamente su contenido
+            inputStream.close();// Cierra el flujo de entrada
 
+            return (options.outWidth != -1 && options.outHeight != -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     //VALIDACION DE FECHA DE NACIMIENTO
-    private boolean validarEdadmenor(Date fechaNacimiento) {
+    private boolean validarEdad(Date fechaNacimiento) {
         // Obtener la fecha actual
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -18);
-        // Resta 18 años para obtener la fecha mínima de nacimiento
+        calendar.add(Calendar.YEAR, -18); // Resta 18 años para obtener la fecha mínima de nacimiento
 
         // Comparar la fecha de nacimiento con la fecha actual - 18 años
         return !fechaNacimiento.after(calendar.getTime());
-    }
-    private boolean validarEdadmayor(Date fechaNacimiento) {
-        // Obtener la fecha actual
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -99);
-        // Resta 18 años para obtener la fecha mínima de nacimiento
-
-        // Comparar la fecha de nacimiento con la fecha actual - 18 años
-        return !fechaNacimiento.before(calendar.getTime());
     }
     //FUNCION PARA MOSTRAR EL CALENDARIO
     private void mostrarDatePickerDialog() {
@@ -239,11 +283,10 @@ public class RegistroDoctor extends AppCompatActivity {
                             Date fechaNacimiento = dateFormat.parse(selectedDateStr);
 
                             // Validar la edad del usuario
-                            if (validarEdadmenor(fechaNacimiento) && !validarEdadmayor(fechaNacimiento)) {
+                            if (validarEdad(fechaNacimiento)) {
                                 editFecha.setText(selectedDateStr);
                             } else {
-                                Toast.makeText(RegistroDoctor.this, "La edad debe estar entre 18 y 99 años para registrarse.", Toast.LENGTH_SHORT).show();
-                                editFecha.setText("");
+                                Toast.makeText(RegistroDoctor.this, "Debe ser mayor de 18 años para registrarse.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -255,78 +298,126 @@ public class RegistroDoctor extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
 
+        // Establece el límite máximo al año actual
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // Mostrar el DatePickerDialog
         datePickerDialog.show();
     }
     //GUARDAR DATOS EN FIRESTORE
-    private void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo, String especialidadSeleccionada, String telefono, Uri imagenINEUri, Uri imagenCedulaUri, String cuentadoctor) {
-        // Subir las imágenes a Firebase Storage y obtén las URL de descarga
-        uploadImagesToStorage(imagenINEUri, imagenCedulaUri, new OnImagesUploadedListener() {
+    private void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo, String especialidadSeleccionada, String telefono, Uri imagenINEUri, Uri imagenCedulaUri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_politicas_privacidad_doctor, null);
+        Button btnCancel = dialogView.findViewById(R.id.btnCanceldoc);
+        Button btnEnviar = dialogView.findViewById(R.id.btnEnviardoc);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onImagesUploaded(String imagenINEUrl, String imagenCedulaUrl) {
-                // Guardar en firestore ya que tengo las URL de las imagenes
-                Map<String, Object> userData = new HashMap<>();
-                userData.put("id", null); // Inicializar el campo "id" con null
-                userData.put("nombre", nombre);
-                userData.put("correo", email);
-                userData.put("password", password);
-                userData.put("sexo", sexo);
-                userData.put("telefono", telefono);
-                userData.put("especialidad",especialidadSeleccionada);
-                userData.put("imagenINE", imagenINEUrl);
-                userData.put("imagenCedula", imagenCedulaUrl);
-                userData.put("cuenta",cuentadoctor);
-                if (fechaNacimiento != null && !fechaNacimiento.isEmpty()) {
-                    long timestamp = obtenerTimestamp(fechaNacimiento);
-                    userData.put("fechanac", timestamp);
-
-                mFirestore.collection("doctor")
-                        .add(userData)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                // Usuario registrado con éxito en Firebase y datos guardados en Firestore
-                                String documentId = documentReference.getId(); // Obtén el ID generado por Firebase
-
-                                // Actualiza el campo "id" con el valor del ID generado
-                                mFirestore.collection("doctor").document(documentId)
-                                        .update("id", documentId)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // Campo "id" actualizado con éxito
-                                                finish();
-                                                startActivity(new Intent(RegistroDoctor.this, MainActivity.class));
-                                                Toast.makeText(RegistroDoctor.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Error al actualizar el campo "id"
-                                                Log.e("Registro", "Error al actualizar el campo 'id'", e);
-                                                Toast.makeText(RegistroDoctor.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-                        })
-
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Error al guardar en Firestore
-                                Log.e("Registro", "Error al guardar en Firestore", e);
-                                Toast.makeText(RegistroDoctor.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
-                            }
-                        });}
-                else {
-                    // La variable fechaNacimiento está vacía o es null
-                    Toast.makeText(RegistroDoctor.this, "La fecha de nacimiento no ha sido proporcionada.", Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View v) {
+                // Cerrar el cuadro de diálogo cuando se hace clic en "Cancelar"
+                dialog.dismiss();
             }
         });
-    }
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Subir las imágenes a Firebase Storage y obtén las URL de descarga
+                uploadImagesToStorage(imagenINEUri, imagenCedulaUri, new OnImagesUploadedListener() {
+                    @Override
+                    public void onImagesUploaded(String imagenINEUrl, String imagenCedulaUrl) {
+                        // Guardar en firestore ya que tengo las URL de las imagenes
+                        String hashedPassword = hashPassword(password);
+                        if (hashedPassword != null) {
+                            Map<String, Object> userData = new HashMap<>();
+                            userData.put("id", null); // Inicializar el campo "id" con null
+                            userData.put("nombre", nombre);
+                            userData.put("correo", email);
+                            userData.put("password", hashedPassword);
+                            long timestamp = obtenerTimestamp(fechaNacimiento);
+                            userData.put("fechanac", timestamp);
+                            userData.put("sexo", sexo);
+                            userData.put("telefono", telefono);
+                            userData.put("especialidad", especialidadSeleccionada);
+                            userData.put("imagenINE", imagenINEUrl);
+                            userData.put("imagenCedula", imagenCedulaUrl);
 
+                            mFirestore.collection("doctorpendiente")
+                                    .add(userData)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            // Usuario registrado con éxito en Firebase y datos guardados en Firestore
+                                            String documentId = documentReference.getId(); // Obtén el ID generado por Firebase
+
+                                            // Actualiza el campo "id" con el valor del ID generado
+                                            mFirestore.collection("doctorpendiente").document(documentId)
+                                                    .update("id", documentId)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            // Campo "id" actualizado con éxito
+                                                            finish();
+                                                            startActivity(new Intent(RegistroDoctor.this, MainActivity.class));
+                                                            Toast.makeText(RegistroDoctor.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            // Error al actualizar el campo "id"
+                                                            Log.e("Registro", "Error al actualizar el campo 'id'", e);
+                                                            Toast.makeText(RegistroDoctor.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Error al guardar en Firestore
+                                            Log.e("Registro", "Error al guardar en Firestore", e);
+                                            Toast.makeText(RegistroDoctor.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+            }
+        });
+        builder.setView(dialogView);
+        dialog.show();
+    }
+    //FUNCION PARA CAMBIAR LA FECHA DE NACIMIENTO STRING A FORMATO TIMESTAMP
+    private long obtenerTimestamp(String fecha) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+        try {
+            Date date = dateFormat.parse(fecha);
+            return date.getTime();  // Obtiene el timestamp en milisegundos
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;  // Devuelve -1 si hay un error en el formato de la fecha
+        }
+    }
+    //HASHEAR CONTRASEÑA
+    private String hashPassword(String password) {
+        try {
+            // Obtén una instancia de MessageDigest para SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            // Convierte la contraseña en bytes y hashea
+            byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+
+            // Convierte el hash en una representación hexadecimal
+            BigInteger bigInt = new BigInteger(1, hashBytes);
+            String hashedPassword = bigInt.toString(16);
+
+            return hashedPassword;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            // Manejar la excepción
+            return null;
+        }
+    }
     // Interfaz para manejar las URL de las imágenes una vez subidas a Firebase Storage
     interface OnImagesUploadedListener {
         void onImagesUploaded(String imagenINEUrl, String imagenCedulaUrl);
@@ -386,17 +477,6 @@ public class RegistroDoctor extends AppCompatActivity {
                         Toast.makeText(RegistroDoctor.this, "Error al subir la imagen de la INE", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-    //FUNCION PARA CAMBIAR LA FECHA DE NACIMIENTO STRING A FORMATO TIMESTAMP
-    private long obtenerTimestamp(String fecha) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-        try {
-            Date date = dateFormat.parse(fecha);
-            return date.getTime();  // Obtiene el timestamp en milisegundos
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return -1;  // Devuelve -1 si hay un error en el formato de la fecha
-        }
     }
     @Override
     public boolean onSupportNavigateUp() {
