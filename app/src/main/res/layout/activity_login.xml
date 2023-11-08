@@ -76,7 +76,18 @@
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <TextView
+                android:id="@+id/olvido_contrasena"
+                android:layout_marginTop="20dp"
+                android:text="¿Has olvidado tu contraseña?"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textSize="14sp"
+                android:textColor="@color/buttonmireceta"
+                android:textStyle="bold"
+                android:clickable="true"/>
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:visibility="gone"

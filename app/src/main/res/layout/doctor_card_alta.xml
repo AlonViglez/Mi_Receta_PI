@@ -5,18 +5,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="8dp"> <!--CARD PARA DETALLES DOCTOR -->
+    app:cardElevation="8dp"> <!--CARD PARA DOCTOR DADO DE ALTA OFICIAL -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
+        <ImageButton
+            android:id="@+id/borrarButton"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:src="@drawable/borrar"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="1dp"
+            android:layout_marginTop="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="Borrar"
+            android:scaleType="fitCenter"/>
+        <ImageButton
+            android:id="@+id/editarButton"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:src="@drawable/editar"
+            android:layout_toStartOf="@id/borrarButton"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="Editar"
+            android:scaleType="fitCenter"/>
         <ImageView
             android:id="@+id/doctorIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:src="@drawable/paciente1"
             android:layout_centerVertical="true"/>
-
         <TextView
             android:id="@+id/doctorName"
             android:layout_width="wrap_content"
@@ -28,7 +49,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="9dp"
             android:layout_centerVertical="true"/>
-
         <TextView
             android:id="@+id/especialidadMedica"
             android:layout_width="wrap_content"
@@ -40,13 +60,5 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textSize="16sp"/>
-        <Button
-            android:id="@+id/verButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Ver"
-            android:backgroundTint="@color/buttonmireceta" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

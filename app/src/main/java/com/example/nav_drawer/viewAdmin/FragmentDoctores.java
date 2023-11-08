@@ -1,5 +1,6 @@
 package com.example.nav_drawer.viewAdmin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.nav_drawer.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +68,49 @@ public class FragmentDoctores extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_doctores, container, false);
+        View view = inflater.inflate(R.layout.fragment_doctores, container, false);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Obtener una referencia al contenedor de tarjetas
+        LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainerAlta);
+
+        // Realizar una consulta para obtener los datos de los doctores
+        db.collection("altadoctores")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String nombreDoctor = document.getString("nombre");
+                            String especialidadMedica = document.getString("especialidad");
+                            String idDoctor = document.getString("id");
+                            // Inflar el diseño de la tarjeta personalizado
+                            View cardView = getLayoutInflater().inflate(R.layout.doctor_card_alta, null);
+                            // Encontrar las vistas dentro de la tarjeta
+                            ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
+                            TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
+                            TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
+                            ImageButton btnborrar = cardView.findViewById(R.id.borrarButton); // Agregar el botón de editar
+                            ImageButton btneditar = cardView.findViewById(R.id.editarButton); // Agregar el botón de eliminar
+                            // Configurar los elementos de la tarjeta
+                            doctorNameTextView.setText(nombreDoctor);
+                            especialidadMedicaTextView.setText(especialidadMedica);
+
+                            //BOTON BORRAR
+                            btnborrar.setOnClickListener(v -> {
+                                //MOSTRARE UN DIALOG DE QUE SI ESTA SEGURO DE ELIMINAR TAL DOCTOR(boton de aceptar/cancelar)
+                            });
+                            //BOTON EDITAR
+                            btneditar.setOnClickListener(v -> {
+                                Intent intent = new Intent(getActivity(), EditarDoctor.class);
+                                intent.putExtra("doctorId", idDoctor); //Paso el ID del doctor
+                                startActivity(intent);
+                            });
+                            // Agrega la tarjeta al contenedor
+                            doctorsContainer.addView(cardView);
+                        }
+                    } else {
+                        // Si hubiera un error
+                    }
+                });
+        return view;
     }
 }

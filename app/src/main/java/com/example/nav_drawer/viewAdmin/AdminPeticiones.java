@@ -1,5 +1,7 @@
-package com.example.nav_drawer;
+package com.example.nav_drawer.viewAdmin;
+import com.example.nav_drawer.R;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,12 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.nav_drawer.viewAdmin.FragmentDetails;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +73,7 @@ public class AdminPeticiones extends Fragment {
         LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainer);
 
         // Realizar una consulta para obtener los datos de los doctores
-        db.collection("doctor")
+        db.collection("doctorpendiente")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -88,23 +87,16 @@ public class AdminPeticiones extends Fragment {
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
-                            Button ver = cardView.findViewById(R.id.verButton); // Agrega el botón de detalles
+                            Button ver = cardView.findViewById(R.id.verButton); // Agregar el botón de detalles
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
 
-                            // Establecer un OnClickListener para el botón de "Detalles"
+                            //Establecer un OnClickListener para el botón de "Detalles"
                             ver.setOnClickListener(v -> {
-                                // Ocultar el fragmento actual (AdminPeticiones)
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.hide(this);  // Ocultar el fragmento actual
-                                fragmentTransaction.addToBackStack(null);
-
-                                // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
-                                fragmentTransaction.replace(R.id.fragmentContainerDetails, new FragmentDetails());
-                                fragmentTransaction.addToBackStack(null);
-                                fragmentTransaction.commit();
+                                Intent intent = new Intent(getActivity(), DetallesDoctor.class);
+                                intent.putExtra("doctorId", idDoctor); //Paso el ID del doctor
+                                startActivity(intent);
                             });
 
                             // Agrega la tarjeta al contenedor

@@ -2,6 +2,7 @@ package com.example.nav_drawer;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -30,6 +31,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.Application;
 import com.google.firebase.FirebaseApp;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +58,7 @@ public class Registro extends AppCompatActivity {
     ProgressBar progressBar;
     TextView textView;
     String sexo = "";
+    String hashedPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,13 +109,13 @@ public class Registro extends AppCompatActivity {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
                 String nombre = editNombre.getText().toString().trim();  // Agrega el nombre obtenido
-                String fechaNacimiento = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
+                String fechaNacimientoStr = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
                 String repass = editRepetirPass.getText().toString().trim();
                 TextView textViewErrorPass = findViewById(R.id.textViewErrorPassword);
                 TextView textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
                 TextView textViewCamp = findViewById(R.id.textViewCampos);
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimiento.isEmpty() && sexo.isEmpty() && repass.isEmpty()) {
+                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimientoStr.isEmpty() && sexo.isEmpty() && repass.isEmpty()) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
@@ -123,11 +129,27 @@ public class Registro extends AppCompatActivity {
                     textViewErrorPassRep.setVisibility(View.VISIBLE);
                     editTextPassword.setText("");  // Limpiar contraseñas
                     editRepetirPass.setText("");  // Limpiar contraseñas repetidas
-                }else {
-                    textViewCamp.setVisibility(View.GONE);  // Ocultar mensaje de error si estaba visible
-                    textViewErrorPass.setVisibility(View.GONE);
-                    textViewErrorPassRep.setVisibility(View.GONE);
-                    registerUser(nombre, email, password, fechaNacimiento, sexo);
+                } else if(fechaNacimientoStr.isEmpty()) {
+                    textViewCamp.setText("Ingrese la fecha de nacimiento");
+                    textViewCamp.setVisibility(View.VISIBLE);
+                } else{
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+                        Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
+                        if (validarEdad(fechaNacimiento)) {
+                            textViewCamp.setVisibility(View.GONE); // Ocultar mensaje de error si estaba visible
+                            textViewErrorPass.setVisibility(View.GONE);
+                            textViewErrorPassRep.setVisibility(View.GONE);
+                            hashedPassword = hashPassword(password);
+                            registerUser(nombre, email, hashedPassword, fechaNacimientoStr, sexo);
+                        } else {
+                            textViewCamp.setText("Debe ser mayor de 18 años para registrarse");
+                            textViewCamp.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Registro.this, "Error al procesar la fecha.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -138,7 +160,6 @@ public class Registro extends AppCompatActivity {
         // Obtiene la fecha actual
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -18); // Resta 18 años para obtener la fecha mínima de nacimiento
-
         // Compara la fecha de nacimiento con la fecha actual - 18 años
         return !fechaNacimiento.after(calendar.getTime());
     }
@@ -186,82 +207,120 @@ public class Registro extends AppCompatActivity {
         datePickerDialog.show();
     }
     //Autenticacion
-    private void registerUser(String nombre, String email, String password, String fechaNacimiento, String sexo) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void registerUser(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_politicas_privacidad_usuario, null);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        Button btnEnviar = dialogView.findViewById(R.id.btnEnviar);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Registro exitoso, ahora guarda los datos en Firestore
-                    saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo);
-                } else {
-                    // Error al registrar al usuario
-                    Toast.makeText(Registro.this, "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View v) {
+                // Cerrar el cuadro de diálogo cuando se hace clic en "Cancelar"
+                dialog.dismiss();
             }
         });
-    }
-    //GUARDAR DATOS EN FIRESTORE
-    private void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo) {
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("id", null);
-        userData.put("nombre", nombre);
-        userData.put("correo", email);
-        userData.put("password", password);
-        long timestamp = obtenerTimestamp(fechaNacimiento);
-        userData.put("fechanac", timestamp);
-        userData.put("sexo", sexo);
-
-        mFirestore.collection("users")
-                .add(userData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.createUserWithEmailAndPassword(email, hashedPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Usuario registrado con éxito en Firebase y datos guardados en Firestore
-                        String documentId = documentReference.getId(); // Obtén el ID generado por Firebase
-
-                        // Actualiza el campo "id" con el valor del ID generado
-                        mFirestore.collection("users").document(documentId)
-                                .update("id", documentId)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Campo "id" actualizado con éxito
-                                        finish();
-                                        startActivity(new Intent(Registro.this, ViewPacient.class));
-                                        Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Error al actualizar el campo "id"
-                                        Log.e("Registro", "Error al actualizar el campo 'id'", e);
-                                        Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Error al guardar en Firestore
-                        Log.e("Registro", "Error al guardar en Firestore", e);
-                        Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Registro exitoso, ahora guarda los datos en Firestore
+                            saveUserDataToFirestore(nombre, email, hashedPassword, fechaNacimiento, sexo);
+                        } else {
+                            // Error al registrar al usuario
+                            Toast.makeText(Registro.this, "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
+            }
+        });
+        builder.setView(dialogView);
+        dialog.show();
+    }
+    //GUARDAR DATOS EN FIRESTORE
+    private void saveUserDataToFirestore(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
+        if (hashedPassword != null) {
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", null);
+            userData.put("nombre", nombre);
+            userData.put("correo", email);
+            userData.put("password", hashedPassword);
+            long timestamp = obtenerTimestamp(fechaNacimiento);
+            userData.put("fechanac", timestamp);
+            userData.put("sexo", sexo);
+
+            mFirestore.collection("users")
+                    .add(userData)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            // Usuario registrado con éxito en Firebase y datos guardados en Firestore
+                            String documentId = documentReference.getId(); // Obtener el ID generado por Firebase
+
+                            // Actualizar el campo "id" con el valor del ID generado
+                            mFirestore.collection("users").document(documentId)
+                                    .update("id", documentId)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Campo "id" actualizado con éxito
+                                            finish();
+                                            startActivity(new Intent(Registro.this, ViewPacient.class));
+                                            Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Error al actualizar el campo "id"
+                                            Log.e("Registro", "Error al actualizar el campo 'id'", e);
+                                            Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Error al guardar en Firestore
+                            Log.e("Registro", "Error al guardar en Firestore", e);
+                            Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
     //FUNCION PARA CAMBIAR LA FECHA DE NACIMIENTO STRING A FORMATO TIMESTAMP
     private long obtenerTimestamp(String fecha) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
         try {
             Date date = dateFormat.parse(fecha);
-            return date.getTime();  // Obtiene el timestamp en milisegundos
+            return date.getTime();  // Obtener el timestamp en milisegundos
         } catch (ParseException e) {
             e.printStackTrace();
-            return -1;  // Devuelve -1 si hay un error en el formato de la fecha
+            return -1;  // Devolver -1 si hay un error en el formato de la fecha
         }
     }
-
+    //FUNCION PARA HASHEAR CONTRASEÑA
+    private String hashPassword(String password) {
+        try {
+            // Obtener una instancia de MessageDigest para SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            // Convierte la contraseña en bytes y hashea
+            byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            // Convierto el hash en una representación hexadecimal
+            BigInteger bigInt = new BigInteger(1, hashBytes);
+            String hashedPassword = bigInt.toString(16);
+            return hashedPassword;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            // Manejar la excepción
+            return null;
+        }
+    }
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

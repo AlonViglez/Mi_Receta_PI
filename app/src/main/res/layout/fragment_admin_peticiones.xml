@@ -3,23 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminPeticiones">
+    android:id="@+id/framepeticiones"
+    tools:context=".viewAdmin.AdminPeticiones">
     <!-- Título principal "Peticiones" centrado -->
-    <TextView
-        android:id="@+id/titlePeticiones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Peticiones"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center" />
-
     <!-- Contenedor de tarjetas de doctores -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/titlePeticiones">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:id="@+id/doctorsContainer"
             android:layout_width="match_parent"

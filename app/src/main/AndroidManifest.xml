@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_EMAIL" />
 
     <application
         android:allowBackup="true"
@@ -15,13 +16,16 @@
         android:theme="@style/Theme.Navdrawer"
         tools:targetApi="31">
         <activity
+            android:name=".viewAdmin.EditarDoctor"
+            android:exported="false" />
+        <activity
+            android:name=".viewAdmin.DetallesDoctor"
+            android:exported="false" />
+        <activity
             android:name=".viewAdmin.ViewAdministrador"
             android:exported="false" />
         <activity
             android:name=".IdentifyRegister"
-            android:exported="false" />
-        <activity
-            android:name=".ViewAdmin"
             android:exported="false" />
         <activity
             android:name=".Inicio"

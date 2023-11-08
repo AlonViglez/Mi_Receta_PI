@@ -16,18 +16,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.nav_drawer.AdminPeticiones;
-import com.example.nav_drawer.ContactarFragment;
-import com.example.nav_drawer.GuiaFragment;
-import com.example.nav_drawer.HistoryFragment;
 import com.example.nav_drawer.Login;
 import com.example.nav_drawer.R;
-import com.example.nav_drawer.viewpaciente.CitasPacientes;
-import com.example.nav_drawer.viewpaciente.DiagnosticarPaciente;
-import com.example.nav_drawer.viewpaciente.HistorialPaciente;
-import com.example.nav_drawer.viewpaciente.HomePaciente;
-import com.example.nav_drawer.viewpaciente.PerfilPaciente;
-import com.example.nav_drawer.viewpaciente.RecetaPaciente;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
