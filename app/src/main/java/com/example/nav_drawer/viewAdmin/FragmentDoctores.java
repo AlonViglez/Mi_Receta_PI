@@ -1,10 +1,12 @@
 package com.example.nav_drawer.viewAdmin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nav_drawer.R;
+import com.example.nav_drawer.Registro;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -96,7 +100,20 @@ public class FragmentDoctores extends Fragment {
 
                             //BOTON BORRAR
                             btnborrar.setOnClickListener(v -> {
-                                //MOSTRARE UN DIALOG DE QUE SI ESTA SEGURO DE ELIMINAR TAL DOCTOR(boton de aceptar/cancelar)
+                                String idDoc = document.getString("id");
+                                /*PONDRE UN DIALOG PARA CONFIRMACION DE BORRAR DOCTOR*/
+
+
+                                // Eliminar el doctor de Firestore
+                                db.collection("altadoctores")
+                                        .document(idDoctor)
+                                        .delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(getContext(), "El doctor se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
+                                        });
                             });
                             //BOTON EDITAR
                             btneditar.setOnClickListener(v -> {
@@ -108,7 +125,7 @@ public class FragmentDoctores extends Fragment {
                             doctorsContainer.addView(cardView);
                         }
                     } else {
-                        // Si hubiera un error
+                        //si hubiera error
                     }
                 });
         return view;
