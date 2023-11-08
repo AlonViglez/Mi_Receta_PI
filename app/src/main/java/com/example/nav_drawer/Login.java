@@ -133,7 +133,7 @@ public class Login extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     // Verificar si el usuario es un administrador
-                                    if (email.equals(admin)) {
+                                    if (email.equalsIgnoreCase(admin)) {
                                         // El usuario es un administrador
                                         Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso (Admin)", Toast.LENGTH_SHORT).show();
                                         Intent adminIntent = new Intent(getApplicationContext(), ViewAdministrador.class);
@@ -143,7 +143,7 @@ public class Login extends AppCompatActivity {
                                         // Verificar si el usuario es un doctor
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         CollectionReference doctorsRef = db.collection("altadoctores");
-                                        Query query = doctorsRef.whereEqualTo("correo", email);
+                                        Query query = doctorsRef.whereEqualTo("correo", email.toLowerCase());
                                         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -177,7 +177,7 @@ public class Login extends AppCompatActivity {
                                                     progressBar.setVisibility(View.GONE);
                                                     if (task.isSuccessful()) {
                                                         // Verificar si el usuario es un administrador
-                                                        if (email.equals(admin)) {
+                                                        if (email.equalsIgnoreCase(admin)) {
                                                             // El usuario es un administrador
                                                             Toast.makeText(getApplicationContext(), "Inicio de Sesion Exitoso (Admin)", Toast.LENGTH_SHORT).show();
                                                             Intent adminIntent = new Intent(getApplicationContext(), ViewAdministrador.class);
@@ -187,7 +187,7 @@ public class Login extends AppCompatActivity {
                                                             // Verificar si el usuario es un doctor
                                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                             CollectionReference doctorsRef = db.collection("altadoctores");
-                                                            Query query = doctorsRef.whereEqualTo("correo", email);
+                                                            Query query = doctorsRef.whereEqualTo("correo", email.toLowerCase());
                                                             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {

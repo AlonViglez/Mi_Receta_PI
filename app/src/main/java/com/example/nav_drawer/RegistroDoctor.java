@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -151,9 +153,12 @@ public class RegistroDoctor extends AppCompatActivity {
                 String repass = editRepetirPass.getText().toString().trim();
                 String especialidadSeleccionada = especialidadMedicaSpinner.getSelectedItem().toString(); //Especialidad medica seleccionada
                 String telefono = editTelefono.getText().toString().trim();
+                String[] dominiosPopulares = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com", "live.com", "ucol.mx"};
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimiento.isEmpty() && sexo.isEmpty() && repass.isEmpty() && especialidadSeleccionada.isEmpty() && telefono.isEmpty() /*&& imagenINEUri != null && imagenCedulaUri != null*/) {
+                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || fechaNacimiento.isEmpty() || sexo.isEmpty() || repass.isEmpty() || especialidadSeleccionada.isEmpty() || telefono.isEmpty() || (imagenCedulaUri == null) || (imagenCedulaUri == null)) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
+                    textViewErrorPass.setVisibility(View.GONE);
+                    textViewErrorPassRep.setVisibility(View.GONE);
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
                 } else if (!password.equals(repass)) {
@@ -166,11 +171,41 @@ public class RegistroDoctor extends AppCompatActivity {
                     textViewErrorPassRep.setVisibility(View.VISIBLE);
                     editTextPassword.setText("");  // Limpiar contraseñas
                     editRepetirPass.setText("");  // Limpiar contraseñas repetidas
-                }else {
-                    textViewCamp.setVisibility(View.GONE);  // Ocultar mensaje de error si estaba visible
-                    textViewErrorPass.setVisibility(View.GONE);
-                    textViewErrorPassRep.setVisibility(View.GONE);
-                    saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo, especialidadSeleccionada,telefono,imagenINEUri,imagenCedulaUri);//Guardar datos en Firestore
+                } else if (telefono.isEmpty() || telefono.length() != 10) {
+                    //VALIDACION DE DIGITOS DEL TELEFONO 10
+                    textViewCamp.setText("El número de teléfono debe tener 10 dígitos");
+                    textViewCamp.setVisibility(View.VISIBLE);
+                } else {
+                    //VALIDACION DE DOMINIO CORREO ELECTRONICO
+                    boolean emailValido = false;
+                    for (String dominio : dominiosPopulares) {
+                        if (email.endsWith("@" + dominio)) {
+                            emailValido = true;
+                            break;
+                        }
+                    }
+                    //VALIDACION DE QUE NO ESTE VACIO ANTES DE LA ARROBA
+                    if (emailValido && email.indexOf("@") > 0) {
+                        // Validación de imágenes
+                        boolean imagenCedulaValida = validarImagen(imagenCedulaUri);
+                        boolean imagenINEValida = validarImagen(imagenINEUri);
+                        if (imagenCedulaValida && imagenINEValida) {
+                            // IMAGENES SON VALIDAS
+                            // OCULTAR MENSAJES DE ERROR
+                            textViewCamp.setVisibility(View.GONE);
+                            textViewErrorPass.setVisibility(View.GONE);
+                            textViewErrorPassRep.setVisibility(View.GONE);
+                            // GUARDAR EN FIRESTORE
+                            saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo, especialidadSeleccionada, telefono, imagenINEUri, imagenCedulaUri);
+                        } else {
+                            // Al menos una de las imágenes no es válida
+                            textViewCamp.setText("Imagen(es) no válidas");
+                            textViewCamp.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textViewCamp.setText("El correo debe ser válido y utilizar un dominio correcto(ejemplo: gmail.com)");
+                        textViewCamp.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -199,7 +234,21 @@ public class RegistroDoctor extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE);
     }
+    //VALIDAR IMAGENES
+    private boolean validarImagen(Uri imagenUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imagenUri);// Abre un flujo de entrada para la URI de la imagen
+            BitmapFactory.Options options = new BitmapFactory.Options(); // Crea un objeto BitmapFactory.Options
+            options.inJustDecodeBounds = true;// Establece la propiedad inJustDecodeBounds en true para obtener solo las dimensiones de la imagen
+            BitmapFactory.decodeStream(inputStream, null, options);// Intenta decodificar las dimensiones de la imagen sin cargar completamente su contenido
+            inputStream.close();// Cierra el flujo de entrada
 
+            return (options.outWidth != -1 && options.outHeight != -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     //VALIDACION DE FECHA DE NACIMIENTO
     private boolean validarEdad(Date fechaNacimiento) {
         // Obtener la fecha actual
@@ -249,6 +298,8 @@ public class RegistroDoctor extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
 
+        // Establece el límite máximo al año actual
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // Mostrar el DatePickerDialog
         datePickerDialog.show();
     }

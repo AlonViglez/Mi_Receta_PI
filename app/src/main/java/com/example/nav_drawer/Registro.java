@@ -109,13 +109,14 @@ public class Registro extends AppCompatActivity {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
                 String nombre = editNombre.getText().toString().trim();  // Agrega el nombre obtenido
-                String fechaNacimientoStr = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
+                String fechaNacimiento = editFecha.getText().toString().trim();  // Agrega la fecha de nacimiento obtenida
                 String repass = editRepetirPass.getText().toString().trim();
+                String[] dominiosPopulares = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com", "live.com", "ucol.mx"};
                 TextView textViewErrorPass = findViewById(R.id.textViewErrorPassword);
                 TextView textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
                 TextView textViewCamp = findViewById(R.id.textViewCampos);
                 //VALIDACIONES DE QUE NO ESTEN VACIOS LOS CAMPOS
-                if (nombre.isEmpty() && email.isEmpty() && password.isEmpty() && fechaNacimientoStr.isEmpty() && sexo.isEmpty() && repass.isEmpty()) {
+                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || fechaNacimiento.isEmpty() || sexo.isEmpty() || repass.isEmpty()) {
                     //Toast.makeText(Registro.this, "Complete los datos", Toast.LENGTH_SHORT).show();
                     textViewCamp.setText("Complete todos los campos");
                     textViewCamp.setVisibility(View.VISIBLE);
@@ -129,26 +130,26 @@ public class Registro extends AppCompatActivity {
                     textViewErrorPassRep.setVisibility(View.VISIBLE);
                     editTextPassword.setText("");  // Limpiar contraseñas
                     editRepetirPass.setText("");  // Limpiar contraseñas repetidas
-                } else if(fechaNacimientoStr.isEmpty()) {
-                    textViewCamp.setText("Ingrese la fecha de nacimiento");
-                    textViewCamp.setVisibility(View.VISIBLE);
-                } else{
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-                        Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
-                        if (validarEdad(fechaNacimiento)) {
-                            textViewCamp.setVisibility(View.GONE); // Ocultar mensaje de error si estaba visible
-                            textViewErrorPass.setVisibility(View.GONE);
-                            textViewErrorPassRep.setVisibility(View.GONE);
-                            hashedPassword = hashPassword(password);
-                            registerUser(nombre, email, hashedPassword, fechaNacimientoStr, sexo);
-                        } else {
-                            textViewCamp.setText("Debe ser mayor de 18 años para registrarse");
-                            textViewCamp.setVisibility(View.VISIBLE);
+                } else {
+                    //VALIDACION DE DOMINIO CORREO ELECTRONICO
+                    boolean emailValido = false;
+                    for (String dominio : dominiosPopulares) {
+                        if (email.endsWith("@" + dominio)) {
+                            emailValido = true;
+                            break;
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Registro.this, "Error al procesar la fecha.", Toast.LENGTH_SHORT).show();
+                    }
+                    //VALIDACION DE QUE NO ESTE VACIO ANTES DE LA ARROBA
+                    if (emailValido && email.indexOf("@") > 0) {
+                        //OCULTAR MENSAJES DE ERROR
+                        textViewCamp.setVisibility(View.GONE);
+                        textViewErrorPass.setVisibility(View.GONE);
+                        textViewErrorPassRep.setVisibility(View.GONE);
+                        //REGISTRAR EN FIREBASE
+                        registerUser(nombre, email, hashedPassword, fechaNacimiento, sexo);
+                    } else {
+                        textViewCamp.setText("El correo debe ser válido y utilizar un dominio correcto(ejemplo: gmail.com)");
+                        textViewCamp.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -203,6 +204,8 @@ public class Registro extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
 
+        // Establece el límite máximo al año actual
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // Muestra el DatePickerDialog
         datePickerDialog.show();
     }
