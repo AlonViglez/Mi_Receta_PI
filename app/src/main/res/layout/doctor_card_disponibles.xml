@@ -1,0 +1,91 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"> <!-- CARD PARA DETALLES DOCTOR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/doctorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doctor name"
+                android:textColor="@color/azul_cute"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="9dp" />
+            <ImageView
+                android:id="@+id/doctorIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/paciente1"
+                android:layout_marginStart="6dp"
+                android:layout_gravity="start" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="-220dp"
+            android:gravity="start"> <!-- Añadir la propiedad gravity aquí -->
+            <TextView
+                android:id="@+id/especialidadMedica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Especialidad medica"
+                android:textColor="@color/color_gris"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/disponibilidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disponibilidad"
+                android:textColor="@color/color_gris"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp">
+                <ImageView
+                    android:id="@+id/valoracionIcon1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_stars" />
+                <ImageView
+                    android:id="@+id/valoracionIcon2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_stars" />
+                <ImageView
+                    android:id="@+id/valoracionIcon3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_stars" />
+                <ImageView
+                    android:id="@+id/valoracionIcon4"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_stars" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

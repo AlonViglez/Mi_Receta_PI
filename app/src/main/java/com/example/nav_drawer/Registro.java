@@ -54,7 +54,7 @@ public class Registro extends AppCompatActivity {
     RadioButton radioMasculino, radioFemenino, radioOtros;
     RadioGroup sexoRadioGroup;
     EditText editFecha;
-    Button buttonReg;
+    Button buttonRegistro;
     ProgressBar progressBar;
     TextView textView;
     String sexo = "";
@@ -73,7 +73,7 @@ public class Registro extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
         editFecha = findViewById(R.id.fecha);
         editNombre = findViewById(R.id.nombre);
-        buttonReg = findViewById(R.id.btn_registro);
+        buttonRegistro = findViewById(R.id.btn_registro);
         textView = findViewById(R.id.loginNow);
         editRepetirPass = findViewById(R.id.repetirPassword);
         linearLayoutSexo = findViewById(R.id.linearLayoutSexo);
@@ -103,7 +103,7 @@ public class Registro extends AppCompatActivity {
             }
         });
         //FUNCIONALIDAD DEL BOTON REGISTRAR
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        buttonRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
@@ -146,7 +146,7 @@ public class Registro extends AppCompatActivity {
                         textViewErrorPass.setVisibility(View.GONE);
                         textViewErrorPassRep.setVisibility(View.GONE);
                         //REGISTRAR EN FIREBASE
-                        registerUser(nombre, email, hashedPassword, fechaNacimiento, sexo);
+                        registerUser(nombre, email, password, fechaNacimiento, sexo);
                     } else {
                         textViewCamp.setText("El correo debe ser válido y utilizar un dominio correcto(ejemplo: gmail.com)");
                         textViewCamp.setVisibility(View.VISIBLE);
@@ -210,7 +210,7 @@ public class Registro extends AppCompatActivity {
         datePickerDialog.show();
     }
     //Autenticacion
-    private void registerUser(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
+    public void registerUser(String nombre, String email, String password, String fechaNacimiento, String sexo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_politicas_privacidad_usuario, null);
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);
@@ -227,74 +227,76 @@ public class Registro extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.createUserWithEmailAndPassword(email, hashedPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Registro exitoso, ahora guarda los datos en Firestore
-                            saveUserDataToFirestore(nombre, email, hashedPassword, fechaNacimiento, sexo);
-                        } else {
-                            // Error al registrar al usuario
-                            Toast.makeText(Registro.this, "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                // Registro exitoso, ahora guarda los datos en Firestore
+                                saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo);
+                                Toast.makeText(Registro.this, "Registro completo", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Error al registrar al usuario
+                                Toast.makeText(Registro.this, "Error al registrar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
         builder.setView(dialogView);
         dialog.show();
     }
     //GUARDAR DATOS EN FIRESTORE
-    private void saveUserDataToFirestore(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
-        if (hashedPassword != null) {
-            Map<String, Object> userData = new HashMap<>();
-            userData.put("id", null);
-            userData.put("nombre", nombre);
-            userData.put("correo", email);
-            userData.put("password", hashedPassword);
-            long timestamp = obtenerTimestamp(fechaNacimiento);
-            userData.put("fechanac", timestamp);
-            userData.put("sexo", sexo);
+    public void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo) {
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("id", null);
+        userData.put("nombre", nombre);
+        userData.put("correo", email);
+        userData.put("password", password);
+        long timestamp = obtenerTimestamp(fechaNacimiento);
+        userData.put("fechanac", timestamp);
+        userData.put("sexo", sexo);
 
-            mFirestore.collection("users")
-                    .add(userData)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            // Usuario registrado con éxito en Firebase y datos guardados en Firestore
-                            String documentId = documentReference.getId(); // Obtener el ID generado por Firebase
+        mFirestore.collection("users")
+                .add(userData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Usuario registrado con éxito en Firebase y datos guardados en Firestore
+                        String documentId = documentReference.getId(); // Obtener el ID generado por Firebase
 
-                            // Actualizar el campo "id" con el valor del ID generado
-                            mFirestore.collection("users").document(documentId)
-                                    .update("id", documentId)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            // Campo "id" actualizado con éxito
-                                            finish();
-                                            startActivity(new Intent(Registro.this, ViewPacient.class));
-                                            Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Error al actualizar el campo "id"
-                                            Log.e("Registro", "Error al actualizar el campo 'id'", e);
-                                            Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Error al guardar en Firestore
-                            Log.e("Registro", "Error al guardar en Firestore", e);
-                            Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+                        // Actualizar el campo "id" con el valor del ID generado
+                        mFirestore.collection("users").document(documentId)
+                                .update("id", documentId)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // Campo "id" actualizado con éxito
+                                        finish();
+                                        startActivity(new Intent(Registro.this, ViewPacient.class));
+                                        Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Error al actualizar el campo "id"
+                                        Log.e("Registro", "Error al actualizar el campo 'id'", e);
+                                        Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Error al guardar en Firestore
+                        Log.e("Registro", "Error al guardar en Firestore", e);
+                        Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
     //FUNCION PARA CAMBIAR LA FECHA DE NACIMIENTO STRING A FORMATO TIMESTAMP
     private long obtenerTimestamp(String fecha) {
@@ -323,10 +325,5 @@ public class Registro extends AppCompatActivity {
             // Manejar la excepción
             return null;
         }
-    }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return false;
     }
 }
