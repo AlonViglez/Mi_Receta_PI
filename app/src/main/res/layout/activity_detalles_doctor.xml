@@ -10,22 +10,38 @@
         android:id="@+id/r3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="80dp"
-            android:layout_height="75dp"
+            android:layout_width="65dp"
+            android:layout_height="70dp"
             android:layout_alignParentStart="true"
             android:src="@drawable/flecha_atras"
             android:padding="16dp"/>
-
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="10dp"
+            android:alpha="0.5"
+            android:background="#39A7FF"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Detalles"
             android:textColor="@color/black"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:id="@+id/detalles"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="10dp"
+            android:alpha="0.5"
+            android:background="#39A7FF"
+            android:layout_below="@id/detalles"/>
     </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
