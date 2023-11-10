@@ -1,45 +1,54 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="8dp"> <!-- CARD PARA DETALLES DOCTOR -->
+    app:cardElevation="8dp"
+    android:id="@+id/doctorCardHelp">
+
+    <!-- Diseño horizontal principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/doctorName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Doctor name"
-                android:textColor="@color/azul_cute"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginBottom="9dp" />
+            android:orientation="horizontal">
             <ImageView
                 android:id="@+id/doctorIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/paciente1"
-                android:layout_marginStart="6dp"
-                android:layout_gravity="start" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/bicho"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
         </LinearLayout>
+
+        <!-- Linear Layout para el nombre del doctor, especialidad, disponibilidad y valoración -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical"
-            android:layout_marginTop="32dp"
-            android:layout_marginStart="-220dp"
-            android:gravity="start"> <!-- Añadir la propiedad gravity aquí -->
+            android:padding="9dp">
+
+            <!-- Nombre del doctor -->
+            <TextView
+                android:id="@+id/doctorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Doctor name"
+                android:textColor="@color/azul_cute"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Especialidad medica -->
             <TextView
                 android:id="@+id/especialidadMedica"
                 android:layout_width="wrap_content"
@@ -49,6 +58,8 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
                 android:textSize="16sp"/>
+
+            <!-- Disponibilidad medica -->
             <TextView
                 android:id="@+id/disponibilidad"
                 android:layout_width="wrap_content"
@@ -59,27 +70,32 @@
                 android:layout_marginBottom="3dp"
                 android:textSize="16sp"/>
 
+            <!-- Valoración -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp">
+
                 <ImageView
                     android:id="@+id/valoracionIcon1"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/icon_stars" />
+
                 <ImageView
                     android:id="@+id/valoracionIcon2"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/icon_stars" />
+
                 <ImageView
                     android:id="@+id/valoracionIcon3"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/icon_stars" />
+
                 <ImageView
                     android:id="@+id/valoracionIcon4"
                     android:layout_width="24dp"

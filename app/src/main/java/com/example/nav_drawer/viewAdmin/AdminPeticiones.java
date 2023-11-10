@@ -83,6 +83,15 @@ public class AdminPeticiones extends Fragment {
                             String idDoctor = document.getString("id");
                             // Inflar el diseño de la tarjeta personalizado
                             View cardView = getLayoutInflater().inflate(R.layout.doctor_card, null);
+                            // Configurar los márgenes
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+                            layoutParams.setMargins(16, 16, 16, 16); // Ajusta los márgenes según tus necesidades
+
+                            // Aplicar los márgenes a la vista de la tarjeta
+                            cardView.setLayoutParams(layoutParams);
                             // Encontrar las vistas dentro de la tarjeta
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);

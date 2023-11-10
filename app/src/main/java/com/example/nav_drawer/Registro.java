@@ -250,53 +250,56 @@ public class Registro extends AppCompatActivity {
     }
     //GUARDAR DATOS EN FIRESTORE
     public void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo) {
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("id", null);
-        userData.put("nombre", nombre);
-        userData.put("correo", email);
-        userData.put("password", password);
-        long timestamp = obtenerTimestamp(fechaNacimiento);
-        userData.put("fechanac", timestamp);
-        userData.put("sexo", sexo);
+        String hashedPassword = hashPassword(password);
+        if (hashedPassword != null) {
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", null);
+            userData.put("nombre", nombre);
+            userData.put("correo", email);
+            userData.put("password", hashedPassword);
+            long timestamp = obtenerTimestamp(fechaNacimiento);
+            userData.put("fechanac", timestamp);
+            userData.put("sexo", sexo);
 
-        mFirestore.collection("users")
-                .add(userData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Usuario registrado con éxito en Firebase y datos guardados en Firestore
-                        String documentId = documentReference.getId(); // Obtener el ID generado por Firebase
+            mFirestore.collection("users")
+                    .add(userData)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            // Usuario registrado con éxito en Firebase y datos guardados en Firestore
+                            String documentId = documentReference.getId(); // Obtener el ID generado por Firebase
 
-                        // Actualizar el campo "id" con el valor del ID generado
-                        mFirestore.collection("users").document(documentId)
-                                .update("id", documentId)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Campo "id" actualizado con éxito
-                                        finish();
-                                        startActivity(new Intent(Registro.this, ViewPacient.class));
-                                        Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Error al actualizar el campo "id"
-                                        Log.e("Registro", "Error al actualizar el campo 'id'", e);
-                                        Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Error al guardar en Firestore
-                        Log.e("Registro", "Error al guardar en Firestore", e);
-                        Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                            // Actualizar el campo "id" con el valor del ID generado
+                            mFirestore.collection("users").document(documentId)
+                                    .update("id", documentId)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Campo "id" actualizado con éxito
+                                            finish();
+                                            startActivity(new Intent(Registro.this, ViewPacient.class));
+                                            Toast.makeText(Registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Error al actualizar el campo "id"
+                                            Log.e("Registro", "Error al actualizar el campo 'id'", e);
+                                            Toast.makeText(Registro.this, "Error al actualizar el campo 'id'", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Error al guardar en Firestore
+                            Log.e("Registro", "Error al guardar en Firestore", e);
+                            Toast.makeText(Registro.this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
     //FUNCION PARA CAMBIAR LA FECHA DE NACIMIENTO STRING A FORMATO TIMESTAMP
     private long obtenerTimestamp(String fecha) {

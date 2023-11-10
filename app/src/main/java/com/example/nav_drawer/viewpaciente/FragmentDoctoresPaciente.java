@@ -1,14 +1,26 @@
 package com.example.nav_drawer.viewpaciente;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.nav_drawer.R;
+import com.example.nav_drawer.viewAdmin.DetallesDoctor;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +37,8 @@ public class FragmentDoctoresPaciente extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView doctorNameTextView;
+    private TextView especialidadMedicaTextView;
 
     public FragmentDoctoresPaciente() {
         // Required empty public constructor
@@ -60,7 +74,49 @@ public class FragmentDoctoresPaciente extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_doctores_paciente, container, false);
+        View view = inflater.inflate(R.layout.fragment_doctores_paciente, container, false);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Obtener una referencia al contenedor de tarjetas
+        LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainerHelp);
+
+        // Realizar una consulta para obtener los datos de los doctores
+        db.collection("altadoctores")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String nombreDoctor = document.getString("nombre");
+                            String especialidadMedica = document.getString("especialidad");
+                            String idDoctor = document.getString("id");
+                            // Inflar el diseño de la tarjeta personalizado
+                            View cardView = getLayoutInflater().inflate(R.layout.doctor_card_ayuda_chat, null);
+
+                            // Configurar los márgenes
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+                            layoutParams.setMargins(16, 16, 16, 16); // Ajusta los márgenes según tus necesidades
+
+                            // Aplicar los márgenes a la vista de la tarjeta
+                            cardView.setLayoutParams(layoutParams);
+
+                            // Encontrar las vistas dentro de la tarjeta
+                            ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
+                            TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
+                            TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
+
+                            // Configurar los elementos de la tarjeta
+                            doctorNameTextView.setText(nombreDoctor);
+                            especialidadMedicaTextView.setText(especialidadMedica);
+
+                            // Agregar la tarjeta al contenedor
+                            doctorsContainer.addView(cardView);
+                        }
+                    } else {
+                        // Si hubiera un error
+                    }
+                });
+        return view;
     }
 }

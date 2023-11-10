@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/framepeticiones"
     tools:context=".viewpaciente.FragmentDoctoresPaciente">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/doctorRecyclerView"
+    <!-- Título principal "Peticiones" centrado -->
+    <!-- Contenedor de tarjetas de doctores -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="2dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/doctor_card_disponibles" />
-</RelativeLayout>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/doctorsContainerHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="80dp"
+            android:padding="15dp">
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
