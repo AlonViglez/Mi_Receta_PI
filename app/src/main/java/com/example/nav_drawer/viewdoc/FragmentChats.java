@@ -1,44 +1,33 @@
 package com.example.nav_drawer.viewdoc;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nav_drawer.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentChats#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentChats extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    EditText searchInput;
+    ImageButton searchButton;
+    ImageButton backButton;
+    RecyclerView recyclerView;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public FragmentChats() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentChats.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragmentChats newInstance(String param1, String param2) {
         FragmentChats fragment = new FragmentChats();
         Bundle args = new Bundle();
@@ -60,7 +49,36 @@ public class FragmentChats extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chats, container, false);
+        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+
+        searchInput = view.findViewById(R.id.search_username_input);
+        searchButton = view.findViewById(R.id.search_user_btn);
+        backButton = view.findViewById(R.id.back_btn);
+        recyclerView = view.findViewById(R.id.search_user_recycler_view);
+
+        searchInput.requestFocus();
+
+        backButton.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
+        searchButton.setOnClickListener(v -> {
+            String searchTerm = searchInput.getText().toString();
+            if (searchTerm.isEmpty() || searchTerm.length() < 3) {
+                searchInput.setError("Paciente Incorrecto");
+                return;
+            }
+            setupSearchRecyclerView(searchTerm);
+        });
+
+        return view;
+    }
+
+    void setupSearchRecyclerView(String searchTerm) {
+
+    }
+
+    void onBackPressed() {
+
     }
 }
