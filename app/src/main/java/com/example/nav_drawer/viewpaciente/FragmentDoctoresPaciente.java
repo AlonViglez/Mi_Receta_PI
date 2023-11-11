@@ -109,7 +109,17 @@ public class FragmentDoctoresPaciente extends Fragment {
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
-
+                            //PASAR AL ACTIVITY DE PAGAR EL CHAT
+                            cardView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Aquí maneja el clic en la tarjeta
+                                    // Por ejemplo, puedes abrir el nuevo Activity
+                                    Intent intent = new Intent(getActivity(), comprar_chat.class);
+                                    intent.putExtra("idDoctor", idDoctor);
+                                    startActivity(intent);
+                                }
+                            });
                             // Agregar la tarjeta al contenedor
                             doctorsContainer.addView(cardView);
                         }

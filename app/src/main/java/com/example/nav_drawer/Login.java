@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -52,12 +55,19 @@ public class Login extends AppCompatActivity {
     @Override
     public void onStart() { //AL INICIAR LA APP SI ESTA UNA CUENTA ACTIVA TE REDIRECCIONA AUTOMATICAMENTE
         super.onStart();
+        // Verificar la conexión a Internet antes de intentar la autenticación en onStart
+        if (!isNetworkAvailable()) {
+            Toast.makeText(Login.this, "No hay conexión a Internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String userEmail = currentUser.getEmail();
             if (userEmail != null) {
                 if (userEmail.equals(admin)) {
                     // El usuario es el administrador
+                    Toast.makeText(Login.this, "Bienvenido de nuevo", Toast.LENGTH_SHORT).show();
                     Intent adminCheck = new Intent(getApplicationContext(), ViewAdministrador.class);
                     startActivity(adminCheck);
                     finish();
@@ -72,11 +82,13 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 if (!task.getResult().isEmpty()) {
                                     // El usuario es un doctor
+                                    Toast.makeText(Login.this, "Bienvenido de nuevo", Toast.LENGTH_SHORT).show();
                                     Intent doctorIntent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(doctorIntent);
                                     finish();
                                 } else {
                                     // El usuario no es un doctor, por lo tanto, se asume que es un paciente
+                                    Toast.makeText(Login.this, "Bienvenido de nuevo", Toast.LENGTH_SHORT).show();
                                     Intent userCheck = new Intent(getApplicationContext(), ViewPacient.class);
                                     startActivity(userCheck);
                                     finish();
@@ -293,6 +305,14 @@ public class Login extends AppCompatActivity {
             // Manejar la excepción
             return null;
         }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
     }
 
 }

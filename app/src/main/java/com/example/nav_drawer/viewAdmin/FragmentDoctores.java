@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.Registro;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -74,6 +77,7 @@ public class FragmentDoctores extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doctores, container, false);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         // Obtener una referencia al contenedor de tarjetas
         LinearLayout doctorsContainer = view.findViewById(R.id.doctorsContainerAlta);
 
@@ -109,27 +113,48 @@ public class FragmentDoctores extends Fragment {
 
                             //BOTON BORRAR
                             btnborrar.setOnClickListener(v -> {
-                                String idDoc = document.getString("id");
-                                /*PONDRE UN DIALOG PARA CONFIRMACION DE BORRAR DOCTOR*/
+                                String email = document.getString("correo");
+                                // Crear el diálogo de confirmación
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirmacion, null);
+                                builder.setView(dialogView);
+                                Button btnCancelar = dialogView.findViewById(R.id.btnCancelarEliminacion);
+                                Button btnEliminar = dialogView.findViewById(R.id.btnEliminar);
+                                // Declarar la variable alertDialog fuera de los listeners
+                                AlertDialog alertDialog = builder.create();
+                                // Configurar el botón Cancelar para cerrar el diálogo
+                                btnCancelar.setOnClickListener(v1 -> {
+                                    // Cerrar el diálogo
+                                    alertDialog.dismiss();
+                                });
+                                // Eliminar doctor de firestore
+                                btnEliminar.setOnClickListener(v2 -> {
+                                    // Eliminar el doctor de Firestore
+                                    db.collection("altadoctores")
+                                            .document(email)
+                                            .delete()
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(getContext(), "El doctor se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
+                                            });
 
+                                    //HACE FALTA ELIMINARLO DE AUTENTICACION
 
-                                // Eliminar el doctor de Firestore
-                                db.collection("altadoctores")
-                                        .document(idDoctor)
-                                        .delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(getContext(), "El doctor se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
-                                        });
+                                    // Cerrar el diálogo después de eliminar
+                                    alertDialog.dismiss();
+                                });
+                                // Mostrar el diálogo
+                                alertDialog.show();
                             });
                             //BOTON EDITAR
+                            /*NOSE SI IMPLEMENTARLO
                             btneditar.setOnClickListener(v -> {
                                 Intent intent = new Intent(getActivity(), EditarDoctor.class);
                                 intent.putExtra("doctorId", idDoctor); //Paso el ID del doctor
                                 startActivity(intent);
-                            });
+                            });*/
                             // Agrega la tarjeta al contenedor
                             doctorsContainer.addView(cardView);
                         }

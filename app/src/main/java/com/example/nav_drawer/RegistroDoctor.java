@@ -114,9 +114,9 @@ public class RegistroDoctor extends AppCompatActivity {
                     sexo = "Femenino";
                 } else if (checkedId == R.id.radioMasculino) {
                     sexo = "Masculino";
-                } else if (checkedId == R.id.radioOtros) {
+                } /*else if (checkedId == R.id.radioOtros) {
                     sexo = "Otros";
-                }
+                }*/
             }
         });
         //MOSTRAR PICKER DE CALENDARIO EN FECHA DE NACIMIENTO

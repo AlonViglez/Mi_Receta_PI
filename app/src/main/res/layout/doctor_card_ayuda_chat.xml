@@ -57,18 +57,20 @@
                 android:textColor="@color/color_gris"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
-                android:textSize="16sp"/>
+                android:textSize="13sp"/>
 
             <!-- Disponibilidad medica -->
             <TextView
                 android:id="@+id/disponibilidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Disponibilidad"
+                android:text="12:00 pm - 18:00 pm"
                 android:textColor="@color/color_gris"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
-                android:textSize="16sp"/>
+                android:textSize="13sp"
+                android:drawableLeft="@drawable/icon_disponibilidad"
+                android:drawablePadding="5dp"/>/>
 
             <!-- Valoración -->
             <LinearLayout

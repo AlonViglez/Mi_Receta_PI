@@ -32,7 +32,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/politicasText"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac urna ut dolor commodo vehicula. Quisque auctor est vel justo aliquet, ac hendrerit nunc convallis. Maecenas suscipit odio at libero scelerisque, in laoreet metus fringilla. Nulla facilisi. Sed non risus nec eros auctor volutpat. Vestibulum tincidunt lorem a mi efficitur, at aliquam mauris lacinia. Nulla facilisi. Etiam in lorem in odio facilisis elementum.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis elit vel ipsum tristique, ut sodales justo fermentum. Cras tristique, mauris in euismod bibendum, erat tortor vehicula justo, non vehicula quam tortor id justo. Fusce sed laoreet libero, nec porta mauris. Nulla facilisi. Morbi nec lectus urna. Vestibulum ultricies tincidunt urna, a scelerisque est. Quisque quis libero eget justo pharetra pharetra. Fusce interdum quam non tincidunt varius. Vivamus vel arcu eu dolor auctor fringilla. Pellentesque ut odio in mi aliquam laoreet. Aenean in justo in risus scelerisque dictum. Aenean et turpis in lisdsdsdsds"
+                android:text="Bienvenido a MiReceta, una aplicación móvil desarrollada por estudiantes de la Universidad de Colima, Facultad de Ingeniería Electromecánica. Esta aplicación tiene como objetivo principal ayudar a los pacientes a recordar y administrar sus medicamentos de manera efectiva y permitir a los médicos proporcionar servicios de atención médica.
+
+            Antes de utilizar esta aplicación, por favor lea atentamente estos términos y condiciones. Su uso de la aplicación implica la aceptación de estos términos. Si no está de acuerdo con estos términos de condiciones.
+            "
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="8dp"
@@ -40,6 +43,20 @@
                 android:textColor="@color/azul"
                 app:layout_constraintTop_toBottomOf="@id/forgotTitle"
                 android:layout_above="@id/btnCanceldoc"/>
+            <!-- TextView para el hipervínculo -->
+            <TextView
+                android:id="@+id/txtMasInformacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Más información de términos y condiciones"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/azul_cute"
+
+                android:layout_marginStart="20dp"
+                android:onClick="mostrarMasInformacion"
+                app:layout_constraintTop_toBottomOf="@id/politicasText"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -54,9 +71,10 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/politicasText"
+                app:layout_constraintTop_toBottomOf="@id/txtMasInformacion"
                 app:layout_constraintBottom_toBottomOf="@id/dialogBox"
                 app:layout_constraintEnd_toStartOf="@id/btnEnviardoc"/>
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="50dp"
