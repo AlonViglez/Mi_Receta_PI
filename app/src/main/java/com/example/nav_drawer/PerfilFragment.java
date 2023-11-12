@@ -1,9 +1,17 @@
 package com.example.nav_drawer;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +20,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 //PERFIL
 /**
  * A simple {@link Fragment} subclass.
@@ -42,15 +57,18 @@ public class PerfilFragment extends Fragment {
     TextView profilefecha;
     TextView profileespeciality;
 
+    TextView aboutme;
+
     FirebaseAuth mAuth;
 
 
-    // Variables para EditText
-    EditText editText;
-
+    SharedPreferences sharedPreferences;
 
     // Variable para Button
     Button editButton;
+
+
+    FirebaseAuth auth;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -88,6 +106,7 @@ public class PerfilFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_perfil, container, false);
+        aboutme = view.findViewById(R.id.aboutme);
         titleName = view.findViewById(R.id.titleName);
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
@@ -95,15 +114,13 @@ public class PerfilFragment extends Fragment {
         profilefecha = view.findViewById(R.id.profilefecha);
         profileespeciality = view.findViewById(R.id.profileespeciality);
 
-
-        // Inicialización de variables para EditText
-        editText = view.findViewById(R.id.editText);
-
-
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         // Inicialización de variable para Button
         editButton = view.findViewById(R.id.editButton);
-
-        showDoctorData();
+        //mostrar pantalla emergente
+        showdialog();
+        //mostrar datos el del perfil
+        //showDoctorData();
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,9 +153,9 @@ public class PerfilFragment extends Fragment {
                                 profileEmail.setText(email);
                                 titleName.setText(nombreDoctor);
                                 profileName.setText(nombreDoctor);
-                                profiletipo.setText(sexo);
+                              /*  profiletipo.setText(sexo);
                                 profiletelefono.setText(telefono);
-                                profilePassword.setText(password);
+                                profilePassword.setText(password);*/
 
                                 // Establecer un OnClickListener para el botón de "Detalles"
 
@@ -163,4 +180,92 @@ public class PerfilFragment extends Fragment {
         }
 
     }
+
+
+    //parte mostrar la pantalla emergente para about me
+    public void showdialog(){
+        boolean dialogShown = sharedPreferences.getBoolean("dialogShown", false);
+       // if (!dialogShown) {
+            // Mostrar el diálogo solo si no se ha mostrado antes
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Ingrese texto");
+
+            // Crear un EditText para la entrada de texto
+            final EditText input = new EditText(getActivity());
+            builder.setView(input);
+            // Mostrar el diálogo
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Código para el botón Aceptar
+                    String userInput = input.getText().toString();
+
+                    // Guardar el texto en Firebase Firestore
+                    uploadTextToFirestore(userInput);
+
+                    // Guardar un indicador para que no se muestre el diálogo nuevamente
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("dialogShown", true);
+                    editor.apply();
+                }
+            });
+
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Código para el botón Cancelar
+                    dialog.cancel();
+                }
+            });
+
+            // Mostrar el diálogo
+            builder.show();
+          //  showdialog();
+       /* }else {
+            Toast.makeText(getActivity(), "Ya has ingresado sobre tí", Toast.LENGTH_SHORT).show();
+        }*/
+
+    }
+    public void uploadTextToFirestore(String text) {
+        try {
+            // Tu código aquí
+            FirebaseUser user = auth.getCurrentUser();
+        // Crear un mapa para el documento con el texto
+
+        if (user != null) {
+            // Usuario autenticado
+            String uid = user.getUid();
+
+            // Obtener la instancia de FirebaseFirestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> data = new HashMap<>();
+            data.put("descripcion", text);
+
+            // Añadir un nuevo documento a la colección "textos"
+            db.collection("altadoctores")
+                    .document(uid)
+                    .set(data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Documento actualizado con éxito");
+                            // Puedes realizar acciones adicionales si es necesario
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error al actualizar documento", e);
+                            // Puedes manejar el error aquí
+                        }
+                    });
+        }else {
+            Log.e(TAG, "Usuario no autenticado");
+        }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

@@ -60,18 +60,22 @@
         android:layout_marginTop="5dp"
         android:layout_below="@id/titlepersonal">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:background="@drawable/input_design_text_box"
-            android:elevation="4dp"
-            android:hint="Escribe algo sobre tí"
-            android:padding="10dp"
-            android:id="@+id/editText"
-            android:inputType="textMultiLine"
-            android:lines="2"/>
-
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:text="About me"
+           android:id="@+id/text3"
+           android:textColor="@color/black"
+           android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/aboutme"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="About me"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_below="@id/text3"/>
     </LinearLayout>
 
 
