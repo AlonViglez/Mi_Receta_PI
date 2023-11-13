@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nav_drawer.viewdoc.Actualizarperfildoc;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,20 +57,19 @@ public class PerfilFragment extends Fragment {
     TextView profileEmail;
     TextView profilegenero;
     TextView profilefecha;
+
+    TextView profilenum;
     TextView profileespeciality;
 
     TextView aboutme;
-
-    FirebaseAuth mAuth;
-
-
     SharedPreferences sharedPreferences;
 
     // Variable para Button
     Button editButton;
 
-
-    FirebaseAuth auth;
+    String userEmail;
+    FirebaseAuth mAuth;
+    String id;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -113,51 +114,75 @@ public class PerfilFragment extends Fragment {
         profilegenero = view.findViewById(R.id.profilegenero);
         profilefecha = view.findViewById(R.id.profilefecha);
         profileespeciality = view.findViewById(R.id.profileespeciality);
+        profilenum = view.findViewById(R.id.profilenum);
 
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Inicialización de variable para Button
         editButton = view.findViewById(R.id.editButton);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            userEmail = currentUser.getEmail();
+            Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+            // Resto del código...
+        } else {
+            Log.e(TAG, "Usuario no autenticado");
+            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+        }
+
+        //mostrar datos el del perfil
+        showDoctorData(db, currentUser);
+
         //mostrar pantalla emergente
         showdialog();
-        //mostrar datos el del perfil
-        //showDoctorData();
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //passUserData();
+               Intent i = new Intent(getActivity(), Actualizarperfildoc.class);
+                startActivity(i);
             }
         });
         return view;
     }
 
-    public void showDoctorData(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser(); //Correo de usuario logueado
-        if (currentUser != null) {
-            String userEmail = currentUser.getEmail();
-            // Realizar una consulta para obtener los datos de los doctores
-            db.collection("altadoctores")
-                    .whereEqualTo("correo", userEmail)//buscar el usuario mediante el correo
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String email = document.getString("correo");
-                                String nombreDoctor = document.getString("nombre");
-                                String sexo = document.getString("sexo");
-                                String telefono = document.getString("telefono");
-                                String password = document.getString("password");
+    public void showDoctorData(FirebaseFirestore db, FirebaseUser currentUser) {
+        //Correo de usuario logueadote
+        try {
+                // Realizar una consulta para obtener los datos de los doctores
+                db.collection("altadoctores")
+                        .whereEqualTo("correo", userEmail)//buscar el usuario mediante el correo
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    id = document.getString("id");
+                                    String nombreDoctor = document.getString("nombre");
+                                    String telefono = document.getString("telefono");
+                                    String email = document.getString("correo");
+                                    String sexo = document.getString("sexo");
+                                    String fechanac = document.getString("fecha");
+                                    String especialidad = document.getString("especialidad");
+                                    String descricion = document.getString("descripcion");
 
-                                // Agrega el botón de detalles
-                                // Configurar los elementos de la tarjeta
-                                profileEmail.setText(email);
-                                titleName.setText(nombreDoctor);
-                                profileName.setText(nombreDoctor);
+                                    // Agrega el botón de detalles
+                                    // Configurar los elementos de la tarjeta
+
+                                    titleName.setText(nombreDoctor);
+                                    profileName.setText(nombreDoctor);
+                                    profilenum.setText(telefono);
+                                    profileEmail.setText(email);
+                                    profilegenero.setText(sexo);
+                                    profilefecha.setText(fechanac);
+                                    profileespeciality.setText(especialidad);
+                                    aboutme.setText(descricion);
                               /*  profiletipo.setText(sexo);
                                 profiletelefono.setText(telefono);
                                 profilePassword.setText(password);*/
 
-                                // Establecer un OnClickListener para el botón de "Detalles"
+                                    // Establecer un OnClickListener para el botón de "Detalles"
 
                             /*ver.setOnClickListener(v -> {
                                 // Ocultar el fragmento actual (AdminPeticiones)
@@ -172,11 +197,13 @@ public class PerfilFragment extends Fragment {
                                 fragmentTransaction.commit();
                             });*/
 
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            // Si hubiera un error
-                        }
-                    });
+                        });
+        }catch (Exception e) {
+            Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -185,7 +212,7 @@ public class PerfilFragment extends Fragment {
     //parte mostrar la pantalla emergente para about me
     public void showdialog(){
         boolean dialogShown = sharedPreferences.getBoolean("dialogShown", false);
-       // if (!dialogShown) {
+        if (!dialogShown) {
             // Mostrar el diálogo solo si no se ha mostrado antes
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Ingrese texto");
@@ -201,7 +228,7 @@ public class PerfilFragment extends Fragment {
                     String userInput = input.getText().toString();
 
                     // Guardar el texto en Firebase Firestore
-                    uploadTextToFirestore(userInput);
+                    uploadTextToFirestore(userInput, userEmail);
 
                     // Guardar un indicador para que no se muestre el diálogo nuevamente
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -220,50 +247,53 @@ public class PerfilFragment extends Fragment {
 
             // Mostrar el diálogo
             builder.show();
-          //  showdialog();
-       /* }else {
+            showdialog();
+        }else {
             Toast.makeText(getActivity(), "Ya has ingresado sobre tí", Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
     }
-    public void uploadTextToFirestore(String text) {
+    public void uploadTextToFirestore(String text, String email) {
         try {
-            // Tu código aquí
-            FirebaseUser user = auth.getCurrentUser();
-        // Crear un mapa para el documento con el texto
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            // Usuario autenticado
-            String uid = user.getUid();
+            if (currentUser != null) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            // Obtener la instancia de FirebaseFirestore
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Map<String, Object> data = new HashMap<>();
-            data.put("descripcion", text);
+                Map<String, Object> data = new HashMap<>();
+                data.put("descripcion", text);
 
-            // Añadir un nuevo documento a la colección "textos"
-            db.collection("altadoctores")
-                    .document(uid)
-                    .set(data)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "Documento actualizado con éxito");
-                            // Puedes realizar acciones adicionales si es necesario
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error al actualizar documento", e);
-                            // Puedes manejar el error aquí
-                        }
-                    });
-        }else {
-            Log.e(TAG, "Usuario no autenticado");
-        }
+                if (email != null && !email.isEmpty()) {
+                    // Llamar a update aquí
+                    db.collection("altadoctores")
+                            .document(id)
+                            .update("descripcion", text)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Campo 'descripcion' actualizado con éxito");
+                                    // Puedes realizar acciones adicionales si es necesario
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error al actualizar campo 'descripcion'", e);
+                                    // Puedes manejar el error aquí
+                                    Toast.makeText(getActivity(), "Error al actualizar campo 'descripcion'", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Log.e(TAG, "El correo electrónico es nulo o vacío");
+                    Toast.makeText(getActivity(), "El correo electrónico es nulo o vacío", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.e(TAG, "Usuario no autenticado");
+                Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error: " + e.getMessage());
+            Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
