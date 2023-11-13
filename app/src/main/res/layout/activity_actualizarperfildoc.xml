@@ -117,7 +117,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/profileEmail"
+                    android:id="@+id/profiledescr"
                     android:hint="Escrbie algo sobre tí"
                     android:layout_weight="1"
                     android:layout_marginLeft="20dp"
@@ -139,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#DDF2FD"
                 android:text="Editar Perfil"
+                android:id="@+id/editbutton"
                 android:layout_below="@+id/l4"
                 android:textColor="@color/black"
                 android:textSize="18sp"

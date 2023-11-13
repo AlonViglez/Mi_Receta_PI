@@ -142,6 +142,7 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onClick(View view) {
                Intent i = new Intent(getActivity(), Actualizarperfildoc.class);
+               i.putExtra("id",id);
                 startActivity(i);
             }
         });
