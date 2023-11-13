@@ -20,10 +20,13 @@ import android.widget.Toast;
 
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.Registro;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +43,8 @@ public class FragmentDoctores extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore firestore;
 
     public FragmentDoctores() {
         // Required empty public constructor
@@ -70,6 +75,8 @@ public class FragmentDoctores extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -90,6 +97,7 @@ public class FragmentDoctores extends Fragment {
                             String nombreDoctor = document.getString("nombre");
                             String especialidadMedica = document.getString("especialidad");
                             String idDoctor = document.getString("id");
+                            String email = document.getString("correo");
                             // Inflar el diseño de la tarjeta personalizado
                             View cardView = getLayoutInflater().inflate(R.layout.doctor_card_alta, null);
                             // Configurar los márgenes
@@ -113,39 +121,50 @@ public class FragmentDoctores extends Fragment {
 
                             //BOTON BORRAR
                             btnborrar.setOnClickListener(v -> {
-                                String email = document.getString("correo");
-                                // Crear el diálogo de confirmación
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirmacion, null);
                                 builder.setView(dialogView);
                                 Button btnCancelar = dialogView.findViewById(R.id.btnCancelarEliminacion);
                                 Button btnEliminar = dialogView.findViewById(R.id.btnEliminar);
-                                // Declarar la variable alertDialog fuera de los listeners
+
                                 AlertDialog alertDialog = builder.create();
-                                // Configurar el botón Cancelar para cerrar el diálogo
+
                                 btnCancelar.setOnClickListener(v1 -> {
-                                    // Cerrar el diálogo
                                     alertDialog.dismiss();
                                 });
-                                // Eliminar doctor de firestore
+                                //Toast.makeText(getContext(), "Correo" + email, Toast.LENGTH_SHORT).show();
+                                final Task<SignInMethodQueryResult> taskCopy = mAuth.fetchSignInMethodsForEmail(email);
                                 btnEliminar.setOnClickListener(v2 -> {
-                                    // Eliminar el doctor de Firestore
-                                    db.collection("altadoctores")
-                                            .document(email)
-                                            .delete()
-                                            .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(getContext(), "El doctor se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
-                                            })
-                                            .addOnFailureListener(e -> {
-                                                Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
-                                            });
-
-                                    //HACE FALTA ELIMINARLO DE AUTENTICACION
-
-                                    // Cerrar el diálogo después de eliminar
+                                    if (taskCopy.isSuccessful()) {
+                                        SignInMethodQueryResult result = taskCopy.getResult();
+                                        Toast.makeText(getContext(), "Correo" + result, Toast.LENGTH_SHORT).show();
+                                        if (result != null && result.getSignInMethods() != null && result.getSignInMethods().size() > 0) {
+                                            String uidUsuarioAEliminar = result.getSignInMethods().get(0);
+                                            mAuth.getCurrentUser().delete()
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        db.collection("altadoctores")
+                                                                .document(email)
+                                                                .delete()
+                                                                .addOnSuccessListener(aVoid1 -> {
+                                                                    Toast.makeText(getContext(), "El doctor con correo " + email + " se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
+                                                                })
+                                                                .addOnFailureListener(e -> {
+                                                                    Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
+                                                                });
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Toast.makeText(getContext(), "Error al eliminar el usuario de Authentication", Toast.LENGTH_SHORT).show();
+                                                    });
+                                        } else {
+                                            Log.d("EliminarUsuario", "Usuario con correo " + email + " no encontrado en Authentication.");
+                                            Toast.makeText(getContext(), "Usuario no encontrado en Authentication" + email, Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Log.e("EliminarUsuario", "Error al buscar usuario por correo en Authentication", taskCopy.getException());
+                                        Toast.makeText(getContext(), "Error al buscar usuario por correo en Authentication", Toast.LENGTH_SHORT).show();
+                                    }
                                     alertDialog.dismiss();
                                 });
-                                // Mostrar el diálogo
                                 alertDialog.show();
                             });
                             //BOTON EDITAR
