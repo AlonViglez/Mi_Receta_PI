@@ -3,12 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/framepeticiones"
     tools:context=".viewpaciente.FragmentDoctoresPaciente">
-
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Título principal "Peticiones" centrado -->
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:layout_height="wrap_content"
+        android:text="¿Puedo ayudarte?"
+        android:textSize="28sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+    <!-- Contenedor de tarjetas de doctores -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/doctorsContainerHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="80dp"
+            android:padding="15dp">
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

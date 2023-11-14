@@ -54,7 +54,7 @@ public class Registro extends AppCompatActivity {
     RadioButton radioMasculino, radioFemenino, radioOtros;
     RadioGroup sexoRadioGroup;
     EditText editFecha;
-    Button buttonReg;
+    Button buttonRegistro;
     ProgressBar progressBar;
     TextView textView;
     String sexo = "";
@@ -73,7 +73,7 @@ public class Registro extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
         editFecha = findViewById(R.id.fecha);
         editNombre = findViewById(R.id.nombre);
-        buttonReg = findViewById(R.id.btn_registro);
+        buttonRegistro = findViewById(R.id.btn_registro);
         textView = findViewById(R.id.loginNow);
         editRepetirPass = findViewById(R.id.repetirPassword);
         linearLayoutSexo = findViewById(R.id.linearLayoutSexo);
@@ -90,9 +90,9 @@ public class Registro extends AppCompatActivity {
                     sexo = "Femenino";
                 } else if (checkedId == R.id.radioMasculino) {
                     sexo = "Masculino";
-                } else if (checkedId == R.id.radioOtros) {
+                } /*else if (checkedId == R.id.radioOtros) {
                     sexo = "Otros";
-                }
+                }*/
             }
         });
         //MOSTRAR PICKER DE CALENDARIO EN FECHA DE NACIMIENTO
@@ -103,7 +103,7 @@ public class Registro extends AppCompatActivity {
             }
         });
         //FUNCIONALIDAD DEL BOTON REGISTRAR
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        buttonRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
@@ -146,7 +146,7 @@ public class Registro extends AppCompatActivity {
                         textViewErrorPass.setVisibility(View.GONE);
                         textViewErrorPassRep.setVisibility(View.GONE);
                         //REGISTRAR EN FIREBASE
-                        registerUser(nombre, email, hashedPassword, fechaNacimiento, sexo);
+                        registerUser(nombre, email, password, fechaNacimiento, sexo);
                     } else {
                         textViewCamp.setText("El correo debe ser válido y utilizar un dominio correcto(ejemplo: gmail.com)");
                         textViewCamp.setVisibility(View.VISIBLE);
@@ -210,7 +210,7 @@ public class Registro extends AppCompatActivity {
         datePickerDialog.show();
     }
     //Autenticacion
-    private void registerUser(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
+    public void registerUser(String nombre, String email, String password, String fechaNacimiento, String sexo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_politicas_privacidad_usuario, null);
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);
@@ -227,25 +227,30 @@ public class Registro extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.createUserWithEmailAndPassword(email, hashedPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Registro exitoso, ahora guarda los datos en Firestore
-                            saveUserDataToFirestore(nombre, email, hashedPassword, fechaNacimiento, sexo);
-                        } else {
-                            // Error al registrar al usuario
-                            Toast.makeText(Registro.this, "Error al registrar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                // Registro exitoso, ahora guarda los datos en Firestore
+                                saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo);
+                                Toast.makeText(Registro.this, "Registro completo", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Error al registrar al usuario
+                                Toast.makeText(Registro.this, "Error al registrar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
         builder.setView(dialogView);
         dialog.show();
     }
     //GUARDAR DATOS EN FIRESTORE
-    private void saveUserDataToFirestore(String nombre, String email, String hashedPassword, String fechaNacimiento, String sexo) {
+    public void saveUserDataToFirestore(String nombre, String email, String password, String fechaNacimiento, String sexo) {
+        String hashedPassword = hashPassword(password);
         if (hashedPassword != null) {
             Map<String, Object> userData = new HashMap<>();
             userData.put("id", null);
@@ -323,10 +328,5 @@ public class Registro extends AppCompatActivity {
             // Manejar la excepción
             return null;
         }
-    }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return false;
     }
 }

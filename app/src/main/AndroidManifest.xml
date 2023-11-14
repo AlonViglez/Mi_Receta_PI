@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SEND_EMAIL" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +19,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Navdrawer"
         tools:targetApi="31">
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".viewpaciente.MyWorker"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".viewpaciente.NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
+        <activity
+            android:name=".viewpaciente.comprar_chat"
+            android:exported="false" />
         <activity
             android:name=".viewAdmin.EditarDoctor"
             android:exported="false" />
@@ -59,7 +82,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -20,16 +20,16 @@ public class IdentifyRegister extends AppCompatActivity {
         btnregresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IdentifyRegister.this, Login.class);
-                startActivity(intent);
+                Intent log = new Intent(IdentifyRegister.this, Login.class);
+                startActivity(log);
             }
         });
         //Boton USUARIO
         btnUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IdentifyRegister.this, Registro.class);
-                startActivity(intent);
+                Intent regispac = new Intent(IdentifyRegister.this, Registro.class);
+                startActivity(regispac);
             }
         });
 
@@ -37,8 +37,8 @@ public class IdentifyRegister extends AppCompatActivity {
         btnDoctor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IdentifyRegister.this, RegistroDoctor.class);
-                startActivity(intent);
+                Intent regisdoc = new Intent(IdentifyRegister.this, RegistroDoctor.class);
+                startActivity(regisdoc);
             }
         });
     }

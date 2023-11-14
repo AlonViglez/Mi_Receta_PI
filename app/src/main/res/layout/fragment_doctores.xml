@@ -6,6 +6,17 @@
     android:layout_marginBottom="25dp"
     android:id="@+id/framedoctores"
     tools:context=".viewAdmin.FragmentDoctores">
+    <!-- Título principal "Peticiones" centrado -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Doctores"
+        android:textSize="28sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

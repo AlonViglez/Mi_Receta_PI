@@ -12,8 +12,8 @@
         android:padding="16dp">
         <ImageButton
             android:id="@+id/borrarButton"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:src="@drawable/borrar"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="1dp"
@@ -23,8 +23,8 @@
             android:scaleType="fitCenter"/>
         <ImageButton
             android:id="@+id/editarButton"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:src="@drawable/editar"
             android:layout_toStartOf="@id/borrarButton"
             android:layout_marginEnd="12dp"
@@ -46,9 +46,8 @@
             android:layout_marginStart="16dp"
             android:text=""
             android:textSize="18sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="9dp"
-            android:layout_centerVertical="true"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="4dp" />
         <TextView
             android:id="@+id/especialidadMedica"
             android:layout_width="wrap_content"
@@ -57,8 +56,8 @@
             android:layout_below="@id/doctorName"
             android:layout_marginStart="16dp"
             android:text=""
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
             android:textSize="16sp"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

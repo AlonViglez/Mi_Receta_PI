@@ -114,9 +114,9 @@ public class RegistroDoctor extends AppCompatActivity {
                     sexo = "Femenino";
                 } else if (checkedId == R.id.radioMasculino) {
                     sexo = "Masculino";
-                } else if (checkedId == R.id.radioOtros) {
+                } /*else if (checkedId == R.id.radioOtros) {
                     sexo = "Otros";
-                }
+                }*/
             }
         });
         //MOSTRAR PICKER DE CALENDARIO EN FECHA DE NACIMIENTO
@@ -357,8 +357,8 @@ public class RegistroDoctor extends AppCompatActivity {
                                                         public void onSuccess(Void aVoid) {
                                                             // Campo "id" actualizado con éxito
                                                             finish();
-                                                            startActivity(new Intent(RegistroDoctor.this, MainActivity.class));
-                                                            Toast.makeText(RegistroDoctor.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                                                            startActivity(new Intent(RegistroDoctor.this, Login.class));
+                                                            Toast.makeText(RegistroDoctor.this, "Su solicitud está pendiente", Toast.LENGTH_SHORT).show();
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -477,10 +477,5 @@ public class RegistroDoctor extends AppCompatActivity {
                         Toast.makeText(RegistroDoctor.this, "Error al subir la imagen de la INE", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return false;
     }
 }

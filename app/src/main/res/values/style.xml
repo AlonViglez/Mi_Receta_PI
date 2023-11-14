@@ -4,4 +4,7 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="MyTimePickerStyle" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
 </resources>
