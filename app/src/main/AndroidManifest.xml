@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SEND_EMAIL" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -16,11 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Navdrawer"
         tools:targetApi="31">
+        <service
+            android:name=".viewpaciente.NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
         <activity
             android:name=".viewpaciente.comprar_chat"
-            android:exported="false" />
-        <activity
-            android:name=".politicas_privacidad_mas_informacion"
             android:exported="false" />
         <activity
             android:name=".viewAdmin.EditarDoctor"

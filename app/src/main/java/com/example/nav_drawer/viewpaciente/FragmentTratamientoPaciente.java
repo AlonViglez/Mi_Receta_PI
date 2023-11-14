@@ -6,10 +6,11 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
+import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ public class FragmentTratamientoPaciente extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Handler handler = new Handler();
     String horainicio;
     String userEmail;
     FirebaseAuth mAuth;
@@ -57,8 +59,6 @@ public class FragmentTratamientoPaciente extends Fragment {
     Button btnmedicamento;
     Button btnMostrarTimePicker;
     TimePicker timePicker;
-
-
     public FragmentTratamientoPaciente() {
         // Required empty public constructor
     }
@@ -164,13 +164,12 @@ public class FragmentTratamientoPaciente extends Fragment {
                     int intervalo = Integer.parseInt(intervaloStr);
 
                     enviarDatosFirestore(medicamento, duracion, dosis, intervalo);
-
+                    scheduleNotification(intervalo * 1000); // Convertir el intervalo a milisegundos
                 } else {
                     Toast.makeText(getActivity(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        // Inflate the layout for this fragment
         return view;
     }
     private void enviarDatosFirestore(String medicamento, Integer duracion, Double dosis, Integer intervalo) {
@@ -200,5 +199,19 @@ public class FragmentTratamientoPaciente extends Fragment {
                         Log.e(TAG, "Error al registrar tratamiento", e);
                     }
                 });
+    }
+    // Método para programar la notificación
+    // Método para programar la notificación
+    private void scheduleNotification(int delayMillis) {
+        Toast.makeText(getActivity(), "Tiempo para notificar: " + delayMillis, Toast.LENGTH_SHORT).show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // LLAMAR AL SERVICIO DE NOTIFICACIONES
+                Intent notificationIntent = new Intent(getActivity(), NotificationService.class);
+                notificationIntent.setAction("ACTION_SHOW_NOTIFICATION");
+                getActivity().startService(notificationIntent);
+            }
+        }, delayMillis);
     }
 }
