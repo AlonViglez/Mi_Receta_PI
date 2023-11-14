@@ -136,7 +136,7 @@ public class PerfilFragment extends Fragment {
         showDoctorData(db, currentUser);
 
         //mostrar pantalla emergente
-        showdialog();
+       // showdialog();
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,25 +179,6 @@ public class PerfilFragment extends Fragment {
                                     profilefecha.setText(fechanac);
                                     profileespeciality.setText(especialidad);
                                     aboutme.setText(descricion);
-                              /*  profiletipo.setText(sexo);
-                                profiletelefono.setText(telefono);
-                                profilePassword.setText(password);*/
-
-                                    // Establecer un OnClickListener para el botón de "Detalles"
-
-                            /*ver.setOnClickListener(v -> {
-                                // Ocultar el fragmento actual (AdminPeticiones)
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.hide(this);  // Ocultar el fragmento actual
-                                fragmentTransaction.addToBackStack(null);
-
-                                // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
-                                fragmentTransaction.replace(R.id.fragmentContainerDetails, new FragmentDetails());
-                                fragmentTransaction.addToBackStack(null);
-                                fragmentTransaction.commit();
-                            });*/
-
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
@@ -229,7 +210,7 @@ public class PerfilFragment extends Fragment {
                     String userInput = input.getText().toString();
 
                     // Guardar el texto en Firebase Firestore
-                    uploadTextToFirestore(userInput, userEmail);
+                   // uploadTextToFirestore(userInput, userEmail);
 
                     // Guardar un indicador para que no se muestre el diálogo nuevamente
                     SharedPreferences.Editor editor = sharedPreferences.edit();
