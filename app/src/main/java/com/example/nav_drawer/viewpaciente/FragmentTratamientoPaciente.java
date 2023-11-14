@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -35,6 +37,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -200,8 +203,7 @@ public class FragmentTratamientoPaciente extends Fragment {
                     }
                 });
     }
-    // Método para programar la notificación
-    // Método para programar la notificación
+    /*Método primero para programar la notificación
     private void scheduleNotification(int delayMillis) {
         Toast.makeText(getActivity(), "Tiempo para notificar: " + delayMillis, Toast.LENGTH_SHORT).show();
         handler.postDelayed(new Runnable() {
@@ -210,8 +212,17 @@ public class FragmentTratamientoPaciente extends Fragment {
                 // LLAMAR AL SERVICIO DE NOTIFICACIONES
                 Intent notificationIntent = new Intent(getActivity(), NotificationService.class);
                 notificationIntent.setAction("ACTION_SHOW_NOTIFICATION");
-                getActivity().startService(notificationIntent);
+                getActivity().startForegroundService(notificationIntent);
             }
         }, delayMillis);
+    }*/
+    //Segundo metodo para programar la notificacion en segundo plano
+    private void scheduleNotification(int delayMillis) {
+        // Crear una tarea única con WorkManager
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                .build();
+        // Enviar la tarea a WorkManager
+        WorkManager.getInstance(requireContext()).enqueue(workRequest);
     }
 }
