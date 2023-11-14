@@ -9,7 +9,7 @@
     android:overScrollMode="always"
     android:scrollbarStyle="insideInset"
     android:scrollbars="vertical"
-    android:background="#E0F4FF"
+
     >
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -20,8 +20,9 @@
         android:layout_height="100dp"
         android:id="@+id/fotoperfil"
         android:layout_marginTop="30dp"
-        android:src="@drawable/perfilogo"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/circle_background_perfil"
+        android:scaleType="centerCrop"
         />
 
         <Button
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Editar"
             android:textColor="@color/black"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/color_gris"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="40dp"

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.nav_drawer.viewdoc.Actualizarperfildoc;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +34,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 //PERFIL
 /**
@@ -67,9 +72,24 @@ public class PerfilFragment extends Fragment {
     // Variable para Button
     Button editButton;
 
+
+
     String userEmail;
+
+    String fechanac;
     FirebaseAuth mAuth;
     String id;
+    String fechaFormateada;
+
+    SimpleDateFormat sdf;
+
+    Date fecha;
+
+    long timestamp;
+
+    ImageView fotoperfil;
+
+    private Uri imagenCedulaUri = null;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -115,6 +135,7 @@ public class PerfilFragment extends Fragment {
         profilefecha = view.findViewById(R.id.profilefecha);
         profileespeciality = view.findViewById(R.id.profileespeciality);
         profilenum = view.findViewById(R.id.profilenum);
+        fotoperfil = view.findViewById(R.id.fotoperfil);
 
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
@@ -164,10 +185,17 @@ public class PerfilFragment extends Fragment {
                                     String telefono = document.getString("telefono");
                                     String email = document.getString("correo");
                                     String sexo = document.getString("sexo");
-                                    String fechanac = document.getString("fecha");
+                                    fechanac =  String.valueOf(document.getLong("fechanac"));
                                     String especialidad = document.getString("especialidad");
                                     String descricion = document.getString("descripcion");
-
+                                    String cedulaImageUrl = document.getString("imagenperfilurl");
+                                    if (cedulaImageUrl != null) {
+                                        Glide.with(PerfilFragment.this).load(cedulaImageUrl).into(fotoperfil);
+                                    }
+                                    timestamp = Long.parseLong(fechanac);
+                                    fecha = new Date(timestamp);
+                                    sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                                    fechaFormateada = sdf.format(fecha);
                                     // Agrega el botón de detalles
                                     // Configurar los elementos de la tarjeta
 
@@ -176,7 +204,7 @@ public class PerfilFragment extends Fragment {
                                     profilenum.setText(telefono);
                                     profileEmail.setText(email);
                                     profilegenero.setText(sexo);
-                                    profilefecha.setText(fechanac);
+                                    profilefecha.setText(fechaFormateada);
                                     profileespeciality.setText(especialidad);
                                     aboutme.setText(descricion);
                                 }

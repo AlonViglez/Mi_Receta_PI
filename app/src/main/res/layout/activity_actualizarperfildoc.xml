@@ -32,6 +32,17 @@
             android:src="@drawable/perfilogo"
             android:layout_centerHorizontal="true"
             />
+        <Button
+            android:id="@+id/editperfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar Imagen"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/color_gris"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/fotoperfil"
+            android:layout_marginEnd="10dp"
+            android:layout_centerHorizontal="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +52,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/fotoperfil">
+            android:layout_below="@id/editperfil">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
