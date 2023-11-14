@@ -39,6 +39,9 @@
             android:name=".viewpaciente.comprar_chat"
             android:exported="false" />
         <activity
+            android:name=".viewdoc.Actualizarperfildoc"
+            android:exported="false" />
+        <activity
             android:name=".viewAdmin.EditarDoctor"
             android:exported="false" />
         <activity

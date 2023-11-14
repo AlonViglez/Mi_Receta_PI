@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".PerfilFragment"
+    android:overScrollMode="always"
+    android:scrollbarStyle="insideInset"
+    android:scrollbars="vertical"
+    >
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ImageView
+            android:id="@+id/btnatras"
+            android:layout_width="80dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="-10dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/flecha_hacia_atras"
+            android:padding="16dp"
+            android:layout_marginTop="7dp"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/fotoperfil"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/perfilogo"
+            android:layout_centerHorizontal="true"
+            />
+        <Button
+            android:id="@+id/editperfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar Imagen"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/color_gris"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/fotoperfil"
+            android:layout_marginEnd="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout2"
+            android:orientation="vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/editperfil">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_perfil"> <!-- Reemplaza con el recurso de tu icono -->
+                </ImageView>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profileName"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Escribe tu Nombre"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="10dp"
+                android:alpha="0.5"
+                android:background="@color/black"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:padding="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_call"> <!-- Reemplaza con el recurso de tu icono -->
+                </ImageView>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profilenum"
+                    android:hint="Escribe tu número de telefono"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="10dp"
+                android:alpha="0.5"
+                android:background="@color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:padding="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_email"> <!-- Reemplaza con el recurso de tu icono -->
+                </ImageView>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profiledescr"
+                    android:hint="Escrbie algo sobre tí"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="10dp"
+                android:alpha="0.5"
+                android:background="@color/black"
+
+                />
+            <TextView
+                android:id="@+id/textViewCampos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debe llenar todos los campos"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#DDF2FD"
+                android:text="Editar Perfil"
+                android:id="@+id/editbutton"
+                android:layout_below="@+id/l4"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:cornerRadius="20dp"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

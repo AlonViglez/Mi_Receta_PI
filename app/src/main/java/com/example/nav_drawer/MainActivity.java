@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             * */
 
             fragmentManager = getSupportFragmentManager();
-            openFragment(new HomeFragment());
+           // openFragment(new HomeFragment());
         /*
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
