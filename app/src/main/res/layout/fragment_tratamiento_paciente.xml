@@ -88,7 +88,7 @@
             android:layout_gravity="center"
             android:visibility="gone"/>
         <Button
-            android:text="@string/nuevo_tratamiento"
+            android:text="@string/aceptar"
             android:id="@+id/btn_registro_medicamento"
             android:layout_marginTop="20dp"
             android:layout_width="200dp"

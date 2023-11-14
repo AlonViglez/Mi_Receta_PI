@@ -2,6 +2,9 @@ package com.example.nav_drawer.viewpaciente;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,8 +25,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Field;
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -43,6 +50,7 @@ public class FragmentTratamientoPaciente extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    String horainicio;
     String userEmail;
     FirebaseAuth mAuth;
     EditText editMedicamento, editDuracion, editIntervalo, editDosis;
@@ -109,18 +117,34 @@ public class FragmentTratamientoPaciente extends Fragment {
         btnMostrarTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Mostrar el TimePicker al hacer clic en el botón
-                timePicker.setVisibility(View.VISIBLE);
-            }
-        });
-        // Configurar el TimePicker para mostrar solo horas de 1 a 24
-        timePicker.setIs24HourView(true);
-        timePicker.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
-        timePicker.setFormatter(new TimePicker.Formatter() {
-            @Override
-            public String format(int value) {
-                // Ajustar las opciones de 1 a 24
-                return String.format(Locale.getDefault(), "%02d", value);
+                // Obtener la hora actual
+                LocalTime currentTime = LocalTime.now();
+
+                // Crear un TimePicker personalizado sin minutos y formato de 12 horas
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        getActivity(),
+                        AlertDialog.THEME_HOLO_LIGHT,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                // Actualizar la hora seleccionada en el TimePicker
+                                minute = 0;
+                                // Puedes realizar cualquier acción que desees con la hora seleccionada
+                                // Por ejemplo, mostrarla en un TextView
+                                horainicio = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
+                                // Puedes mostrar la hora seleccionada en un TextView o cualquier otro componente
+                                // En este ejemplo, se mostrará en un Toast
+                                Toast.makeText(getActivity(), "Hora seleccionada: " + horainicio , Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        currentTime.getHour(),
+                        0, // Establecer minutos en 0
+                        true // Mostrar formato de 24 horas
+                );
+                // Establecer el título del diálogo
+                timePickerDialog.setTitle("Primer toma de medicamento:");
+                // Mostrar el diálogo
+                timePickerDialog.show();
             }
         });
         btnmedicamento.setOnClickListener(new View.OnClickListener() {
@@ -156,23 +180,24 @@ public class FragmentTratamientoPaciente extends Fragment {
         tratamiento.put("duracion", duracion);
         tratamiento.put("dosis", dosis);
         tratamiento.put("intervalo", intervalo);
+        tratamiento.put("selectime", horainicio);
+        tratamiento.put("usuario", userEmail);
 
         // Obtener una referencia a la colección "tratamientos" en Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("tratamientos")
-                .document(userEmail) // Puedes usar el correo del usuario como identificador único
-                .set(tratamiento)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .add(tratamiento) // Utilizar "add" para crear un nuevo documento con un ID automático
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "Datos enviados a Firestore correctamente", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getActivity(), "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Error al enviar datos a Firestore", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Error al enviar datos a Firestore", e);
+                        Toast.makeText(getActivity(), "Error al registrar tratamiento", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error al registrar tratamiento", e);
                     }
                 });
     }
