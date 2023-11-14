@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -62,6 +63,8 @@ public class FragmentTratamientoPaciente extends Fragment {
     Button btnmedicamento;
     Button btnMostrarTimePicker;
     TimePicker timePicker;
+    String tratamientoId;
+    String medicamento,duracionStr,dosisStr,intervaloStr;
     public FragmentTratamientoPaciente() {
         // Required empty public constructor
     }
@@ -154,10 +157,10 @@ public class FragmentTratamientoPaciente extends Fragment {
             @Override
             public void onClick(View v) {
                 // Obtener los valores de los EditText
-                String medicamento = editMedicamento.getText().toString();
-                String duracionStr = editDuracion.getText().toString();
-                String dosisStr = editDosis.getText().toString();
-                String intervaloStr = editIntervalo.getText().toString();
+                medicamento = editMedicamento.getText().toString();
+                duracionStr = editDuracion.getText().toString();
+                dosisStr = editDosis.getText().toString();
+                intervaloStr = editIntervalo.getText().toString();
                 // Verificar que los campos no estén vacíos
                 if (!medicamento.isEmpty() && !duracionStr.isEmpty() && !dosisStr.isEmpty() && !intervaloStr.isEmpty()) {
                     // Enviar los datos a Firestore
@@ -167,7 +170,6 @@ public class FragmentTratamientoPaciente extends Fragment {
                     int intervalo = Integer.parseInt(intervaloStr);
 
                     enviarDatosFirestore(medicamento, duracion, dosis, intervalo);
-                    scheduleNotification(intervalo * 1000); // Convertir el intervalo a milisegundos
                 } else {
                     Toast.makeText(getActivity(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                 }
@@ -192,7 +194,12 @@ public class FragmentTratamientoPaciente extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        // Obtener el ID del tratamiento después de agregarlo
+                        tratamientoId = documentReference.getId();
+                        // Actualizar el documento con el ID
+                        documentReference.update("id", tratamientoId);
                         Toast.makeText(getActivity(), "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
+                        scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento); // Convertir el intervalo a milisegundos
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -217,9 +224,14 @@ public class FragmentTratamientoPaciente extends Fragment {
         }, delayMillis);
     }*/
     //Segundo metodo para programar la notificacion en segundo plano
-    private void scheduleNotification(int delayMillis) {
+    private void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento) {
         // Crear una tarea única con WorkManager
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .setInputData(new Data.Builder()
+                        .putString("tratamientoId", tratamientoId)
+                        .putString("userEmail", userEmail)
+                        .putString("nombreMedicamento", medicamento)
+                        .build())
                 .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
                 .build();
         // Enviar la tarea a WorkManager
