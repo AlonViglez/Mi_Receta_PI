@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 
@@ -35,6 +37,7 @@ public class MyWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        // Obtener DATOS
         tratamientoId = getInputData().getString("tratamientoId");
         userEmail = getInputData().getString("userEmail");
         totaltomas = getInputData().getString("tomada");
@@ -44,7 +47,7 @@ public class MyWorker extends Worker {
         showNotification(getApplicationContext(), nombreMedicamento, "¿Ya te tomaste tu medicamento?", tratamientoId);
         return Result.success(); // Si la tarea se completa con éxito
     }
-
+    //Metodo para mostrar notificacion
     private void showNotification(Context context, String title, String message, String tratamientoId) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
