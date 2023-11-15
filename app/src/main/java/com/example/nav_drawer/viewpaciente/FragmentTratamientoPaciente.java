@@ -10,6 +10,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -64,7 +65,9 @@ public class FragmentTratamientoPaciente extends Fragment {
     Button btnMostrarTimePicker;
     TimePicker timePicker;
     String tratamientoId;
-    String medicamento,duracionStr,dosisStr,intervaloStr;
+    String medicamento,duracionStr,dosisStr,intervaloStr, totalTomasStr, tomada;
+    int totalTomas;
+    int primeratoma = 1;
     public FragmentTratamientoPaciente() {
         // Required empty public constructor
     }
@@ -168,8 +171,12 @@ public class FragmentTratamientoPaciente extends Fragment {
                     int duracion = Integer.parseInt(duracionStr);
                     double dosis = Double.parseDouble(dosisStr);
                     int intervalo = Integer.parseInt(intervaloStr);
-
-                    enviarDatosFirestore(medicamento, duracion, dosis, intervalo);
+                    // Calcular el total de tomas por día
+                    totalTomas = calcularTotalTomasPorDia(duracion,horainicio, intervalo);
+                    //Convertir totaltomas a string
+                    totalTomasStr = String.valueOf(totalTomas);
+                    tomada = String.valueOf(primeratoma);
+                    enviarDatosFirestore(medicamento, duracion, dosis, intervalo,primeratoma,totalTomas);
                 } else {
                     Toast.makeText(getActivity(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                 }
@@ -177,7 +184,7 @@ public class FragmentTratamientoPaciente extends Fragment {
         });
         return view;
     }
-    private void enviarDatosFirestore(String medicamento, Integer duracion, Double dosis, Integer intervalo) {
+    private void enviarDatosFirestore(String medicamento, Integer duracion, Double dosis, Integer intervalo,Integer primeratoma, Integer totalTomas) {
         // Crear un objeto Map con los datos del tratamiento
         Map<String, Object> tratamiento = new HashMap<>();
         tratamiento.put("medicamento", medicamento);
@@ -186,6 +193,8 @@ public class FragmentTratamientoPaciente extends Fragment {
         tratamiento.put("intervalo", intervalo);
         tratamiento.put("selectime", horainicio);
         tratamiento.put("usuario", userEmail);
+        tratamiento.put("tomada", primeratoma);
+        tratamiento.put("totalPastillas", totalTomas);
 
         // Obtener una referencia a la colección "tratamientos" en Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -199,7 +208,7 @@ public class FragmentTratamientoPaciente extends Fragment {
                         // Actualizar el documento con el ID
                         documentReference.update("id", tratamientoId);
                         Toast.makeText(getActivity(), "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
-                        scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento); // Convertir el intervalo a milisegundos
+                        scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento,tomada,totalTomasStr); // Convertir el intervalo a milisegundos
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -224,17 +233,30 @@ public class FragmentTratamientoPaciente extends Fragment {
         }, delayMillis);
     }*/
     //Segundo metodo para programar la notificacion en segundo plano
-    private void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento) {
+    private void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento, String tomada, String totalTomasStr) {
         // Crear una tarea única con WorkManager
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
                 .setInputData(new Data.Builder()
                         .putString("tratamientoId", tratamientoId)
                         .putString("userEmail", userEmail)
                         .putString("nombreMedicamento", medicamento)
+                        .putString("tomada", tomada)
+                        .putString("totaltomas", totalTomasStr)
                         .build())
                 .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
                 .build();
-        // Enviar la tarea a WorkManager
-        WorkManager.getInstance(requireContext()).enqueue(workRequest);
+        // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+        WorkManager.getInstance(requireContext()).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+    }
+    // Método para calcular el total de tomas por día considerando la hora de inicio
+    private int calcularTotalTomasPorDia(int duracion, String horainicio, int intervalo) {
+        int horasPorDia = 24;
+        // Obtener la hora de inicio y convertirla a formato de 24 horas
+        String[] horaInicioArray = horainicio.split(":");
+        int horaInicio = Integer.parseInt(horaInicioArray[0]);
+        // Calcular el total de tomas por día
+        int totalTomas = duracion * horasPorDia;
+        totalTomas = (totalTomas - horaInicio)/intervalo;
+        return totalTomas;
     }
 }

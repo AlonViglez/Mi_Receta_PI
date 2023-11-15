@@ -24,6 +24,8 @@ public class MyWorker extends Worker {
     String tratamientoId;
     String userEmail;
     String nombreMedicamento;
+    String totaltomas;
+    String tomada;
     public MyWorker(
             @NonNull Context context,
             @NonNull WorkerParameters params) {
@@ -35,35 +37,37 @@ public class MyWorker extends Worker {
     public Result doWork() {
         tratamientoId = getInputData().getString("tratamientoId");
         userEmail = getInputData().getString("userEmail");
+        totaltomas = getInputData().getString("tomada");
+        tomada = getInputData().getString("totaltomas");
         nombreMedicamento = getInputData().getString("nombreMedicamento");
         // Realiza la tarea que deseas aquí
-        showNotification(getApplicationContext(), nombreMedicamento, "¿Ya te tomaste tu medicamento?");
+        showNotification(getApplicationContext(), nombreMedicamento, "¿Ya te tomaste tu medicamento?", tratamientoId);
         return Result.success(); // Si la tarea se completa con éxito
     }
 
-    private void showNotification(Context context, String title, String message) {
+    private void showNotification(Context context, String title, String message, String tratamientoId) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Crear un canal de notificación (necesario para Android 8.0 y versiones posteriores)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(tratamientoId, "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
-        // Crear un intent para la acción cuando se toque la notificación
+        /* Crear un intent para la acción cuando se toque la notificación
         Intent intent = new Intent(context, Inicio.class); // Reemplaza Inicio.class con la actividad principal de tu aplicación
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        */
         // Obtener el nombre del paquete de la aplicación
         String packageName = context.getPackageName();
         // Obtener la URI del sonido personalizado
         Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.pastillas);
 
         // Construir la notificación
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, tratamientoId)
                 .setSmallIcon(R.drawable.pildora)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(null)
                 .setAutoCancel(true)
                 .setSound(sound)
                 .setOngoing(true); // Hace que la notificación sea persistente
@@ -78,6 +82,6 @@ public class MyWorker extends Worker {
 
         builder.addAction(R.drawable.icon_disponibilidad, "Tomada", takenPendingIntent);
         // Mostrar la notificación
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        notificationManager.notify(tratamientoId.hashCode(), builder.build());
     }
 }
