@@ -1,7 +1,11 @@
 package com.example.nav_drawer.viewAdmin;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +22,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.nav_drawer.PerfilFragment;
 import com.example.nav_drawer.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +37,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,10 +58,16 @@ public class FragmentPerfilAdmin extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ImageView imagenadmin;
     TextView profileName, profileEmail, profiletelefono, profilePassword, profiletipo;
     TextView titleName;
-    Button editProfile;
+
+    SharedPreferences sharedPreferences;
+
+    FirebaseAuth mAuth;
+
+    String userEmail;
+
+    String id;
 
 
     public FragmentPerfilAdmin() {
@@ -89,111 +109,55 @@ public class FragmentPerfilAdmin extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil_admin, container, false);
 
         //agregamos el view para que pueda llamar los id
-        imagenadmin = view.findViewById(R.id.fotoperfil);
+        titleName = view.findViewById(R.id.titleName);
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
-        profiletelefono = view.findViewById(R.id.telefeonoadmin);
-        profilePassword = view.findViewById(R.id.profilePassword);
-        titleName = view.findViewById(R.id.titleName);
-        editProfile = view.findViewById(R.id.editButton);
-        profiletipo = view.findViewById(R.id.sexo);
-        Button ver = view.findViewById(R.id.editButton);
 
-        showUserData();
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //passUserData();
-            }
-        });
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Inicialización de variable para Button
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            userEmail = currentUser.getEmail();
+            Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+            // Resto del código...
+        } else {
+            Log.e(TAG, "Usuario no autenticado");
+            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+        }
+        //mostrar datos el del perfil
+        showAdminData(db, currentUser);
         return view;
     }
 
-    public void showUserData(){
+    public void showAdminData(FirebaseFirestore db, FirebaseUser currentUser) {
+        try {
+            // Realizar una consulta para obtener los datos de los doctores
+            db.collection("administrador")
+                    .whereEqualTo("correo", userEmail)//buscar el usuario mediante el correo
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                id = String.valueOf(document.getLong("id"));;
+                                String nombreDoctor = document.getString("nombre");
+                                String email = document.getString("correo");
+                                // Agrega el botón de detalles
+                                // Configurar los elementos de la tarjeta
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Realizar una consulta para obtener los datos de los doctores
-        db.collection("doctor")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String email = document.getString("correo");
-                            String nombreDoctor = document.getString("nombre");
-                            String sexo = document.getString("sexo");
-                            String telefono = document.getString("telefono");
-                            String password = document.getString("password");
-
-                            // Agrega el botón de detalles
-                            // Configurar los elementos de la tarjeta
-                            profileEmail.setText(email);
-                            titleName.setText(nombreDoctor);
-                            profileName.setText(nombreDoctor);
-                            profiletipo.setText(sexo);
-                            profiletelefono.setText(telefono);
-                            profilePassword.setText(password);
-
-                            // Establecer un OnClickListener para el botón de "Detalles"
-
-                            /*ver.setOnClickListener(v -> {
-                                // Ocultar el fragmento actual (AdminPeticiones)
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.hide(this);  // Ocultar el fragmento actual
-                                fragmentTransaction.addToBackStack(null);
-
-                                // Reemplazar el fragmento con el nuevo fragmento de detalles (FragmentDetails)
-                                fragmentTransaction.replace(R.id.fragmentContainerDetails, new FragmentDetails());
-                                fragmentTransaction.addToBackStack(null);
-                                fragmentTransaction.commit();
-                            });*/
-
+                                titleName.setText("¡Hola admin! "+nombreDoctor);
+                                profileName.setText(nombreDoctor);
+                                profileEmail.setText(email);
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        // Si hubiera un error
-                    }
-                });
-
-
-    }
-    /*
-    public void passUserData(){
-        String userUsername = profileUsername.getText().toString().trim();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
-
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-
-                    String nameFromDB = snapshot.child(userUsername).child("name").getValue(String.class);
-                    String emailFromDB = snapshot.child(userUsername).child("email").getValue(String.class);
-                    String usernameFromDB = snapshot.child(userUsername).child("username").getValue(String.class);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
-                    //forma de enviar a otro archivo desde un fragment
-                    Intent intent = new Intent(getActivity(), ViewAdministrador.class);
-                    intent.putExtra("fragmentToLoad", FragmentEditarPerfilAdmin.class.getName());
-                    startActivity(intent);
-
-                    intent.putExtra("name", nameFromDB);
-                    intent.putExtra("email", emailFromDB);
-                    intent.putExtra("username", usernameFromDB);
-                    intent.putExtra("password", passwordFromDB);
-
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                    });
+        }catch (Exception e) {
+            Toast.makeText(getActivity(), "Valor no valido", Toast.LENGTH_SHORT).show();
+        }
     }
 
-*/
 }
