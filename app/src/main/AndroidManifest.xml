@@ -19,10 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Navdrawer"
         tools:targetApi="31">
-        <activity
-            android:name=".viewpaciente.ActualizarPerfilPaciente"
-            android:exported="false" />
-
         <receiver
             android:name=".viewpaciente.TakenButtonReceiver"
             android:enabled="true"
@@ -31,7 +27,6 @@
                 <action android:name="ACTION_TAKEN" />
             </intent-filter>
         </receiver>
-
         <service
             android:name=".viewpaciente.MyWorker"
             android:exported="false"
@@ -39,8 +34,7 @@
         <service
             android:name=".viewpaciente.NotificationService"
             android:enabled="true"
-            android:exported="false" />
-
+            android:exported="false"></service>
         <activity
             android:name=".viewpaciente.comprar_chat"
             android:exported="false" />

@@ -19,6 +19,7 @@
     <string name="cerrar_sesion">Cerrar Sesion</string>
     <string name="comprar">Comprar</string>
     <string name="aceptar">Aceptar</string>
+    <string name="nuevo_tratamiento">Nuevo tratamiento</string>
     <string-array name="especialidades_medicas">
         <item>Medicina General</item>
         <item>Medicina Familiar</item>

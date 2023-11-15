@@ -103,7 +103,7 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
             });
             //al entrar te mandara a esta primero
             fragmentManager = getSupportFragmentManager();
-            openFragment(new HomePaciente());
+            openFragment(new FragmentTratamientoPaciente());
         /*
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
