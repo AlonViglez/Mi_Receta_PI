@@ -111,7 +111,7 @@ public class TakenButtonReceiver extends BroadcastReceiver {
                             } else {
                                 // Todas las pastillas han sido tomadas, puedes realizar acciones adicionales si es necesario
                             }
-                            // Puede ser marcar la medicación como tomada en tu base de datos, etc.
+                            // Marcar la medicación como tomada en base de datos
                             Intent inicioIntent = new Intent(context, Inicio.class);
                             inicioIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(inicioIntent);
