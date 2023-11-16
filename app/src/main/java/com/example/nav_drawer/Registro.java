@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -81,7 +82,18 @@ public class Registro extends AppCompatActivity {
         radioFemenino = findViewById(R.id.radioFemenino);
         radioOtros = findViewById(R.id.radioOtros);
         sexoRadioGroup = findViewById(R.id.sexoRadioGroup);
+        ImageView btnregresar = findViewById(R.id.btnatras);
+
+        btnregresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent log = new Intent(Registro.this, IdentifyRegister.class);
+                startActivity(log);
+            }
+        });
+
         //SELECCIONAR SEXO
+
         sexoRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

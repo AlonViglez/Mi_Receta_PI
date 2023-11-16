@@ -5,43 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegistroDoctor">
-    <ImageView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/rectangle1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:id="@+id/l1"
-        android:layout_below="@id/header"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/mr"
-            android:layout_width="300dp"
-            android:layout_height="155dp"
-            android:background="@drawable/mr" />
-
-        <TextView
-            android:text="@string/registro"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/mireceta" />
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/l1"
         android:id="@+id/scroll">
 
         <LinearLayout
@@ -50,6 +18,56 @@
             android:orientation="vertical"
             android:gravity="center"
             android:id="@+id/l2">
+
+            <RelativeLayout
+                android:id="@+id/r3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/rectangle1" />
+
+                <ImageView
+                    android:id="@+id/btnatras"
+                    android:layout_width="80dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="4dp"
+                    android:padding="16dp"
+                    android:src="@drawable/baseline_home_24" />
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/l1"
+                android:layout_below="@id/header"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/mr"
+                    android:layout_width="300dp"
+                    android:layout_height="155dp"
+                    android:background="@drawable/mr" />
+
+                <TextView
+                    android:text="@string/registro"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mireceta" />
+            </LinearLayout>
 
             <TextView
                 android:layout_marginTop="20dp"
@@ -311,15 +329,15 @@
                 android:text="@string/registro"
                 android:id="@+id/btn_registro"
                 android:layout_marginTop="20dp"
-                android:layout_width="200dp"
-                android:layout_height="70dp"
+                android:layout_width="330dp"
+                android:layout_height="60dp"
                 android:backgroundTint="@color/buttonmireceta"/>
 
             <TextView
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/loginNow"
                 android:text="@string/inicio_de_sesion"
                 android:layout_width="match_parent"

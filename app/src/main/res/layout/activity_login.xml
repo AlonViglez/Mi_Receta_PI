@@ -5,23 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Login">
-    <ImageView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/rectangle1" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/header">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
+
+            <ImageView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/rectangle1" />
 
             <ImageView
                 android:id="@+id/mr"
@@ -98,16 +98,16 @@
                 android:text="@string/iniciar_sesion"
                 android:id="@+id/btn_login"
                 android:layout_marginTop="20dp"
-                android:layout_width="200dp"
-                android:layout_height="70dp"
+                android:layout_width="330dp"
+                android:layout_height="60dp"
                 android:backgroundTint="@color/buttonmireceta"/>
 
 
             <TextView
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/nuevoregistro"
                 android:text="@string/registrate_aqui"
                 android:layout_width="match_parent"
