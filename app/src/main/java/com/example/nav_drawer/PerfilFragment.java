@@ -88,6 +88,20 @@ public class PerfilFragment extends Fragment {
     ImageView fotoperfil;
 
 
+    // variales locales para que no se pete
+    String storedNombreDoctor;
+    String storedTelefono;
+    String storedEmail;
+    String storedSexo;
+    String storedFechaNac;
+    String storedEspecialidad;
+    String storedDescripcion;
+    String storedCedulaImageUrl;
+
+
+    //mostrar variables de la bd
+    String nombreDoctor, telefono, email, sexo,especialidad,descricion,cedulaImageUrl;
+
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -151,8 +165,28 @@ public class PerfilFragment extends Fragment {
             Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
 
+    //variables guardadas
+        if (nombreDoctor == null) {
+            showDoctorData(db, currentUser);
+        } else {
+            // Los datos ya han sido cargados, usar datos almacenados
+            titleName.setText("¡Hola Dr! " + nombreDoctor);
+            profileName.setText(nombreDoctor);
+            profilenum.setText(telefono);
+            profileEmail.setText(email);
+            profilegenero.setText(sexo);
+            profilefecha.setText(fechaFormateada);
+            profileespeciality.setText(especialidad);
+            aboutme.setText(descricion);
+
+            // Cargar imagen usando Glide (asegúrate de tener la URL almacenada)
+            if (cedulaImageUrl != null) {
+                Glide.with(PerfilFragment.this).load(cedulaImageUrl).into(fotoperfil);
+            }
+        }
+
         //mostrar datos el del perfil
-        showDoctorData(db, currentUser);
+        //showDoctorData(db, currentUser);
 
         //mostrar pantalla emergente
        // showdialog();
@@ -179,14 +213,14 @@ public class PerfilFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     id = document.getString("id");
-                                    String nombreDoctor = document.getString("nombre");
-                                    String telefono = document.getString("telefono");
-                                    String email = document.getString("correo");
-                                    String sexo = document.getString("sexo");
+                                    nombreDoctor = document.getString("nombre");
+                                    telefono = document.getString("telefono");
+                                    email = document.getString("correo");
+                                    sexo = document.getString("sexo");
                                     fechanac =  String.valueOf(document.getLong("fechanac"));
-                                    String especialidad = document.getString("especialidad");
-                                    String descricion = document.getString("descripcion");
-                                    String cedulaImageUrl = document.getString("imagenperfilurl");
+                                    especialidad = document.getString("especialidad");
+                                    descricion = document.getString("descripcion");
+                                    cedulaImageUrl = document.getString("imagenperfilurl");
                                     if (cedulaImageUrl != null) {
                                         Glide.with(PerfilFragment.this).load(cedulaImageUrl).into(fotoperfil);
                                     }

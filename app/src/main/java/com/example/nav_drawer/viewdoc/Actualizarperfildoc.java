@@ -81,7 +81,7 @@ public class Actualizarperfildoc extends AppCompatActivity {
 
         btnSubirfotoperfil = findViewById(R.id.editperfil);
         intent = getIntent();
-        id = intent.getStringExtra("id"); //Recibimos el id del fragment
+         id = intent.getStringExtra("id"); //Recibimos el id del fragment
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {

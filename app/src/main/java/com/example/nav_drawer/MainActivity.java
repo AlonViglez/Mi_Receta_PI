@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Button button;
     TextView textView;
     FirebaseUser user;
-
+   static final int MAX_NUM_CLICS = 2; // Puedes ajustar este valor según tus necesidades
+    int numClics = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,16 +75,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     int itemId = item.getItemId();
-                    if(itemId == R.id.bottom_notify) {
-                        openFragment(new FragmentNotificaciones());
+                    if (itemId == R.id.bottom_notify) {
+                        handleNavigationClick(new FragmentNotificaciones());
                         return true;
-                    }else if(itemId == R.id.bottom_chats){
-                        openFragment(new FragmentChats());
+                    } else if (itemId == R.id.bottom_chats) {
+                        handleNavigationClick(new FragmentChats());
                         return true;
-                    }else if(itemId == R.id.bottom_perfil){
-                        openFragment(new PerfilFragment());
+                    } else if (itemId == R.id.bottom_perfil) {
+                        handleNavigationClick(new PerfilFragment());
                         return true;
                     }
+
                     return false;
                 }
             });
@@ -105,7 +107,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });*/
         }
     }
+    private void handleNavigationClick(Fragment fragment) {
+        numClics++;
 
+        if (numClics >= MAX_NUM_CLICS) {
+            // Realizar acciones adicionales después de múltiples clics
+            // Por ejemplo, reiniciar el contador y hacer algo especial.
+            numClics = 0;
+            // Agrega aquí cualquier acción adicional que desees realizar.
+        } else {
+            openFragment(fragment);
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
