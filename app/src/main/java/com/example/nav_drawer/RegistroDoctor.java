@@ -204,6 +204,7 @@ public class RegistroDoctor extends AppCompatActivity {
                             textViewCamp.setVisibility(View.GONE);
                             textViewErrorPass.setVisibility(View.GONE);
                             textViewErrorPassRep.setVisibility(View.GONE);
+                            email = email.toLowerCase();
                             // GUARDAR EN FIRESTORE
                             saveUserDataToFirestore(nombre, email, password, fechaNacimiento, sexo, especialidadSeleccionada, telefono, imagenINEUri, imagenCedulaUri);
                         } else {

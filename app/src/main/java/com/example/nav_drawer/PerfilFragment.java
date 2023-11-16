@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,17 +19,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.nav_drawer.viewdoc.Actualizarperfildoc;
+import com.example.nav_drawer.viewpaciente.ActualizarPerfilPaciente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -89,7 +87,7 @@ public class PerfilFragment extends Fragment {
 
     ImageView fotoperfil;
 
-    private Uri imagenCedulaUri = null;
+
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -199,7 +197,7 @@ public class PerfilFragment extends Fragment {
                                     // Agrega el botón de detalles
                                     // Configurar los elementos de la tarjeta
 
-                                    titleName.setText(nombreDoctor);
+                                    titleName.setText("¡Hola Dr! "+nombreDoctor);
                                     profileName.setText(nombreDoctor);
                                     profilenum.setText(telefono);
                                     profileEmail.setText(email);

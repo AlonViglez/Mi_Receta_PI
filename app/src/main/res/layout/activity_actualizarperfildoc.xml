@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="Editar Imagen"
             android:textColor="@color/black"
-            android:backgroundTint="@color/color_gris"
+            android:backgroundTint="#DDF2FD"
             android:layout_marginTop="10dp"
             android:layout_below="@id/fotoperfil"
             android:layout_marginEnd="10dp"
@@ -131,7 +131,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_email"> <!-- Reemplaza con el recurso de tu icono -->
+                    android:src="@drawable/icon_file"> <!-- Reemplaza con el recurso de tu icono -->
                 </ImageView>
 
                 <EditText
@@ -165,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#DDF2FD"
-                android:text="Editar Perfil"
+                android:text="Aceptar"
                 android:id="@+id/editbutton"
                 android:layout_below="@+id/l4"
                 android:textColor="@color/black"

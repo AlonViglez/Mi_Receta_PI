@@ -36,10 +36,16 @@
             android:enabled="true"
             android:exported="false"></service>
         <activity
+            android:name=".viewpaciente.FormularioRecetarPaciente"
+            android:exported="false" />
+        <activity
             android:name=".viewpaciente.comprar_chat"
             android:exported="false" />
         <activity
             android:name=".viewdoc.Actualizarperfildoc"
+            android:exported="false" />
+        <activity
+            android:name=".viewpaciente.ActualizarPerfilPaciente"
             android:exported="false" />
         <activity
             android:name=".viewAdmin.EditarDoctor"

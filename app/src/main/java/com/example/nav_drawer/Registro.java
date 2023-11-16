@@ -157,6 +157,7 @@ public class Registro extends AppCompatActivity {
                         textViewCamp.setVisibility(View.GONE);
                         textViewErrorPass.setVisibility(View.GONE);
                         textViewErrorPassRep.setVisibility(View.GONE);
+                        email = email.toLowerCase();
                         //REGISTRAR EN FIREBASE
                         registerUser(nombre, email, password, fechaNacimiento, sexo);
                     } else {
