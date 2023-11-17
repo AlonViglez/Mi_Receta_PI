@@ -46,11 +46,14 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
     Button button;
     TextView textView;
     FirebaseUser user;
+    boolean showDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pacient);
+        Intent intentdialog = getIntent();
+        showDialog = intentdialog.getBooleanExtra("SHOW_DIALOG", false);
         auth = FirebaseAuth.getInstance();
         user = auth .getCurrentUser();
         if (user == null){
@@ -101,9 +104,22 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                      */
                 }
             });
-            //al entrar te mandara a esta primero
             fragmentManager = getSupportFragmentManager();
-            openFragment(new FragmentTratamientoPaciente());
+            //al entrar te mandara a esta primero
+            if (showDialog == false) {
+                openFragment(new FragmentTratamientoPaciente());
+            }else if (showDialog == true){
+                // Crear una instancia de MiFragmento
+                FragmentTratamientoPaciente miFragmento = new FragmentTratamientoPaciente();
+                // Crear un Bundle para los argumentos
+                Bundle args = new Bundle();
+                args.putBoolean("SHOW_DIALOG", showDialog);
+                // Establecer los argumentos en el fragmento
+                miFragmento.setArguments(args);
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container_pacient, miFragmento);
+                transaction.commit();
+            }
         /*
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

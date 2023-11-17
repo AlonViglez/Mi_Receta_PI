@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/layout_bg_dialog"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="left"
+            android:text="Tratamiento"
+            android:textColor="#36AA6F"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="left"
+            android:text="¿Ya te tomaste tu medicamento? ¡Felicidades, sigue así!"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAceptarTratamientoDialog"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_background_green"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="15dp"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:elevation="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>

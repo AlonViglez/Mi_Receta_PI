@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.os.Bundle;
 import android.content.Intent;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -41,6 +42,7 @@ public class FragmentTratamientoPaciente extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    boolean showDialog;
     Button btnnuevotratamiento;
     String userEmail;
     String nombrePastilla;
@@ -48,8 +50,6 @@ public class FragmentTratamientoPaciente extends Fragment {
     String pastillasTomadas;
     String dosis;
     TextView textNombrePastilla,textTipoMedicamento,textPastillasTomadas;
-
-
     public FragmentTratamientoPaciente() {
         // Required empty public constructor
     }
@@ -86,6 +86,13 @@ public class FragmentTratamientoPaciente extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tratamiento_paciente, container, false);
         btnnuevotratamiento = view.findViewById(R.id.btn_nuevo_medicamento);
+        // Recuperar los argumentos
+        Bundle args = getArguments();
+        if (args != null) {
+            showDialog = args.getBoolean("SHOW_DIALOG", false); // El segundo parámetro es el valor predeterminado
+            // Haz algo con el booleano...
+            Log.d("MiFragmento", "Mi booleano: " + showDialog);
+        }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Obtener una referencia al contenedor de tarjetas
         LinearLayout tratamientosContainer  = view.findViewById(R.id.pacienteContainerTratamientos);
@@ -152,6 +159,18 @@ public class FragmentTratamientoPaciente extends Fragment {
                 startActivity(intent);
             }
         });
+        if(showDialog == true){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento, null);
+            builder.setView(dialogView);
+            Button btnAceptar = dialogView.findViewById(R.id.btnAceptarTratamientoDialog);
+            AlertDialog alertDialog = builder.create();
+            btnAceptar.setOnClickListener(v1 -> {
+                showDialog = false;
+                alertDialog.dismiss();
+            });
+            alertDialog.show();
+        }
         return view;
     }
 }

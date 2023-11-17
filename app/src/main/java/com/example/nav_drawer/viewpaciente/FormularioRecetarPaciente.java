@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FormularioRecetarPaciente extends AppCompatActivity {
     private Handler handler = new Handler();
+    int numnotificacion = 0;
     String horainicio;
     String userEmail;
     FirebaseAuth mAuth;
@@ -183,18 +184,34 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
     //Segundo metodo para programar la notificacion en segundo plano
     private void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento, String tomada, String totalTomasStr) {
         // Crear una tarea única con WorkManager
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
-                .setInputData(new Data.Builder()
-                        .putString("tratamientoId", tratamientoId)
-                        .putString("userEmail", userEmail)
-                        .putString("nombreMedicamento", medicamento)
-                        .putString("tomada", tomada)
-                        .putString("totaltomas", totalTomasStr)
-                        .build())
-                .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
-                .build();
-        // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
-        WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        numnotificacion += 1;
+        if(numnotificacion == 1) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        } else if (numnotificacion == 2) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerDos.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }
     }
     // Método para calcular el total de tomas por día considerando la hora de inicio
     private int calcularTotalTomasPorDia(int duracion, String horainicio, int intervalo) {

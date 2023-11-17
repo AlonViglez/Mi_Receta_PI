@@ -27,8 +27,20 @@
                 <action android:name="ACTION_TAKEN" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiverDos"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".viewpaciente.MyWorker"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".viewpaciente.MyWorkerDos"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
