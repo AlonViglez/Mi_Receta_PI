@@ -3,12 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/framehistorial"
     tools:context=".viewpaciente.HistorialPaciente">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/layout_list_historial"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/titleHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Historial"
+            android:textSize="28sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <!-- Contenedor de tarjetas de doctores -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/pacienteContainerHistorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:padding="15dp">
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </FrameLayout>

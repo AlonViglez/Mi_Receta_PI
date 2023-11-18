@@ -33,7 +33,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:gravity="left"
-            android:text="¿Ya te tomaste tu medicamento? ¡Felicidades, sigue así!"
+            android:text="¡Felicitcaciones haz completado todas tus pastillas!"
             android:textColor="#757575"
             android:textSize="18sp" />
         <ImageView
@@ -41,7 +41,7 @@
             android:layout_height="85dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:src="@drawable/icon_pregunta"
+            android:src="@drawable/icon_completado_dialog"
             android:contentDescription="Icono del diálogo" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -56,5 +56,4 @@
             android:textColor="@color/white"
             android:elevation="8dp"/>
     </LinearLayout>
-
 </LinearLayout>

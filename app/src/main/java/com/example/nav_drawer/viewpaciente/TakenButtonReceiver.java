@@ -36,6 +36,7 @@ public class TakenButtonReceiver extends BroadcastReceiver {
     int totalPastillas;
     int tomada;
     boolean showdialog = true;
+    boolean completadadialog = false;
     private static boolean buttonEnabled = true; // Variable para rastrear si el botón está habilitado
     private static final int DELAY_MILLIS = 4000; // Retraso en milisegundos (4 segundos)
     @Override
@@ -110,7 +111,7 @@ public class TakenButtonReceiver extends BroadcastReceiver {
                                 // Programar la próxima notificación
                                 scheduleNextNotification(context, tratamientoID, email, nombreMedicamento, delayMillis, totalTomasStr, tomadaStr);
                             } else {
-                                // Todas las pastillas han sido tomadas, puedes realizar acciones adicionales si es necesario
+
                             }
                             // Marcar la medicación como tomada en base de datos
                             Intent inicioIntent = new Intent(context, ViewPacient.class);

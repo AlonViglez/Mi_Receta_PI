@@ -26,6 +26,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +53,8 @@ public class FragmentTratamientoPaciente extends Fragment {
     String pastillasTomadas;
     String dosis;
     TextView textNombrePastilla,textTipoMedicamento,textPastillasTomadas;
+    FirebaseFirestore db;
+    int numpastillastomadas,numtotalpastillas;
     public FragmentTratamientoPaciente() {
         // Required empty public constructor
     }
@@ -93,7 +98,7 @@ public class FragmentTratamientoPaciente extends Fragment {
             // Haz algo con el booleano...
             Log.d("MiFragmento", "Mi booleano: " + showDialog);
         }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         // Obtener una referencia al contenedor de tarjetas
         LinearLayout tratamientosContainer  = view.findViewById(R.id.pacienteContainerTratamientos);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -104,6 +109,32 @@ public class FragmentTratamientoPaciente extends Fragment {
             Log.e(TAG, "Usuario no autenticado");
             Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
+        //Realizar una consulta para saber si un tratamiento ya fue completado y mandarlo al historial
+        db.collection("tratamientos")
+                .whereEqualTo("usuario", userEmail)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Obtener el número total de pastillas y las pastillas tomadas del documento
+                            pastillasTomadas = String.valueOf(document.getLong("tomada"));
+                            totalPastillas = String.valueOf(document.getLong("totalPastillas"));
+                            numpastillastomadas = Integer.parseInt(pastillasTomadas);
+                            numtotalpastillas = Integer.parseInt(totalPastillas);
+                            // Verificar si el tratamiento está completo
+                            if (numtotalpastillas == numpastillastomadas) {
+                                //Si el tratamiento esta completado
+                                enviarATratamientosCompletados(document);
+                            }
+                        }
+                    } else {
+                        // Si hubiera un error
+                        Exception exception = task.getException();
+                        if (exception != null) {
+                            // Manejar el error
+                        }
+                    }
+                });
         //Realizar una consulta para obtener los tratamientos del usuario específico
         db.collection("tratamientos")
                 .whereEqualTo("usuario", userEmail)
@@ -115,8 +146,8 @@ public class FragmentTratamientoPaciente extends Fragment {
                             totalPastillas = String.valueOf(document.getLong("totalPastillas"));
                             pastillasTomadas = String.valueOf(document.getLong("tomada"));
                             dosis = String.valueOf(document.getLong("dosis"));
-                            int numpastillastomadas = Integer.parseInt(pastillasTomadas);
-                            int numtotalpastillas = Integer.parseInt(totalPastillas);
+                            numpastillastomadas = Integer.parseInt(pastillasTomadas);
+                            numtotalpastillas = Integer.parseInt(totalPastillas);
 
                             // Inflar el diseño de la tarjeta personalizado
                             View cardView = getLayoutInflater().inflate(R.layout.paciente_card_tratamientos, null);
@@ -172,5 +203,41 @@ public class FragmentTratamientoPaciente extends Fragment {
             alertDialog.show();
         }
         return view;
+    }
+    // Método para enviar el tratamiento a la nueva tabla y eliminarlo de la original
+    private void enviarATratamientosCompletados(QueryDocumentSnapshot tratamientoDocument) {
+        // Obtener los datos del documento
+        Map<String, Object> tratamientoData = new HashMap<>(tratamientoDocument.getData());
+
+        // Añadir los datos a la nueva colección "tratamientosCompletados"
+        db.collection("tratamientoscompletados")
+                .add(tratamientoData)
+                .addOnSuccessListener(documentReference -> {
+                    eliminarTratamientoOriginal(tratamientoDocument.getId());
+                })
+                .addOnFailureListener(e -> {
+                    //Si fallara
+                });
+    }
+
+    // Método para eliminar el tratamiento de la colección original
+    private void eliminarTratamientoOriginal(String tratamientoId) {
+        db.collection("tratamientos")
+                .document(tratamientoId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento_completado, null);
+                    builder.setView(dialogView);
+                    Button btnAceptar = dialogView.findViewById(R.id.btnAceptarTratamientoDialog);
+                    AlertDialog alertDialog = builder.create();
+                    btnAceptar.setOnClickListener(v1 -> {
+                        alertDialog.dismiss();
+                    });
+                    alertDialog.show();
+                })
+                .addOnFailureListener(e -> {
+                    // Errores
+                });
     }
 }
