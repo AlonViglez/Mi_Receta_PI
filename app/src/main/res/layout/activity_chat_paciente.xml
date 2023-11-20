@@ -23,13 +23,13 @@
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/profile_pic_layout"
-            android:id="@+id/other_username"/>
+            android:id="@+id/other_usernames"/>
 
         <include layout="@layout/profile_pic_view"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
-            android:layout_toRightOf="@id/back_btn"
+            android:layout_toRightOf="@id/back_btns"
             android:id="@+id/profile_pic_layout"/>
 
         <ImageButton
@@ -37,7 +37,7 @@
             android:layout_height="32dp"
             android:src="@drawable/icon_back"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:id="@+id/back_btn"/>
+            android:id="@+id/back_btns"/>
 
     </RelativeLayout>
 
@@ -46,7 +46,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:layout_above="@id/bottom_layout"
-        android:id="@+id/chat_recycler_view"/>
+        android:id="@+id/chat_recycler_views"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,20 +64,20 @@
             android:background="@drawable/input_desing_text"
             android:elevation="4dp"
             android:padding="10dp"
-            android:layout_toLeftOf="@id/message_send_btn"
-            android:id="@+id/chat_message_input"/>
+            android:layout_toLeftOf="@id/message_send_btns"
+            android:id="@+id/chat_message_inputs"/>
 
         <ImageButton
+            android:id="@+id/message_send_btns"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/icon_send"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/mireceta"
-            android:id="@+id/message_send_btn"
             android:padding="8dp"
-            android:layout_marginStart="10dp"/>
+            android:src="@drawable/icon_send"
+            app:tint="@color/mireceta" />
 
     </RelativeLayout>
 
