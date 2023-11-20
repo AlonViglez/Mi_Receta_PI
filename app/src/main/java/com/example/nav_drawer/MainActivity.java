@@ -12,20 +12,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.nav_drawer.viewdoc.FragmentChats;
+import com.example.nav_drawer.viewdoc.Activity_search_paciente;
 import com.example.nav_drawer.viewdoc.FragmentNotificaciones;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarItemView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -78,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         openFragment(new FragmentNotificaciones());
                         return true;
                     }else if(itemId == R.id.bottom_chats){
-                        openFragment(new FragmentChats());
+                        Intent intent = new Intent(MainActivity.this, Activity_search_paciente.class);
+                        startActivity(intent);
                         return true;
                     }else if(itemId == R.id.bottom_perfil){
                         openFragment(new PerfilFragment());

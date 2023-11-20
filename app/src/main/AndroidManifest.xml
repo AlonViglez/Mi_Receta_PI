@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_EMAIL" />
@@ -14,7 +14,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Navdrawer"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".viewpaciente.Activity_Chat_Paciente"
+            android:exported="false" />
+        <activity
+            android:name=".viewpaciente.Activity_search_doctor"
+            android:exported="false" />
+        <activity
+            android:name=".ChatInput_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Chat_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".viewdoc.Activity_search_paciente"
+            android:exported="false" />
+        <activity
+            android:name=".viewdoc.Activity_Chat"
+            android:exported="false" />
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
@@ -32,7 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".Inicio"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +71,7 @@
         <activity
             android:name=".Login"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" >
+            android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

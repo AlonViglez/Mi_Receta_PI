@@ -9,5 +9,6 @@
     <color name="buttonmireceta">#19A7CE</color>
     <color name="select_item">#05B6FF</color>
 
-
+    <color name="chat_color_sender">#146C94</color>
+    <color name="chat_color_receiver">#7CB342</color>
 </resources>

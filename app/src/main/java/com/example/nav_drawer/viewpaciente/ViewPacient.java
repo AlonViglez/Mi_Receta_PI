@@ -24,9 +24,11 @@ import com.example.nav_drawer.GuiaFragment;
 import com.example.nav_drawer.HistoryFragment;
 import com.example.nav_drawer.HomeFragment;
 import com.example.nav_drawer.Login;
+import com.example.nav_drawer.MainActivity;
 import com.example.nav_drawer.PerfilFragment;
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.RecetarFragment;
+import com.example.nav_drawer.viewdoc.Activity_search_paciente;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -77,8 +79,9 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     //fragmentos del nav
                     int itemId = item.getItemId();
-                    if(itemId == R.id.bottom_chats_paciente) {
-                        openFragment(new FragmentChatPaciente());
+                    if (itemId == R.id.bottom_chats_paciente) {
+                        Intent intent = new Intent(ViewPacient.this, Activity_search_doctor.class);
+                        startActivity(intent);
                         return true;
                     }else if(itemId == R.id.bottom_doctores_paciente){
                         openFragment(new FragmentDoctoresPaciente());

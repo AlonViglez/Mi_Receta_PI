@@ -239,6 +239,8 @@ public class Registro extends AppCompatActivity {
             userData.put("fechanac", timestamp);
             userData.put("sexo", sexo);
 
+
+
             mFirestore.collection("users")
                     .add(userData)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
