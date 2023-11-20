@@ -35,6 +35,38 @@
                 <action android:name="ACTION_TAKEN" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiverTres"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiverCuatro"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiverCinco"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".viewpaciente.TakenButtonReceiverSeis"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_TAKEN" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".viewpaciente.MyWorker"
             android:exported="false"
@@ -44,9 +76,21 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-            android:name=".viewpaciente.NotificationService"
-            android:enabled="true"
-            android:exported="false"></service>
+            android:name=".viewpaciente.MyWorkerTres"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".viewpaciente.MyWorkerCuatro"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".viewpaciente.MyWorkerCinco"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".viewpaciente.MyWorkerSeis"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".viewpaciente.FormularioRecetarPaciente"
             android:exported="false" />

@@ -10,35 +10,65 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/titleRecetar"
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/backButtonFormulario"
+                android:layout_width="65dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:src="@drawable/flecha_atras"
+                android:padding="16dp"
+                android:clickable="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tratamientos"
+                android:layout_margin="20dp"
+                android:textColor="@color/black"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:id="@+id/Tratamientos"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tratamiento"
-            android:textSize="28sp"
-            android:textColor="@android:color/black"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Medicamento:"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
         <EditText
             android:id="@+id/editMedicamento"
             android:layout_width="match_parent"
             android:layout_height="37dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
             android:textSize="16sp"
             android:textAlignment="center"
             android:textColor="#736A6A"
-            android:hint="Medicamento(Paracetamol)"
-            android:background="@drawable/diseno_background">
-        </EditText>
+            android:hint="Medicamento (Paracetamol)"
+            android:background="@drawable/diseno_background"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Duración:"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
         <EditText
             android:id="@+id/editDuracion"
             android:layout_width="match_parent"
             android:layout_height="37dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
             android:textSize="16sp"
             android:textAlignment="center"
             android:textColor="#736A6A"
@@ -47,12 +77,22 @@
             android:inputType="number"
             android:digits="0123456789">
         </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Dosis:"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
         <EditText
             android:id="@+id/editDosis"
             android:layout_width="match_parent"
             android:layout_height="37dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
             android:textSize="16sp"
             android:textAlignment="center"
             android:textColor="#736A6A"
@@ -60,12 +100,22 @@
             android:background="@drawable/diseno_background"
             android:inputType="numberDecimal">
         </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Intervalo:"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
         <EditText
             android:id="@+id/editIntervalo"
             android:layout_width="match_parent"
             android:layout_height="37dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
             android:textSize="16sp"
             android:textAlignment="center"
             android:textColor="#736A6A"
@@ -74,12 +124,24 @@
             android:inputType="number"
             android:digits="0123456789">
         </EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Primera toma, hora de inicio:"
+            android:textSize="16sp"
+            android:textColor="#000000"/>
         <Button
             android:id="@+id/btnMostrarTimePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="25dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
             android:text="Seleccionar Hora"/>
         <TimePicker
             android:id="@+id/timePicker"
@@ -88,11 +150,13 @@
             android:layout_gravity="center"
             android:visibility="gone"/>
         <Button
-            android:text="@string/aceptar"
+            android:text="@string/crear_tratamiento"
             android:id="@+id/btn_registro_medicamento"
-            android:layout_marginTop="20dp"
-            android:layout_width="200dp"
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center"
+            android:layout_width="250dp"
             android:layout_height="70dp"
-            android:backgroundTint="@color/buttonmireceta"/>
+            android:textSize="17dp"
+            android:backgroundTint="@color/azul_cute"/>
     </LinearLayout>
 </RelativeLayout>

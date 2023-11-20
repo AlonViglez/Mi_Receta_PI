@@ -21,12 +21,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class TakenButtonReceiverDos extends BroadcastReceiver {
     String nombreMedicamento, totalTomasStr, tomadaStr;
     int totalPastillas;
     int tomada;
+    boolean showdialog = true;
+    int posicion = 1;
+    int num = 2;
     private static boolean buttonEnabled = true; // Variable para rastrear si el botón está habilitado
     private static final int DELAY_MILLIS = 4000; // Retraso en milisegundos (4 segundos)
     @Override
@@ -101,10 +106,13 @@ public class TakenButtonReceiverDos extends BroadcastReceiver {
                                 // Programar la próxima notificación
                                 scheduleNextNotification(context, tratamientoID, email, nombreMedicamento, delayMillis, totalTomasStr, tomadaStr);
                             } else {
-                                // Todas las pastillas han sido tomadas, puedes realizar acciones adicionales si es necesario
+                                // Alcanzamos el total de pastillas, por lo que debemos crear una notificación en Firestore
                             }
                             // Marcar la medicación como tomada en base de datos
                             Intent inicioIntent = new Intent(context, ViewPacient.class);
+                            inicioIntent.putExtra("POSICIONDOS", posicion);
+                            inicioIntent.putExtra("DOSNOTIFY", num);
+                            inicioIntent.putExtra("SHOW_DIALOG", showdialog);
                             inicioIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(inicioIntent);
                             Log.d(TAG, "Detalles del tratamiento obtenidos con éxito");

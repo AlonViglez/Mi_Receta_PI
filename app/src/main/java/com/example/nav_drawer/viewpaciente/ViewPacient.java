@@ -140,7 +140,7 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
         }else if (itemId == R.id.nav_contactar) {
             openFragment(new ContactarFragment());
         }else if (itemId == R.id.nav_history) {
-            openFragment(new HistoryFragment());
+            openFragment(new HistorialPaciente());
         }else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);

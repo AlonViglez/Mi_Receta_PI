@@ -46,7 +46,7 @@ public class FragmentTratamientoPaciente extends Fragment {
     private String mParam1;
     private String mParam2;
     boolean showDialog;
-    Button btnnuevotratamiento;
+    ImageView btnnuevotratamiento;
     String userEmail;
     String nombrePastilla;
     String totalPastillas;
@@ -95,7 +95,6 @@ public class FragmentTratamientoPaciente extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             showDialog = args.getBoolean("SHOW_DIALOG", false); // El segundo parámetro es el valor predeterminado
-            // Haz algo con el booleano...
             Log.d("MiFragmento", "Mi booleano: " + showDialog);
         }
         db = FirebaseFirestore.getInstance();
@@ -190,7 +189,7 @@ public class FragmentTratamientoPaciente extends Fragment {
                 startActivity(intent);
             }
         });
-        if(showDialog == true){
+        if(showDialog == true && numpastillastomadas != numtotalpastillas){
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento, null);
             builder.setView(dialogView);

@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:id="@+id/frametratamientos"
     tools:context=".viewpaciente.FragmentTratamientoPaciente">
-
     <LinearLayout
         android:id="@+id/layout_list"
         android:orientation="vertical"
@@ -22,17 +21,42 @@
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
-        <Button
-            android:text="@string/nuevo_tratamiento"
-            android:id="@+id/btn_nuevo_medicamento"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
-            android:backgroundTint="@color/buttonmireceta"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+            <ImageView
+                android:id="@+id/btn_nuevo_medicamento"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="start"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/icon_agregar"
+                android:scaleType="fitXY"
+                android:backgroundTint="@color/buttonmireceta"
+                android:clickable="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_toEndOf="@id/btn_nuevo_medicamento"
+                android:layout_marginTop="16dp"
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:text="@string/nuevo_tratamiento"
+                android:textColor="@color/azul_cute"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
         <!-- Contenedor de tarjetas de doctores -->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
             <LinearLayout
                 android:id="@+id/pacienteContainerTratamientos"
                 android:layout_width="match_parent"
@@ -42,5 +66,13 @@
                 android:padding="15dp">
             </LinearLayout>
         </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:padding="8dp"
+            android:orientation="vertical"
+            android:id="@+id/l5">
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

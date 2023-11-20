@@ -99,5 +99,4 @@
             android:layout_marginTop="20dp"
             android:visibility="visible"/>
     </RelativeLayout>
-
 </FrameLayout>
