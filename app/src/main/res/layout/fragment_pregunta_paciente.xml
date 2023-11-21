@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".viewpaciente.PreguntaPaciente">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/layout_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/titleRecetar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preguntas de los usuarios"
+            android:textSize="28sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="35dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:gravity="left"
+                android:text="Ingresar una nueva pregunta"
+                android:textColor="@color/azul_cute"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/pregunta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text1"
+                android:layout_marginTop="12dp"
+                android:hint="Pregunta"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/btnrecomendarenviar"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pregunta"
+                android:padding="10dp"
+                android:text="Enviar">
+            </Button>
+        </RelativeLayout>
+
+        <!-- Contenedor de tarjetas de doctores -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/pacienteContainerPregunta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:padding="15dp">
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:padding="8dp"
+            android:orientation="vertical"
+            android:id="@+id/l5">
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

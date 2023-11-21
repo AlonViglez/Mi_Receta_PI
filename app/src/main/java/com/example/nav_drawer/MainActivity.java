@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.nav_drawer.viewdoc.FragmentChats;
 import com.example.nav_drawer.viewdoc.FragmentNotificaciones;
+import com.example.nav_drawer.viewdoc.PreguntaDoctor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarItemView;
@@ -79,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         handleNavigationClick(new FragmentNotificaciones());
                         return true;
                     } else if (itemId == R.id.bottom_chats) {
-                        handleNavigationClick(new FragmentChats());
+                        //handleNavigationClick(new FragmentChats());
+                        handleNavigationClick(new PreguntaDoctor());
                         return true;
                     } else if (itemId == R.id.bottom_perfil) {
                         handleNavigationClick(new PerfilFragment());
