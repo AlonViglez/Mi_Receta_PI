@@ -81,7 +81,8 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                     //fragmentos del nav
                     int itemId = item.getItemId();
                     if(itemId == R.id.bottom_chats_paciente) {
-                        openFragment(new FragmentChatPaciente());
+                        //openFragment(new FragmentChatPaciente());
+                        openFragment(new FragmentRecomendacionesPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_doctores_paciente){
                         openFragment(new FragmentDoctoresPaciente());
