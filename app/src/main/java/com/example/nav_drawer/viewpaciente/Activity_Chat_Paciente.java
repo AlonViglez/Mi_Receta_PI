@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import com.example.nav_drawer.ChatroomModelDoctor;
 import com.example.nav_drawer.DoctorModel;
 import com.example.nav_drawer.FirebaseUtilDoctor;
 import com.example.nav_drawer.R;
+import com.example.nav_drawer.viewdoc.Activity_Chat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -41,6 +43,9 @@ public class Activity_Chat_Paciente extends AppCompatActivity {
 
         otherDoctor = AndroidUtilDoctor.getDoctorModelFromIntent(getIntent());
         chatroomId = FirebaseUtilDoctor.getChatroomId(FirebaseUtilDoctor.currentDoctorId(),otherDoctor.getId());
+
+        Intent intent = new Intent(this, Activity_Chat.class);
+        intent.putExtra("CHAT_ROOM_ID", chatroomId);
 
         messageInput = findViewById(R.id.chat_message_inputs);
         sendMessageBtn = findViewById(R.id.message_send_btns);

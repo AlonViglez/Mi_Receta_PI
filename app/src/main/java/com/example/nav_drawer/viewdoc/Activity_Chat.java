@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nav_drawer.AndroidUtil;
 import com.example.nav_drawer.ChatMessageModel;
 import com.example.nav_drawer.ChatroomModel;
+import com.example.nav_drawer.ChatroomModelDoctor;
 import com.example.nav_drawer.FirebaseUtil;
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.UserModel;
@@ -31,7 +32,7 @@ import java.util.Arrays;
 public class Activity_Chat extends AppCompatActivity {
     UserModel otherUser;
     String chatroomId;
-    ChatroomModel chatroomModel;
+    ChatroomModelDoctor chatroomModelDoctor;
     ChatRecyclerAdapter adapter;
 
 
@@ -85,9 +86,9 @@ public class Activity_Chat extends AppCompatActivity {
     }
     void sendMessageToUser(String message){
 
-        chatroomModel.setLastMessageTimestap(Timestamp.now());
-        chatroomModel.setLastMessageSenderId(FirebaseUtil.currentUserId());
-        FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+        chatroomModelDoctor.setLastMessageTimestamp(Timestamp.now());
+        chatroomModelDoctor.setLastMessageSenderId(FirebaseUtil.currentUserId());
+        FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModelDoctor);
 
         ChatMessageModel chatMessageModel = new ChatMessageModel(message,FirebaseUtil.currentUserId(),Timestamp.now());
         FirebaseUtil.getChatroomMessageReference(chatroomId).add(chatMessageModel)
@@ -103,16 +104,16 @@ public class Activity_Chat extends AppCompatActivity {
     void getOrCreateChatroomModel(){
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                chatroomModel = task.getResult().toObject(ChatroomModel.class);
-                if (chatroomModel==null){
+                chatroomModelDoctor = task.getResult().toObject(ChatroomModelDoctor.class);
+                if (chatroomModelDoctor==null){
                     //Primer Mensaje
-                    chatroomModel = new ChatroomModel(
+                    chatroomModelDoctor = new ChatroomModelDoctor(
                             chatroomId,
                             Arrays.asList(FirebaseUtil.currentUserId(),otherUser.getId()),
                             Timestamp.now(),
                             ""
                     );
-                    FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
+                    FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModelDoctor);
                 }
             }
         });
