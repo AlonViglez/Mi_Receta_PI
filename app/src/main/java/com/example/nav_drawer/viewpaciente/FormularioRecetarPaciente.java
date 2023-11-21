@@ -33,6 +33,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -87,6 +88,30 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
             Log.e(TAG, "Usuario no autenticado");
             Toast.makeText(FormularioRecetarPaciente.this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
+        // Referencia a la colección "tratamientos" en Firestore
+        CollectionReference tratamientosRef = db.collection("tratamientos");
+        // Realizar la consulta para contar los documentos relacionados con el correo electrónico
+        tratamientosRef.whereEqualTo("usuario", userEmail)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // Obtener el número de documentos que coinciden con el correo electrónico
+                        int numDocumentos = queryDocumentSnapshots.size();
+                        Toast.makeText(FormularioRecetarPaciente.this, "Número de tratamientos encontrados: " + numDocumentos, Toast.LENGTH_SHORT).show();
+                        if (numDocumentos == 0) {
+                            contadornotificacion = 0;
+                        } else {
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Manejar errores de consulta
+                        Toast.makeText(FormularioRecetarPaciente.this, "Error al consultar tratamientos", Toast.LENGTH_SHORT).show();
+                    }
+                });
         btnregresar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -136,7 +161,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                 dosisStr = editDosis.getText().toString();
                 intervaloStr = editIntervalo.getText().toString();
                 // Verificar que los campos no estén vacíos
-                if (!medicamento.isEmpty() && !duracionStr.isEmpty() && !dosisStr.isEmpty() && !intervaloStr.isEmpty()) {
+                if (!medicamento.isEmpty() && !duracionStr.isEmpty() && !dosisStr.isEmpty() && !intervaloStr.isEmpty() || horainicio != null) {
                     // Enviar los datos a Firestore
                     //Conversiones
                     int duracion = Integer.parseInt(duracionStr);
@@ -147,13 +172,13 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     //Convertir totaltomas a string
                     totalTomasStr = String.valueOf(totalTomas);
                     tomada = String.valueOf(primeratoma);
-                    // Guardar el nuevo valor de contador en SharedPreferences
-                    SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-                    editor.putInt(CONTADOR_KEY, contadornotificacion + 1); // Incrementar el valor
-                    editor.apply();
                     //Puede crear notificaciones
                     if(contadornotificacion < 6){ //MAXIMO DE TRATAMIENTOS 6 en total
-                        Toast.makeText(FormularioRecetarPaciente.this, "Primeras dos, Contador " + contadornotificacion, Toast.LENGTH_SHORT).show();
+                        // Guardar el nuevo valor de contador en SharedPreferences
+                        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                        editor.putInt(CONTADOR_KEY, contadornotificacion + 1); // Incrementar el valor
+                        editor.apply();
+                        Toast.makeText(FormularioRecetarPaciente.this, "Primeras dos, Contador KEY: " + CONTADOR_KEY + " Contador: " + contadornotificacion, Toast.LENGTH_SHORT).show();
                         enviarDatosFirestore(medicamento, duracion, dosis, intervalo,primeratoma,totalTomas);
                     }else{
                         Toast.makeText(FormularioRecetarPaciente.this, "Termina todos tus tratamientos , contador " + contadornotificacion, Toast.LENGTH_SHORT).show();
@@ -188,7 +213,20 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                         // Actualizar el documento con el ID
                         documentReference.update("id", tratamientoId);
                         Toast.makeText(FormularioRecetarPaciente.this, "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(FormularioRecetarPaciente.this);
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento_registrado, null);
+                        builder.setView(dialogView);
+                        Button btnAceptar = dialogView.findViewById(R.id.btnAceptarTratamientoDialog);
+                        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                        btnAceptar.setOnClickListener(v1 -> {
+                            alertDialog.dismiss();
+                        });
+                        alertDialog.show();
                         scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento,tomada,totalTomasStr); // Convertir el intervalo a milisegundos
+                        editMedicamento.setText("");
+                        editDosis.setText("");
+                        editDuracion.setText("");
+                        editIntervalo.setText("");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

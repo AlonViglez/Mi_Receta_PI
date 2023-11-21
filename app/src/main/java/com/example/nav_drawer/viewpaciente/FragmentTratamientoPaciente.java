@@ -189,7 +189,7 @@ public class FragmentTratamientoPaciente extends Fragment {
                 startActivity(intent);
             }
         });
-        if(showDialog == true && numpastillastomadas != numtotalpastillas){
+        if (showDialog == true) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento, null);
             builder.setView(dialogView);

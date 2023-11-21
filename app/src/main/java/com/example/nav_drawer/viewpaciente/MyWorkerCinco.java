@@ -77,7 +77,7 @@ public class MyWorkerCinco extends Worker {
         takenIntent.putExtra("USER_EMAIL", userEmail);
         takenIntent.putExtra("TRATAMIENTO_ID", tratamientoId);
 
-        PendingIntent takenPendingIntent = PendingIntent.getBroadcast(context, 0, takenIntent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent takenPendingIntent = PendingIntent.getBroadcast(context, tratamientoId.hashCode(), takenIntent, PendingIntent.FLAG_MUTABLE);
 
         builder.addAction(R.drawable.icon_disponibilidad, "Tomada", takenPendingIntent);
         // Mostrar la notificación
