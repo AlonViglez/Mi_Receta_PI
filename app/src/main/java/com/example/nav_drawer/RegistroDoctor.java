@@ -105,7 +105,16 @@ public class RegistroDoctor extends AppCompatActivity {
         textViewErrorPass = findViewById(R.id.textViewErrorPassword);
         textViewErrorPassRep = findViewById(R.id.textViewErrorRepetirPassword);
         textViewCamp = findViewById(R.id.textViewCampos);
+        ImageView btnregresar = findViewById(R.id.btnatras);
         //SELECCIONAR SEXO
+
+        btnregresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent log = new Intent(RegistroDoctor.this, IdentifyRegister.class);
+                startActivity(log);
+            }
+        });
         sexoRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

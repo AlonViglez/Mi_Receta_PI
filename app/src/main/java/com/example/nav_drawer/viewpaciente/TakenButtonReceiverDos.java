@@ -8,21 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
-//import androidx.work.impl.utils.ForceStopRunnable;
 
-import com.example.nav_drawer.Inicio;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,14 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TakenButtonReceiver extends BroadcastReceiver {
+public class TakenButtonReceiverDos extends BroadcastReceiver {
     String nombreMedicamento, totalTomasStr, tomadaStr;
     int totalPastillas;
     int tomada;
-    int posicion = 0;
-    int num = 1;
     boolean showdialog = true;
-   // boolean completadadialog = false;
+    int posicion = 1;
+    int num = 2;
     private static boolean buttonEnabled = true; // Variable para rastrear si el botón está habilitado
     private static final int DELAY_MILLIS = 4000; // Retraso en milisegundos (4 segundos)
     @Override
@@ -117,8 +110,8 @@ public class TakenButtonReceiver extends BroadcastReceiver {
                             }
                             // Marcar la medicación como tomada en base de datos
                             Intent inicioIntent = new Intent(context, ViewPacient.class);
-                            inicioIntent.putExtra("POSICIONUNO", posicion);
-                            inicioIntent.putExtra("UNONOTIFY", num);
+                            inicioIntent.putExtra("POSICIONDOS", posicion);
+                            inicioIntent.putExtra("DOSNOTIFY", num);
                             inicioIntent.putExtra("SHOW_DIALOG", showdialog);
                             inicioIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(inicioIntent);
@@ -138,7 +131,7 @@ public class TakenButtonReceiver extends BroadcastReceiver {
     }
     // Método para programar la próxima notificación
     private void scheduleNextNotification(Context context, String tratamientoID, String userEmail, String nombreMedicamento, long delayMillis, String totalTomasStr, String tomadaStr) {
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerDos.class)
                 .setInputData(new Data.Builder()
                         .putString("tratamientoId", tratamientoID)
                         .putString("userEmail", userEmail)
@@ -151,4 +144,3 @@ public class TakenButtonReceiver extends BroadcastReceiver {
         WorkManager.getInstance(context).enqueueUniqueWork(tratamientoID, ExistingWorkPolicy.REPLACE, workRequest);
     }
 }
-

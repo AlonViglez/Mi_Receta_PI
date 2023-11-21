@@ -12,12 +12,14 @@ import androidx.work.WorkManager;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -27,10 +29,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -44,16 +51,21 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
     EditText editMedicamento, editDuracion, editIntervalo, editDosis;
     Button btnmedicamento;
     Button btnMostrarTimePicker;
+    ImageView btnregresar;
     TimePicker timePicker;
     String tratamientoId;
     String medicamento,duracionStr,dosisStr,intervaloStr, totalTomasStr, tomada;
     int totalTomas;
     int primeratoma = 1;
+    int contadornotificacion = 0;
+    FirebaseFirestore db;
+    private static final String PREFS_NAME = "FormularioRecetarPaciente";  // Nombre del archivo de preferencias
+    private static final String CONTADOR_KEY = "contador";    // Clave para almacenar y recuperar contador
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_recetar_paciente);
-        TextView titleRecetar = findViewById(R.id.titleRecetar);
+        //TextView titleRecetar = findViewById(R.id.titleRecetar);
         editMedicamento = findViewById(R.id.editMedicamento);
         editDuracion = findViewById(R.id.editDuracion);
         editDosis = findViewById(R.id.editDosis);
@@ -61,8 +73,13 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
         btnmedicamento = findViewById(R.id.btn_registro_medicamento);
         btnMostrarTimePicker = findViewById(R.id.btnMostrarTimePicker);
         timePicker = findViewById(R.id.timePicker);
+        btnregresar = findViewById(R.id.backButtonFormulario);
+        // Recuperar el valor de contador desde SharedPreferences
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        contadornotificacion = prefs.getInt(CONTADOR_KEY, 0);
+        //Validacion de user
         mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userEmail = currentUser.getEmail();
@@ -71,6 +88,36 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
             Log.e(TAG, "Usuario no autenticado");
             Toast.makeText(FormularioRecetarPaciente.this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
+        // Referencia a la colección "tratamientos" en Firestore
+        CollectionReference tratamientosRef = db.collection("tratamientos");
+        // Realizar la consulta para contar los documentos relacionados con el correo electrónico
+        tratamientosRef.whereEqualTo("usuario", userEmail)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // Obtener el número de documentos que coinciden con el correo electrónico
+                        int numDocumentos = queryDocumentSnapshots.size();
+                        Toast.makeText(FormularioRecetarPaciente.this, "Número de tratamientos encontrados: " + numDocumentos, Toast.LENGTH_SHORT).show();
+                        if (numDocumentos == 0) {
+                            contadornotificacion = 0;
+                        } else {
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Manejar errores de consulta
+                        Toast.makeText(FormularioRecetarPaciente.this, "Error al consultar tratamientos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        btnregresar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         // Configurar el evento click del botón para mostrar el TimePicker
         btnMostrarTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +161,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                 dosisStr = editDosis.getText().toString();
                 intervaloStr = editIntervalo.getText().toString();
                 // Verificar que los campos no estén vacíos
-                if (!medicamento.isEmpty() && !duracionStr.isEmpty() && !dosisStr.isEmpty() && !intervaloStr.isEmpty()) {
+                if (!medicamento.isEmpty() && !duracionStr.isEmpty() && !dosisStr.isEmpty() && !intervaloStr.isEmpty() || horainicio != null) {
                     // Enviar los datos a Firestore
                     //Conversiones
                     int duracion = Integer.parseInt(duracionStr);
@@ -125,7 +172,17 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     //Convertir totaltomas a string
                     totalTomasStr = String.valueOf(totalTomas);
                     tomada = String.valueOf(primeratoma);
-                    enviarDatosFirestore(medicamento, duracion, dosis, intervalo,primeratoma,totalTomas);
+                    //Puede crear notificaciones
+                    if(contadornotificacion < 6){ //MAXIMO DE TRATAMIENTOS 6 en total
+                        // Guardar el nuevo valor de contador en SharedPreferences
+                        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                        editor.putInt(CONTADOR_KEY, contadornotificacion + 1); // Incrementar el valor
+                        editor.apply();
+                        Toast.makeText(FormularioRecetarPaciente.this, "Primeras dos, Contador KEY: " + CONTADOR_KEY + " Contador: " + contadornotificacion, Toast.LENGTH_SHORT).show();
+                        enviarDatosFirestore(medicamento, duracion, dosis, intervalo,primeratoma,totalTomas);
+                    }else{
+                        Toast.makeText(FormularioRecetarPaciente.this, "Termina todos tus tratamientos , contador " + contadornotificacion, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(FormularioRecetarPaciente.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                 }
@@ -156,7 +213,20 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                         // Actualizar el documento con el ID
                         documentReference.update("id", tratamientoId);
                         Toast.makeText(FormularioRecetarPaciente.this, "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(FormularioRecetarPaciente.this);
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento_registrado, null);
+                        builder.setView(dialogView);
+                        Button btnAceptar = dialogView.findViewById(R.id.btnAceptarTratamientoDialog);
+                        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                        btnAceptar.setOnClickListener(v1 -> {
+                            alertDialog.dismiss();
+                        });
+                        alertDialog.show();
                         scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento,tomada,totalTomasStr); // Convertir el intervalo a milisegundos
+                        editMedicamento.setText("");
+                        editDosis.setText("");
+                        editDuracion.setText("");
+                        editIntervalo.setText("");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -167,34 +237,89 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     }
                 });
     }
-    /*Método primero para programar la notificación
-    private void scheduleNotification(int delayMillis) {
-        Toast.makeText(getActivity(), "Tiempo para notificar: " + delayMillis, Toast.LENGTH_SHORT).show();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // LLAMAR AL SERVICIO DE NOTIFICACIONES
-                Intent notificationIntent = new Intent(getActivity(), NotificationService.class);
-                notificationIntent.setAction("ACTION_SHOW_NOTIFICATION");
-                getActivity().startForegroundService(notificationIntent);
-            }
-        }, delayMillis);
-    }*/
-    //Segundo metodo para programar la notificacion en segundo plano
-    private void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento, String tomada, String totalTomasStr) {
+    //Primeras dos Segundo metodo para programar la notificacion en segundo plano
+    public void scheduleNotification(int delayMillis,String tratamientoId,String userEmail, String medicamento, String tomada, String totalTomasStr) {
         // Crear una tarea única con WorkManager
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
-                .setInputData(new Data.Builder()
-                        .putString("tratamientoId", tratamientoId)
-                        .putString("userEmail", userEmail)
-                        .putString("nombreMedicamento", medicamento)
-                        .putString("tomada", tomada)
-                        .putString("totaltomas", totalTomasStr)
-                        .build())
-                .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
-                .build();
-        // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
-        WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        contadornotificacion += 1;
+        if(contadornotificacion == 1) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }else if (contadornotificacion == 2) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerDos.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }else if (contadornotificacion == 3) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerTres.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }else if (contadornotificacion == 4) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerCuatro.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }else if (contadornotificacion == 5) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerCinco.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }else if (contadornotificacion == 6) {
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(MyWorkerSeis.class)
+                    .setInputData(new Data.Builder()
+                            .putString("tratamientoId", tratamientoId)
+                            .putString("userEmail", userEmail)
+                            .putString("nombreMedicamento", medicamento)
+                            .putString("tomada", tomada)
+                            .putString("totaltomas", totalTomasStr)
+                            .build())
+                    .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                    .build();
+            // Enviar la tarea a WorkManager con el mismo ID que el tratamientoId
+            WorkManager.getInstance(this).enqueueUniqueWork(tratamientoId, ExistingWorkPolicy.REPLACE, workRequest);
+        }
     }
     // Método para calcular el total de tomas por día considerando la hora de inicio
     private int calcularTotalTomasPorDia(int duracion, String horainicio, int intervalo) {
@@ -206,5 +331,30 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
         int totalTomas = duracion * horasPorDia;
         totalTomas = (totalTomas - horaInicio)/intervalo;
         return totalTomas;
+    }
+    //Restablecer las notificaciones disponibles
+    public void eliminarNotificaciones(String userEmail) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("notificaciones")
+                .document(userEmail)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(FormularioRecetarPaciente.this, "Documento eliminado de 'notificaciones'", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Error al eliminar el documento
+                        Toast.makeText(FormularioRecetarPaciente.this, "Error al eliminar documento", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    //Regresar
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

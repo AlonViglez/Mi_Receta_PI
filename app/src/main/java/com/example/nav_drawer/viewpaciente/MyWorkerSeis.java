@@ -1,12 +1,11 @@
 package com.example.nav_drawer.viewpaciente;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 
@@ -16,11 +15,8 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.nav_drawer.R;
-import com.example.nav_drawer.Inicio;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class MyWorker extends Worker {
+public class MyWorkerSeis extends Worker {
     public static final String CHANNEL_ID = "channel_id";
     public static final int NOTIFICATION_ID = 1;
     String tratamientoId;
@@ -28,7 +24,7 @@ public class MyWorker extends Worker {
     String nombreMedicamento;
     String totaltomas;
     String tomada;
-    public MyWorker(
+    public MyWorkerSeis(
             @NonNull Context context,
             @NonNull WorkerParameters params) {
         super(context, params);
@@ -76,7 +72,7 @@ public class MyWorker extends Worker {
                 .setOngoing(true); // Hace que la notificación sea persistente
 
         // Agregar un botón "Tomada"
-        Intent takenIntent = new Intent(context, TakenButtonReceiver.class);
+        Intent takenIntent = new Intent(context, TakenButtonReceiverSeis.class);
         takenIntent.setAction("ACTION_TAKEN");
         takenIntent.putExtra("USER_EMAIL", userEmail);
         takenIntent.putExtra("TRATAMIENTO_ID", tratamientoId);

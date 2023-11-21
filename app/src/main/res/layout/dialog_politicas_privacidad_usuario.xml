@@ -9,18 +9,18 @@
         android:id="@+id/dialogPoliticas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#80000000">
+        android:background="@color/white">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dialogBox"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/white_box">
+            android:background="@drawable/btn_background_1">
             <TextView
                 android:id="@+id/forgotTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/lavender_round"
+                android:background="@color/buttonmireceta"
                 android:drawablePadding="8dp"
                 android:padding="10dp"
                 android:text="Políticas de privacidad"
@@ -52,9 +52,7 @@ Antes de utilizar esta aplicación, por favor lea atentamente estos términos y 
                 android:text="Más información de términos y condiciones"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/azul_cute"
-
                 android:layout_marginStart="20dp"
-                android:onClick="mostrarMasInformacion"
                 app:layout_constraintTop_toBottomOf="@id/politicasText"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -66,7 +64,7 @@ Antes de utilizar esta aplicación, por favor lea atentamente estos términos y 
                 android:layout_marginEnd="10dp"
                 android:text="Cancelar"
                 android:textColor="@color/black"
-                android:backgroundTint="@color/color_gris"
+                android:backgroundTint="@color/white"
                 android:textSize="10sp"
                 app:cornerRadius="20dp"
                 android:layout_marginBottom="8dp"

@@ -5,34 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IdentifyRegister">
+
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/rectangle1" />
+
     <RelativeLayout
         android:id="@+id/r3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/btnatras"
             android:layout_width="80dp"
             android:layout_height="75dp"
-            android:layout_marginStart="-10dp"
             android:layout_alignParentStart="true"
-            android:src="@drawable/flecha_hacia_atras"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="4dp"
             android:padding="16dp"
-            android:layout_marginTop="7dp"/>
+            android:src="@drawable/baseline_home_24" />
     </RelativeLayout>
+
     <!-- Contenedor vertical para el TextView y los botones -->
     <LinearLayout
+        android:id="@+id/l1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:id="@+id/l1"
         android:layout_below="@id/header"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
         android:gravity="center">
 
         <ImageView
@@ -42,8 +46,8 @@
             android:background="@drawable/mr" />
 
         <TextView
-            android:text="Selecciona tu opción de
-             registro:"
+            android:id="@+id/top_view"
+            android:text="Selecciona tu opción de registro:"
             android:textSize="25sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -51,66 +55,91 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/mireceta" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_below="@+id/l1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="5dp"
+        android:columnCount="2"
+        android:rowCount="3">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="12dp">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/btn_usuario"
-                    android:layout_width="120dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
                     android:src="@drawable/grupo" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Usuario"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="serif"
-                    android:textColor="@color/mireceta"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="Pacientes"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="12dp">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/btn_doctor"
-                    android:layout_width="120dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
                     android:src="@drawable/equipo_medico" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_horizontal"
                     android:text="Doctor"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="serif"
-                    android:textColor="@color/mireceta"/>
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-        </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
     </LinearLayout>
+
     <ImageView
         android:id="@+id/footer"
         android:layout_width="match_parent"
@@ -118,4 +147,5 @@
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/rectangle2" />
+
 </RelativeLayout>
