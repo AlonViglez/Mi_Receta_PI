@@ -27,6 +27,8 @@ import com.example.nav_drawer.Login;
 import com.example.nav_drawer.PerfilFragment;
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.RecetarFragment;
+import com.example.nav_drawer.viewdoc.FragmentRecomendacionesDoctor;
+import com.example.nav_drawer.viewdoc.PreguntaDoctor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -47,6 +49,9 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
     TextView textView;
     FirebaseUser user;
     boolean showDialog;
+
+    int numClics = 0;
+    static final int MAX_NUM_CLICS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,23 +87,24 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                     int itemId = item.getItemId();
                     if(itemId == R.id.bottom_chats_paciente) {
                         //openFragment(new FragmentChatPaciente());
-                        openFragment(new FragmentRecomendacionesPaciente());
+                        handleNavigationClick(new FragmentRecomendacionesPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_doctores_paciente){
                         //openFragment(new FragmentDoctoresPaciente());
-                        openFragment(new PreguntaPaciente());
+                        handleNavigationClick(new PreguntaPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_tratamiento_paciente){
-                        openFragment(new FragmentTratamientoPaciente());
+                        handleNavigationClick(new FragmentTratamientoPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_historial_paciente){
-                        openFragment(new HistorialPaciente());
+                        handleNavigationClick(new HistorialPaciente());
                         return true;
                     }else if(itemId == R.id.bottom_perfil_paciente){
-                        openFragment(new PerfilPaciente());
+                        handleNavigationClick(new PerfilPaciente());
                         return true;
                     }
                     return false;
+
                     /*verificar si se deben elimninar:
                     *CitasPacientes()
                     * DiagnosticarPaciente()
@@ -129,6 +135,19 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
                 Toast.makeText(MainActivity.this,"Upload Videos", Toast.LENGTH_SHORT).show();
             }
         });*/
+        }
+    }
+
+    private void handleNavigationClick(Fragment fragment) {
+        numClics++;
+
+        if (numClics >= MAX_NUM_CLICS) {
+            // Realizar acciones adicionales después de múltiples clics
+            // Por ejemplo, reiniciar el contador y hacer algo especial.
+            numClics = 0;
+            // Agrega aquí cualquier acción adicional que desees realizar.
+        } else {
+            openFragment(fragment);
         }
     }
 

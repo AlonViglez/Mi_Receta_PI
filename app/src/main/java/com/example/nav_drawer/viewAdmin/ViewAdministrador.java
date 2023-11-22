@@ -37,6 +37,9 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
     Button button;
     TextView textView;
     FirebaseUser user;
+
+    static final int MAX_NUM_CLICS = 2; // Puedes ajustar este valor según tus necesidades
+    int numClics = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,13 +70,13 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
                     //fragmentos del nav
                     int itemId = item.getItemId();
                     if(itemId == R.id.bottom_solicitud) {
-                        openFragment(new AdminPeticiones());
+                        handleNavigationClick(new AdminPeticiones());
                         return true;
                     }else if(itemId == R.id.bottom_doctores){
-                        openFragment(new FragmentDoctores());
+                        handleNavigationClick(new FragmentDoctores());
                         return true;
                     }else if(itemId == R.id.bottom_perfil_administrador){
-                        openFragment(new FragmentPerfilAdmin());
+                        handleNavigationClick(new FragmentPerfilAdmin());
                         return true;
                     }
                     return false;
@@ -89,6 +92,19 @@ public class ViewAdministrador extends AppCompatActivity implements NavigationVi
                 Toast.makeText(MainActivity.this,"Upload Videos", Toast.LENGTH_SHORT).show();
             }
         });*/
+        }
+    }
+
+    private void handleNavigationClick(Fragment fragment) {
+        numClics++;
+
+        if (numClics >= MAX_NUM_CLICS) {
+            // Realizar acciones adicionales después de múltiples clics
+            // Por ejemplo, reiniciar el contador y hacer algo especial.
+            numClics = 0;
+            // Agrega aquí cualquier acción adicional que desees realizar.
+        } else {
+            openFragment(fragment);
         }
     }
     @Override

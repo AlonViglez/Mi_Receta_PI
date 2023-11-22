@@ -74,10 +74,10 @@ public class DetallesDoctor extends AppCompatActivity {
                             email = documentSnapshot.getString("correo");
 
                             // Actualiza las vistas con los datos del doctor
-                            nombreDoctorTextView.setText(nombreDoctor);
-                            especialidadMedicaTextView.setText(especialidadMedica);
-                            sexoTextView.setText(sexo);
-                            telefonoTextView.setText(telefono);
+                            nombreDoctorTextView.setText(" "+nombreDoctor);
+                            especialidadMedicaTextView.setText(" "+especialidadMedica);
+                            sexoTextView.setText(" "+sexo);
+                            telefonoTextView.setText(" "+telefono);
 
                             // Utiliza Glide para cargar las imágenes de cédula e INE si son URLs
                             if (cedulaImageUrl != null) {
