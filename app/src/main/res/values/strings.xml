@@ -26,5 +26,9 @@
         <item>Medicina Familiar</item>
         <item>Cardiología</item>
     </string-array>
+    <string-array name="opciones_filtro">
+        <item>Sin responder</item>
+        <item>Respondidas</item>
+    </string-array>
 </resources>
 

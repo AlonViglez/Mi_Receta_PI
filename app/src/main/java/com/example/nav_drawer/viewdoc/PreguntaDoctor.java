@@ -28,9 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -49,6 +51,7 @@ public class PreguntaDoctor extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    View cardView;
 
 
     EditText respuestaedit;
@@ -129,6 +132,7 @@ public class PreguntaDoctor extends Fragment {
                         // Si hubiera un error
                     }
                 });
+        List<View> cardList = new ArrayList<>();
         //mostar los datos
         db.collection("preguntas")
                 .get()
@@ -145,7 +149,7 @@ public class PreguntaDoctor extends Fragment {
                             //Nombre ya lo tengo//
 
                             // Inflar el diseño de la tarjeta personalizado
-                            View cardView = getLayoutInflater().inflate(R.layout.doctor_card_pregunta, null);
+                            cardView = getLayoutInflater().inflate(R.layout.doctor_card_pregunta, null);
 
                             // Configurar los márgenes
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -171,60 +175,65 @@ public class PreguntaDoctor extends Fragment {
                             pregunta.setText(preguntapaciente);
                             nombredoc.setText(nombredoctor);
 
-                            //boton al enviar la respuesta
-                            btnenviar.setOnClickListener(v -> {
-                                respuestactr = respuestaedit.getText().toString().trim();
-                                if(respuestactr.equals("")){
-                                    Toast.makeText(getActivity(), "Ingrese texto", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_responder_doctor, null);
-                                    builder.setView(dialogView);
-                                    Button btnAceptar = dialogView.findViewById(R.id.btnAceptarResponseDialog);
-                                    Button btnCancelar = dialogView.findViewById(R.id.btnCancelarResponse);
-                                    AlertDialog alertDialog = builder.create();
-                                    btnCancelar.setOnClickListener(v1 -> {
-                                        alertDialog.dismiss();
-                                    });
-                                    btnAceptar.setOnClickListener(v2 -> {
-                                        Map<String, Object> dataContestada = new HashMap<>();
-                                        dataContestada.put("respuestadoc", respuestactr);
-                                        dataContestada.put("nombredoctor", Nombredoctor);
-                                        dataContestada.put("useremail", userEmail);
-                                        dataContestada.put("pregunta", preguntapaciente);
-                                        dataContestada.put("nombrepaciente", nombrepaciente);
-                                        dataContestada.put("idpregunta", idpregunta);
-                                        dataContestada.put("usuario", usuariopaciente);
-                                        db.collection("preguntascontestadas")
-                                                .document(idpregunta)
-                                                .set(dataContestada)
-                                                .addOnSuccessListener(documentReference -> {
-                                                    // La respuesta se ha agregado a la nueva colección
-
-                                                    // Eliminar la pregunta contestada de la colección original
-                                                    db.collection("preguntas")
-                                                            .document(idpregunta)
-                                                            .delete()
-                                                            .addOnSuccessListener(aVoid -> {
-                                                            })
-                                                            .addOnFailureListener(e -> {
-                                                            });
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                });
-                                        alertDialog.dismiss();
-                                    });
-                                    alertDialog.show();
-                                }
-                            });
-
+                            cardList.add(cardView);
                             // Agregar la tarjeta al contenedor
                             tratamientosContainer.addView(cardView);
                         }
                     } else {
                         // Si hubiera un error
                     }
+                    for (View cardView : cardList) {
+                        respuestaedit = cardView.findViewById(R.id.editresp);
+                        btnenviar = cardView.findViewById(R.id.btnenviar);
+                        //boton al enviar la respuesta
+                        btnenviar.setOnClickListener(v -> {
+                            respuestactr = respuestaedit.getText().toString().trim();
+                            if(respuestactr.equals("")){
+                                Toast.makeText(getActivity(), "Ingrese texto", Toast.LENGTH_SHORT).show();
+                            }else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                View dialogView = getLayoutInflater().inflate(R.layout.dialog_responder_doctor, null);
+                                builder.setView(dialogView);
+                                Button btnAceptar = dialogView.findViewById(R.id.btnAceptarResponseDialog);
+                                Button btnCancelar = dialogView.findViewById(R.id.btnCancelarResponse);
+                                AlertDialog alertDialog = builder.create();
+                                btnCancelar.setOnClickListener(v1 -> {
+                                    alertDialog.dismiss();
+                                });
+                                btnAceptar.setOnClickListener(v2 -> {
+                                    Map<String, Object> dataContestada = new HashMap<>();
+                                    dataContestada.put("respuestadoc", respuestactr);
+                                    dataContestada.put("nombredoctor", Nombredoctor);
+                                    dataContestada.put("useremail", userEmail);
+                                    dataContestada.put("pregunta", preguntapaciente);
+                                    dataContestada.put("nombrepaciente", nombrepaciente);
+                                    dataContestada.put("idpregunta", idpregunta);
+                                    dataContestada.put("usuario", usuariopaciente);
+                                    db.collection("preguntascontestadas")
+                                            .document(idpregunta)
+                                            .set(dataContestada)
+                                            .addOnSuccessListener(documentReference -> {
+                                                // La respuesta se ha agregado a la nueva colección
+
+                                                // Eliminar la pregunta contestada de la colección original
+                                                db.collection("preguntas")
+                                                        .document(idpregunta)
+                                                        .delete()
+                                                        .addOnSuccessListener(aVoid -> {
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(e -> {
+                                            });
+                                    alertDialog.dismiss();
+                                });
+                                alertDialog.show();
+                            }
+                        });
+                    }
                 });
         return view;
     }
+
 }
