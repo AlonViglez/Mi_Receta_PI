@@ -142,7 +142,7 @@ public class PreguntaPaciente extends Fragment {
                         // Si hubiera un error
                     }
                 });
-        //Realizar una consulta para obtener los tratamientos del usuario específico
+        //Realizar una consulta para obtener las preguntas del usuario específico
         db.collection("preguntas")
                 .whereEqualTo("usuario", userEmail)
                 .get()

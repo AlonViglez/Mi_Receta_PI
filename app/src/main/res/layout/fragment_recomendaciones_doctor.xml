@@ -57,6 +57,18 @@
                 android:layout_marginTop="10dp"
                 android:text="Enviar">
             </Button>
+            <TextView
+                android:id="@+id/textmisrecomendaciones"
+                android:layout_below="@id/btnrecomendarenviar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="25dp"
+                android:gravity="left"
+                android:text="Mis recomendaciones:"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <!-- Contenedor de tarjetas de doctores -->

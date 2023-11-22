@@ -171,40 +171,10 @@ public class PreguntaDoctor extends Fragment {
                             //boton al enviar la respuesta
                             btnenviar.setOnClickListener(v -> {
                                 String respuestactr = respuestaedit.getText().toString().trim();
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("respuestadoc",respuestactr);
-                                db.collection("preguntas")
-                                        .document(idpregunta)
-                                        .update("respuestadoc", respuestactr)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "Campo 'descripcion' actualizado con éxito");
-                                                // Puedes realizar acciones adicionales si es necesario
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                            }
-                                        });
-                                Map<String, Object> data2 = new HashMap<>();
-                                data2.put("nombredoc",nombredoctor);
-                                db.collection("preguntas")
-                                        .document(idpregunta)
-                                        .update("nombredoc", nombredoctor)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "Campo 'descripcion' actualizado con éxito");
-                                                // Puedes realizar acciones adicionales si es necesario
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                            }
-                                        });
+                                Map<String, Object> dataContestada = new HashMap<>();
+                                dataContestada.put("respuestadoc", respuestactr);
+                                dataContestada.put("nombredoctor", Nombredoctor);
+                                dataContestada.put("useremail", userEmail);
 
                             });
 

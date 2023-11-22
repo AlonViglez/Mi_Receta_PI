@@ -16,7 +16,7 @@
             android:id="@+id/titleRecetar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Preguntas de los usuarios"
+            android:text="Mis preguntas"
             android:textSize="28sp"
             android:textColor="@android:color/black"
             android:gravity="center"
