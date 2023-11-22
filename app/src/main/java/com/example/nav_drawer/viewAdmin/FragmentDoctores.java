@@ -114,7 +114,7 @@ public class FragmentDoctores extends Fragment {
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
                             ImageButton btnborrar = cardView.findViewById(R.id.borrarButton); // Agregar el botón de editar
-                            ImageButton btneditar = cardView.findViewById(R.id.editarButton); // Agregar el botón de eliminar
+                            // Agregar el botón de eliminar
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);

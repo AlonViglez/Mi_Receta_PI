@@ -21,17 +21,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="Borrar"
             android:scaleType="fitCenter"/>
-        <ImageButton
-            android:id="@+id/editarButton"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/editar"
-            android:layout_toStartOf="@id/borrarButton"
-            android:layout_marginEnd="12dp"
-            android:layout_marginTop="5dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="Editar"
-            android:scaleType="fitCenter"/>
+
         <ImageView
             android:id="@+id/doctorIcon"
             android:layout_width="55dp"
