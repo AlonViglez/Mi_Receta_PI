@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -57,7 +58,7 @@ public class PreguntaDoctor extends Fragment {
 
     FirebaseFirestore db;
 
-    String userEmail;
+    String userEmail, usuariopaciente;
 
     String RespuestaStr;
 
@@ -66,6 +67,7 @@ public class PreguntaDoctor extends Fragment {
 
 
     TextView textfecha,textNombrepaciente, pregunta,nombredoc,respdoc;
+    String respuestactr;
 
     public PreguntaDoctor() {
         // Required empty public constructor
@@ -137,6 +139,7 @@ public class PreguntaDoctor extends Fragment {
                             nombredoctor = document.getString("nombredoctor");
                             nombrepaciente = document.getString("nombrepaciente");
                             idpregunta = document.getString("idpregunta");
+                            usuariopaciente = document.getString("usuario");
                             //mostrar fecha
                             fechanac = document.getString("fecha");
                             //Nombre ya lo tengo//
@@ -170,12 +173,49 @@ public class PreguntaDoctor extends Fragment {
 
                             //boton al enviar la respuesta
                             btnenviar.setOnClickListener(v -> {
-                                String respuestactr = respuestaedit.getText().toString().trim();
-                                Map<String, Object> dataContestada = new HashMap<>();
-                                dataContestada.put("respuestadoc", respuestactr);
-                                dataContestada.put("nombredoctor", Nombredoctor);
-                                dataContestada.put("useremail", userEmail);
+                                respuestactr = respuestaedit.getText().toString().trim();
+                                if(respuestactr.equals("")){
+                                    Toast.makeText(getActivity(), "Ingrese texto", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_responder_doctor, null);
+                                    builder.setView(dialogView);
+                                    Button btnAceptar = dialogView.findViewById(R.id.btnAceptarResponseDialog);
+                                    Button btnCancelar = dialogView.findViewById(R.id.btnCancelarResponse);
+                                    AlertDialog alertDialog = builder.create();
+                                    btnCancelar.setOnClickListener(v1 -> {
+                                        alertDialog.dismiss();
+                                    });
+                                    btnAceptar.setOnClickListener(v2 -> {
+                                        Map<String, Object> dataContestada = new HashMap<>();
+                                        dataContestada.put("respuestadoc", respuestactr);
+                                        dataContestada.put("nombredoctor", Nombredoctor);
+                                        dataContestada.put("useremail", userEmail);
+                                        dataContestada.put("pregunta", preguntapaciente);
+                                        dataContestada.put("nombrepaciente", nombrepaciente);
+                                        dataContestada.put("idpregunta", idpregunta);
+                                        dataContestada.put("usuario", usuariopaciente);
+                                        db.collection("preguntascontestadas")
+                                                .document(idpregunta)
+                                                .set(dataContestada)
+                                                .addOnSuccessListener(documentReference -> {
+                                                    // La respuesta se ha agregado a la nueva colección
 
+                                                    // Eliminar la pregunta contestada de la colección original
+                                                    db.collection("preguntas")
+                                                            .document(idpregunta)
+                                                            .delete()
+                                                            .addOnSuccessListener(aVoid -> {
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                            });
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                });
+                                        alertDialog.dismiss();
+                                    });
+                                    alertDialog.show();
+                                }
                             });
 
                             // Agregar la tarjeta al contenedor
