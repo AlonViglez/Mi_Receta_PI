@@ -166,29 +166,92 @@ public class PreguntaDoctor extends Fragment {
                             textNombrepaciente = cardView.findViewById(R.id.textNombrepaciente);
                             pregunta = cardView.findViewById(R.id.textpregunta);
                             nombredoc = cardView.findViewById(R.id.textnombredoctor);
-                            respuestaedit = cardView.findViewById(R.id.editresp);
-                            btnenviar = cardView.findViewById(R.id.btnenviar);
 
+                            // Generar identificadores únicos para EditText y Button
+                            int editTextId = View.generateViewId();
+                            respuestaedit = cardView.findViewById(R.id.editresp);
+                            respuestaedit.setId(editTextId);
+
+                            int buttonId = View.generateViewId();
+                            btnenviar = cardView.findViewById(R.id.btnenviar);
+                            btnenviar.setId(buttonId);
                             // Configurar los elementos de la tarjeta
                             textfecha.setText(fechanac);
                             textNombrepaciente.setText(nombrepaciente);
                             pregunta.setText(preguntapaciente);
                             nombredoc.setText(nombredoctor);
 
+                            cardView.setTag(idpregunta);
                             cardList.add(cardView);
                             // Agregar la tarjeta al contenedor
                             tratamientosContainer.addView(cardView);
+                            String idPreguntaAsociado = (String) cardView.getTag();
+
+                            EditText respuestaEdit = cardView.findViewById(editTextId);
+                            // Verificar si el EditText está vacío y es en el tag correspondiente
+                            if (respuestaEdit.getText().toString().trim().isEmpty()) {
+                                Toast.makeText(getActivity(), "Ingrese texto en la tarjeta con ID de pregunta: " + idPreguntaAsociado, Toast.LENGTH_SHORT).show();
+                            }
+                            // Configurar el OnClickListener para el Button de esta tarjeta
+                            Button enviarButton = cardView.findViewById(buttonId);
+                            enviarButton.setOnClickListener(v -> {
+                                respuestactr = respuestaEdit.getText().toString().trim();
+                                if (respuestactr.isEmpty()) {
+                                    Toast.makeText(getActivity(), "Ingrese texto en la tarjeta con ID de pregunta: " + idPreguntaAsociado, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_responder_doctor, null);
+                                    builder.setView(dialogView);
+                                    Button btnAceptar = dialogView.findViewById(R.id.btnAceptarResponseDialog);
+                                    Button btnCancelar = dialogView.findViewById(R.id.btnCancelarResponse);
+                                    AlertDialog alertDialog = builder.create();
+                                    btnCancelar.setOnClickListener(v1 -> {
+                                        alertDialog.dismiss();
+                                    });
+                                    btnAceptar.setOnClickListener(v2 -> {
+                                        Map<String, Object> dataContestada = new HashMap<>();
+                                        dataContestada.put("respuestadoc", respuestactr);
+                                        dataContestada.put("nombredoctor", Nombredoctor);
+                                        dataContestada.put("useremail", userEmail);
+                                        dataContestada.put("pregunta", preguntapaciente);
+                                        dataContestada.put("nombrepaciente", nombrepaciente);
+                                        dataContestada.put("idpregunta", idpregunta);
+                                        dataContestada.put("usuario", usuariopaciente);
+                                        db.collection("preguntascontestadas")
+                                                .document(idpregunta)
+                                                .set(dataContestada)
+                                                .addOnSuccessListener(documentReference -> {
+                                                    // La respuesta se ha agregado a la nueva colección
+
+                                                    // Eliminar la pregunta contestada de la colección original
+                                                    db.collection("preguntas")
+                                                            .document(idpregunta)
+                                                            .delete()
+                                                            .addOnSuccessListener(aVoid -> {
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                            });
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                });
+                                        alertDialog.dismiss();
+                                    });
+                                    alertDialog.show();
+                                }
+                            });
                         }
                     } else {
                         // Si hubiera un error
                     }
-                    for (View cardView : cardList) {
+                    /*for (View cardView : cardList) {
                         respuestaedit = cardView.findViewById(R.id.editresp);
                         btnenviar = cardView.findViewById(R.id.btnenviar);
+                        String idPreguntaAsociado = (String) cardView.getTag();
                         //boton al enviar la respuesta
+                        int cardId = cardView.getId();
                         btnenviar.setOnClickListener(v -> {
                             respuestactr = respuestaedit.getText().toString().trim();
-                            if(respuestactr.equals("")){
+                            if(respuestactr.isEmpty()){
                                 Toast.makeText(getActivity(), "Ingrese texto", Toast.LENGTH_SHORT).show();
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -231,7 +294,7 @@ public class PreguntaDoctor extends Fragment {
                                 alertDialog.show();
                             }
                         });
-                    }
+                    }*/
                 });
         return view;
     }
