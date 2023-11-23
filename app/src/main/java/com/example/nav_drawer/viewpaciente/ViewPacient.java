@@ -156,9 +156,7 @@ public class ViewPacient extends AppCompatActivity  implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //menu
         int itemId = item.getItemId();
-        if (itemId == R.id.nav_guia) {
-            openFragment(new GuiaFragment());
-        }else if (itemId == R.id.nav_contactar) {
+        if (itemId == R.id.nav_contactar) {
             openFragment(new ContactarFragment());
         }else if (itemId == R.id.nav_history) {
             openFragment(new HistorialPaciente());

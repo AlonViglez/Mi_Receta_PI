@@ -128,9 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.nav_guia) {
-            openFragment(new GuiaFragment());
-        }else if (itemId == R.id.nav_contactar) {
+        if (itemId == R.id.nav_contactar) {
             openFragment(new ContactarFragment());
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();

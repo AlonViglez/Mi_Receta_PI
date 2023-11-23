@@ -7,13 +7,7 @@
     <group
         android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_guia"
-            android:icon="@drawable/icon_realizado"
-            android:title="Guia de usuario"
-            android:checkable="true"
-            android:background="@drawable/selector_icon_background"
-            />
+
         <item
             android:id="@+id/nav_contactar"
             android:icon="@drawable/icon_email"
