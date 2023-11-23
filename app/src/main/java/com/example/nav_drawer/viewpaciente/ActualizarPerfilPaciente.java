@@ -78,7 +78,7 @@ public class ActualizarPerfilPaciente extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userEmail = currentUser.getEmail();
-            Toast.makeText(this, "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
             // Resto del código...
         } else {
             Log.e(TAG, "Usuario no autenticado");

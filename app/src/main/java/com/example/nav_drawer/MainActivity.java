@@ -132,9 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openFragment(new GuiaFragment());
         }else if (itemId == R.id.nav_contactar) {
             openFragment(new ContactarFragment());
-        }else if (itemId == R.id.nav_history) {
-            openFragment(new HistoryFragment());
-        }else if (itemId == R.id.nav_logout) {
+        } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);

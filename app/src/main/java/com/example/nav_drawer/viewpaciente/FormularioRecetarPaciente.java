@@ -212,7 +212,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                         tratamientoId = documentReference.getId();
                         // Actualizar el documento con el ID
                         documentReference.update("id", tratamientoId);
-                        Toast.makeText(FormularioRecetarPaciente.this, "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(FormularioRecetarPaciente.this, "Tratamiento registrado correctamente", Toast.LENGTH_SHORT).show();
                         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(FormularioRecetarPaciente.this);
                         View dialogView = getLayoutInflater().inflate(R.layout.dialog_tratamiento_registrado, null);
                         builder.setView(dialogView);
