@@ -353,6 +353,7 @@ public class PreguntaPaciente extends Fragment {
                                 })
                                 .addOnFailureListener(e -> {
                                 });
+                        preguntaedit.setText("");
                         alertDialog.dismiss();
                     });
                     alertDialog.show();

@@ -234,6 +234,7 @@ public class PreguntaDoctor extends Fragment {
                                                 })
                                                 .addOnFailureListener(e -> {
                                                 });
+                                        respuestaEdit.setText("");
                                         alertDialog.dismiss();
                                     });
                                     alertDialog.show();
