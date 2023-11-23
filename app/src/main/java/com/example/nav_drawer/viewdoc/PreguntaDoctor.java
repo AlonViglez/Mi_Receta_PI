@@ -217,6 +217,7 @@ public class PreguntaDoctor extends Fragment {
                                         dataContestada.put("nombrepaciente", nombrepaciente);
                                         dataContestada.put("idpregunta", idpregunta);
                                         dataContestada.put("usuario", usuariopaciente);
+                                        dataContestada.put("fechanac",fechanac);
                                         db.collection("preguntascontestadas")
                                                 .document(idpregunta)
                                                 .set(dataContestada)

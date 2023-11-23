@@ -47,7 +47,7 @@
                 android:layout_below="@+id/textrecomendacion"
                 android:layout_marginTop="12dp"
                 android:hint="Escribe una recomendación"
-                android:inputType="text" />
+                android:inputType="textMultiLine" />
             <Button
                 android:id="@+id/btnrecomendarenviar"
                 android:layout_width="150dp"

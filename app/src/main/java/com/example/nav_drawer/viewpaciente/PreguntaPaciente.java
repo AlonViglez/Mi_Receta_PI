@@ -215,7 +215,7 @@ public class PreguntaPaciente extends Fragment {
                                         nombrepaciente = document.getString("nombrepaciente");
                                         //respuestadoctor = document.getString("respuestadoc");
                                         //mostrar fecha
-                                        fechanac =  document.getString("fecha");
+                                        fechanac =  document.getString("fechanac");
                                         //Nombre ya lo tengo//
 
                                         // Inflar el diseño de la tarjeta personalizado
@@ -264,7 +264,7 @@ public class PreguntaPaciente extends Fragment {
                                         nombrepaciente = document.getString("nombrepaciente");
                                         respuestadoctor = document.getString("respuestadoc");
                                         //mostrar fecha
-                                        fechanac =  document.getString("fecha");
+                                        fechanac =  document.getString("fechanac");
                                         //Nombre ya lo tengo//
 
                                         // Inflar el diseño de la tarjeta personalizado
@@ -332,7 +332,7 @@ public class PreguntaPaciente extends Fragment {
                         // Crear un nuevo documento
                         Map<String, Object> recomendacionData = new HashMap<>();
                         recomendacionData.put("idpregunta",null);
-                        recomendacionData.put("fecha", fechaActual);
+                        recomendacionData.put("fechanac", fechaActual);
                         recomendacionData.put("nombrepaciente", Nombrepaciente);
                         recomendacionData.put("pregunta", PreguntaStr);
                         recomendacionData.put("usuario", userEmail);
