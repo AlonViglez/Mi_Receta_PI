@@ -83,10 +83,10 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userEmail = currentUser.getEmail();
-            Toast.makeText(FormularioRecetarPaciente.this, "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(FormularioRecetarPaciente.this, "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Usuario no autenticado");
-            Toast.makeText(FormularioRecetarPaciente.this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(FormularioRecetarPaciente.this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
         // Referencia a la colección "tratamientos" en Firestore
         CollectionReference tratamientosRef = db.collection("tratamientos");
@@ -98,7 +98,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         // Obtener el número de documentos que coinciden con el correo electrónico
                         int numDocumentos = queryDocumentSnapshots.size();
-                        Toast.makeText(FormularioRecetarPaciente.this, "Número de tratamientos encontrados: " + numDocumentos, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FormularioRecetarPaciente.this, "Número de tratamientos encontrados: " + numDocumentos, Toast.LENGTH_SHORT).show();
                         if (numDocumentos == 0) {
                             contadornotificacion = 0;
                         } else {
@@ -109,7 +109,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Manejar errores de consulta
-                        Toast.makeText(FormularioRecetarPaciente.this, "Error al consultar tratamientos", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FormularioRecetarPaciente.this, "Error al consultar tratamientos", Toast.LENGTH_SHORT).show();
                     }
                 });
         btnregresar.setOnClickListener(new View.OnClickListener(){
@@ -139,7 +139,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                                 horainicio = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
                                 // Puedes mostrar la hora seleccionada en un TextView o cualquier otro componente
                                 // En este ejemplo, se mostrará en un Toast
-                                Toast.makeText(FormularioRecetarPaciente.this, "Hora seleccionada: " + horainicio , Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(FormularioRecetarPaciente.this, "Hora seleccionada: " + horainicio , Toast.LENGTH_SHORT).show();
                             }
                         },
                         currentTime.getHour(),
@@ -178,7 +178,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                         SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
                         editor.putInt(CONTADOR_KEY, contadornotificacion + 1); // Incrementar el valor
                         editor.apply();
-                        Toast.makeText(FormularioRecetarPaciente.this, "Primeras dos, Contador KEY: " + CONTADOR_KEY + " Contador: " + contadornotificacion, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FormularioRecetarPaciente.this, "Primeras dos, Contador KEY: " + CONTADOR_KEY + " Contador: " + contadornotificacion, Toast.LENGTH_SHORT).show();
                         enviarDatosFirestore(medicamento, duracion, dosis, intervalo,primeratoma,totalTomas);
                     }else{
                         Toast.makeText(FormularioRecetarPaciente.this, "Termina todos tus tratamientos , contador " + contadornotificacion, Toast.LENGTH_SHORT).show();
@@ -233,7 +233,6 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(FormularioRecetarPaciente.this, "Error al registrar tratamiento", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Error al registrar tratamiento", e);
                     }
                 });
     }
@@ -341,14 +340,14 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(FormularioRecetarPaciente.this, "Documento eliminado de 'notificaciones'", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FormularioRecetarPaciente.this, "Documento eliminado de 'notificaciones'", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Error al eliminar el documento
-                        Toast.makeText(FormularioRecetarPaciente.this, "Error al eliminar documento", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(FormularioRecetarPaciente.this, "Error al eliminar documento", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

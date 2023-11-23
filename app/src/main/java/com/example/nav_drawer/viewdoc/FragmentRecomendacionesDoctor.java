@@ -98,10 +98,10 @@ public class FragmentRecomendacionesDoctor extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userEmail = currentUser.getEmail();
-            Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Usuario no autenticado");
-            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
 
         //Consultar el nombre del doctor
@@ -113,7 +113,7 @@ public class FragmentRecomendacionesDoctor extends Fragment {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             nombreDoctor = document.getString("nombre");
                             especialidadmedica = document.getString("especialidad");
-                            Toast.makeText(getActivity(), "Nombre: " + nombreDoctor, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "Nombre: " + nombreDoctor, Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Si hubiera un error

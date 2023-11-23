@@ -114,10 +114,10 @@ public class PreguntaDoctor extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userEmail = currentUser.getEmail();
-            Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Usuario autenticado" + userEmail, Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "Usuario no autenticado");
-            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
         //llamar el nombre del paciente
         db.collection("altadoctores")
@@ -190,7 +190,7 @@ public class PreguntaDoctor extends Fragment {
                             EditText respuestaEdit = cardView.findViewById(editTextId);
                             // Verificar si el EditText está vacío y es en el tag correspondiente
                             if (respuestaEdit.getText().toString().trim().isEmpty()) {
-                                Toast.makeText(getActivity(), "Ingrese texto en la tarjeta con ID de pregunta: " + idPreguntaAsociado, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Ingrese texto en la tarjeta con ID de pregunta: " + idPreguntaAsociado, Toast.LENGTH_SHORT).show();
                             }
                             // Configurar el OnClickListener para el Button de esta tarjeta
                             Button enviarButton = cardView.findViewById(buttonId);
