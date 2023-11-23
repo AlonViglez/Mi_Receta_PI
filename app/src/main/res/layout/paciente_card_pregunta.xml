@@ -64,11 +64,10 @@
 
             <TextView
                 android:id="@+id/textpregunta"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pregunta del paciente"
                 android:textSize="14sp"
-                android:maxLength="30"
                 android:layout_marginTop="10sp"
                 />
             <androidx.appcompat.widget.AppCompatImageView
