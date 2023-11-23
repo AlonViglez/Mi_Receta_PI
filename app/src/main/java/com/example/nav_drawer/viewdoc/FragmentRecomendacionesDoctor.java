@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -168,26 +169,39 @@ public class FragmentRecomendacionesDoctor extends Fragment {
                 if(recomendacionStr.equals("")){
                     Toast.makeText(getActivity(), "Ingrese la recomendacion", Toast.LENGTH_SHORT).show();
                 }else {
-                    Date currentDate = Calendar.getInstance().getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    String fechaActual = dateFormat.format(currentDate);
-                    // Crear un nuevo documento
-                    Map<String, Object> recomendacionData = new HashMap<>();
-                    recomendacionData.put("fecha", fechaActual);
-                    recomendacionData.put("nombreDoctor", nombreDoctor);
-                    recomendacionData.put("recomendacion", recomendacionStr);
-                    recomendacionData.put("usuario", userEmail);
-                    recomendacionData.put("especialidad", especialidadmedica);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_recomendar_doctor, null);
+                    builder.setView(dialogView);
+                    Button btnAceptar = dialogView.findViewById(R.id.btnAceptarResponseDialog);
+                    Button btnCancelar = dialogView.findViewById(R.id.btnCancelarResponse);
+                    AlertDialog alertDialog = builder.create();
+                    btnCancelar.setOnClickListener(v1 -> {
+                        alertDialog.dismiss();
+                    });
+                    btnAceptar.setOnClickListener(v2 -> {
+                        Date currentDate = Calendar.getInstance().getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        String fechaActual = dateFormat.format(currentDate);
+                        // Crear un nuevo documento
+                        Map<String, Object> recomendacionData = new HashMap<>();
+                        recomendacionData.put("fecha", fechaActual);
+                        recomendacionData.put("nombreDoctor", nombreDoctor);
+                        recomendacionData.put("recomendacion", recomendacionStr);
+                        recomendacionData.put("usuario", userEmail);
+                        recomendacionData.put("especialidad", especialidadmedica);
 
-                    // Agregar a la tabla
-                    db.collection("recomendaciones")
-                            .add(recomendacionData)
-                            .addOnSuccessListener(documentReference -> {
-                                Toast.makeText(getActivity(), "Recomendación enviada con éxito", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(getActivity(), "Error al enviar la recomendación", Toast.LENGTH_SHORT).show();
-                            });
+                        // Agregar a la tabla
+                        db.collection("recomendaciones")
+                                .add(recomendacionData)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(getActivity(), "Recomendación enviada con éxito", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getActivity(), "Error al enviar la recomendación", Toast.LENGTH_SHORT).show();
+                                });
+                        alertDialog.dismiss();
+                    });
+                    alertDialog.show();
                 }
             }
         });
