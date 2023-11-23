@@ -158,16 +158,15 @@ public class PreguntaPaciente extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            preguntapaciente = document.getString("pregunta");
-                            nombredoctor = document.getString("nombredoctor");
+                            preguntapaciente = document.getString("pregunta");//nombredoctor = document.getString("nombredoctor");
                             nombrepaciente = document.getString("nombrepaciente");
-                            respuestadoctor = document.getString("respuestadoc");
+                            //respuestadoctor = document.getString("respuestadoc");
                             //mostrar fecha
                             fechanac =  document.getString("fecha");
                             //Nombre ya lo tengo//
 
                             // Inflar el diseño de la tarjeta personalizado
-                            View cardView = getLayoutInflater().inflate(R.layout.paciente_card_pregunta, null);
+                            View cardView = getLayoutInflater().inflate(R.layout.paciente_card_pregunta_sin_responder, null);
 
                             // Configurar los márgenes
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -183,8 +182,7 @@ public class PreguntaPaciente extends Fragment {
                             textfecha = cardView.findViewById(R.id.fecha);
                             textNombrepaciente = cardView.findViewById(R.id.textNombrepaciente);
                             pregunta = cardView.findViewById(R.id.textpregunta);
-                            nombredoc = cardView.findViewById(R.id.textnombredoctor);
-                            respdoc = cardView.findViewById(R.id.textrespuesta);
+
 
                             // Configurar los elementos de la tarjeta
                             textfecha.setText(fechanac);
@@ -213,15 +211,15 @@ public class PreguntaPaciente extends Fragment {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         preguntapaciente = document.getString("pregunta");
-                                        nombredoctor = document.getString("nombredoctor");
+                                       // nombredoctor = document.getString("nombredoctor");
                                         nombrepaciente = document.getString("nombrepaciente");
-                                        respuestadoctor = document.getString("respuestadoc");
+                                        //respuestadoctor = document.getString("respuestadoc");
                                         //mostrar fecha
                                         fechanac =  document.getString("fecha");
                                         //Nombre ya lo tengo//
 
                                         // Inflar el diseño de la tarjeta personalizado
-                                        View cardView = getLayoutInflater().inflate(R.layout.paciente_card_pregunta, null);
+                                        View cardView = getLayoutInflater().inflate(R.layout.paciente_card_pregunta_sin_responder, null);
 
                                         // Configurar los márgenes
                                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -237,8 +235,8 @@ public class PreguntaPaciente extends Fragment {
                                         textfecha = cardView.findViewById(R.id.fecha);
                                         textNombrepaciente = cardView.findViewById(R.id.textNombrepaciente);
                                         pregunta = cardView.findViewById(R.id.textpregunta);
-                                        nombredoc = cardView.findViewById(R.id.textnombredoctor);
-                                        respdoc = cardView.findViewById(R.id.textrespuesta);
+                                        //nombredoc = cardView.findViewById(R.id.textnombredoctor);
+                                        //respdoc = cardView.findViewById(R.id.textrespuesta);
 
                                         // Configurar los elementos de la tarjeta
                                         textfecha.setText(fechanac);

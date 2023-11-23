@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    android:id="@+id/pacienteContainerpregunta">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Lado izquierdo -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="220sp">
+
+
+                <!-- Otros atributos según sea necesario --> />
+                <TextView
+                    android:id="@+id/fecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Fecha"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_calendar"
+                    />
+                <!-- Otros atributos según sea necesario --> />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_perfil"/>
+            <TextView
+                android:id="@+id/textNombrepaciente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  Nombre del paciente"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textpregunta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pregunta del paciente"
+                android:textSize="14sp"
+                android:layout_marginTop="10sp"
+                />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:alpha="0.5"
+                android:layout_marginTop="15sp"
+                android:background="#068FFF"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
