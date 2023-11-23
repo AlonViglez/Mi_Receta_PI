@@ -255,7 +255,7 @@ public class PreguntaPaciente extends Fragment {
                 } else if (opcionSeleccionada.equals("Respondidas")) {
                     tratamientosContainer.removeAllViews();
                     //Realizar una consulta para obtener las preguntas del usuario específico
-                    db.collection("preguntasContestadas")
+                    db.collection("preguntascontestadas")
                             .whereEqualTo("usuario", userEmail)
                             .get()
                             .addOnCompleteListener(task -> {
