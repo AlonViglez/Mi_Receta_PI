@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PerfilPaciente#newInstance} factory method to
@@ -72,7 +74,7 @@ public class PerfilPaciente extends Fragment {
 
     long timestamp;
 
-    ImageView fotoperfil;
+    CircleImageView fotoperfil;
 
     SimpleDateFormat sdf;
 
@@ -166,7 +168,9 @@ public class PerfilPaciente extends Fragment {
                                 String descricion = document.getString("descripcion");
                                 String cedulaImageUrl = document.getString("imagenperfilurl");
                                 if (cedulaImageUrl != null) {
-                                    Glide.with(PerfilPaciente.this).load(cedulaImageUrl).into(fotoperfil);
+                                    Glide.with(PerfilPaciente.this)
+                                            .load(cedulaImageUrl)
+                                            .into(fotoperfil);
                                 }
                                 timestamp = Long.parseLong(fechanac);
                                 fecha = new Date(timestamp);

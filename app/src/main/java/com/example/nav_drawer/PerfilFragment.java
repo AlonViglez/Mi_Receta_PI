@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 //PERFIL
 /**
  * A simple {@link Fragment} subclass.
@@ -85,7 +87,7 @@ public class PerfilFragment extends Fragment {
 
     long timestamp;
 
-    ImageView fotoperfil;
+    CircleImageView fotoperfil;
 
 
     // variales locales para que no se pete
@@ -222,7 +224,9 @@ public class PerfilFragment extends Fragment {
                                     descricion = document.getString("descripcion");
                                     cedulaImageUrl = document.getString("imagenperfilurl");
                                     if (cedulaImageUrl != null) {
-                                        Glide.with(PerfilFragment.this).load(cedulaImageUrl).into(fotoperfil);
+                                        Glide.with(PerfilFragment.this)
+                                                .load(cedulaImageUrl)
+                                                .into(fotoperfil);
                                     }
                                     timestamp = Long.parseLong(fechanac);
                                     fecha = new Date(timestamp);

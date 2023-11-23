@@ -23,7 +23,7 @@
             android:layout_marginTop="16dp"
             android:gravity="left"
             android:text="Respuesta"
-            android:textColor="@color/azul_cute"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
         <TextView

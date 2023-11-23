@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActualizarPerfilPaciente extends AppCompatActivity {
     EditText editnombre;
     EditText editnumero;
@@ -51,7 +53,7 @@ public class ActualizarPerfilPaciente extends AppCompatActivity {
     Intent intent;
 
     ImageView btnregresar;
-    ImageView imagenperfil;
+    CircleImageView imagenperfil;
 
     private static final int PICK_IMAGE = 1;
 
@@ -83,7 +85,13 @@ public class ActualizarPerfilPaciente extends AppCompatActivity {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
 
-
+        btnregresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActualizarPerfilPaciente.this, ViewPacient.class);
+                startActivity(intent);
+            }
+        });
         //Actualizar los campos del perfil
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

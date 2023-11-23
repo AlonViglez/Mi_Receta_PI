@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Actualizarperfildoc extends AppCompatActivity {
     EditText editnombre;
     EditText editnumero;
@@ -57,7 +59,7 @@ public class Actualizarperfildoc extends AppCompatActivity {
     Intent intent;
 
     ImageView btnregresar;
-    ImageView imagenperfil;
+    CircleImageView imagenperfil;
 
     private static final int PICK_IMAGE = 1;
 
@@ -110,7 +112,7 @@ public class Actualizarperfildoc extends AppCompatActivity {
         btnregresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Actualizarperfildoc.this, PerfilFragment.class);
+                Intent intent = new Intent(Actualizarperfildoc.this, MainActivity.class);
                 startActivity(intent);
             }
         });

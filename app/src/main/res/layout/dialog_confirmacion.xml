@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogForgot"
@@ -7,69 +7,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80000000">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dialogBox"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/rounded_image_border">
-        <TextView
-            android:id="@+id/forgotTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/lavender_round"
-            android:drawablePadding="8dp"
-            android:padding="10dp"
-            android:text="Eliminar doctor"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/layout_bg_dialog"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/desc"
-            android:text="¿Está seguro que quiere eliminar al doctor? Esa acción es irreversible"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="left"
+            android:text="Eliminar doctor"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/forgotTitle"
-            app:layout_constraintBottom_toTopOf="@id/btnCancelarEliminacion"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:id="@+id/btnCancelarEliminacion"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="Cancelar"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/buttonmireceta"
-            android:textSize="10sp"
-            app:cornerRadius = "20dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/desc"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toStartOf="@id/btnEliminar"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:id="@+id/btnEliminar"
-            android:text="Eliminar"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/red"
-            android:textSize="10sp"
-            app:cornerRadius = "20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintStart_toEndOf="@id/btnCancelarEliminacion"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="left"
+            android:text="¿Estás seguro de eliminar este doctor? Esta opción es irreversible"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15sp"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCancelarEliminacion"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5sp"
+                android:background="@drawable/btn_background_6"
+                android:elevation="8dp"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnEliminar"
+                android:layout_width="0dp"
+                android:layout_marginLeft="5sp"
+                android:layout_marginRight="5sp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:background="@drawable/btn_background_5"
+                android:text="Aceptar"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:elevation="8dp"
+                /> 
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
