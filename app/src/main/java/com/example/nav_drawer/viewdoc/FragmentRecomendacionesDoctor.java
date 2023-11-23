@@ -199,6 +199,7 @@ public class FragmentRecomendacionesDoctor extends Fragment {
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(getActivity(), "Error al enviar la recomendación", Toast.LENGTH_SHORT).show();
                                 });
+                        editRecomendacion.setText("");
                         alertDialog.dismiss();
                     });
                     alertDialog.show();
