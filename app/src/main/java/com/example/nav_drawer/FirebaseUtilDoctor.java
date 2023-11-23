@@ -5,36 +5,36 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.annotation.Documented;
-
 public class FirebaseUtilDoctor {
 
-
-        public static String currentDoctorId(){
-            return FirebaseAuth.getInstance().getUid();
-        }
-        public static DocumentReference currentDoctorDetails(){
-            return FirebaseFirestore.getInstance().collection("altadoctores").document(currentDoctorId());
-        }
-
-        public static CollectionReference allDoctorCollectionReference(){
-            return FirebaseFirestore.getInstance().collection("altadoctores");
-        }
-
-        public  static DocumentReference getChatroomReference(String chatroomId){
-            return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
-        }
-
-        public static CollectionReference getChatroomMessageReference(String chatroomId){
-            return getChatroomReference(chatroomId).collection("chats");
-        }
-
-        public  static String getChatroomId(String doctorId1,String doctorId2){
-            if (doctorId1.hashCode()<doctorId2.hashCode()){
-                return doctorId1+"_"+doctorId2;
-            }else {
-                return doctorId2+"_"+doctorId1;
-            }
-        }
-
+    public static String currentDoctorId() {
+        return FirebaseAuth.getInstance().getUid();
     }
+
+    public static DocumentReference currentDoctorDetails() {
+        return FirebaseFirestore.getInstance().collection("altadoctores").document(currentDoctorId());
+    }
+
+    // Cambios aquí: Utilizar una colección general para los chatrooms
+    public static CollectionReference allDoctorCollectionReference() {
+        return FirebaseFirestore.getInstance().collection("chatrooms");
+    }
+
+    public static DocumentReference getChatroomReference(String chatroomId) {
+        return allDoctorCollectionReference().document(chatroomId);
+    }
+
+    // Cambios aquí: Utilizar una subcolección para los mensajes dentro de cada chatroom
+    public static CollectionReference getChatroomMessageReference(String chatroomId) {
+        return getChatroomReference(chatroomId).collection("messages");
+    }
+
+    // Cambios aquí: Crear un chatroomId basado en los IDs de los participantes
+    public static String getChatroomId(String participantId1, String participantId2) {
+        if (participantId1.hashCode() < participantId2.hashCode()) {
+            return participantId1 + "_" + participantId2;
+        } else {
+            return participantId2 + "_" + participantId1;
+        }
+    }
+}

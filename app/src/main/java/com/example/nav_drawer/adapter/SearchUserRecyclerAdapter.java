@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nav_drawer.AndroidUtil;
-import com.example.nav_drawer.FirebaseUtil;
+import com.example.nav_drawer.ChatroomModel;
 import com.example.nav_drawer.R;
 import com.example.nav_drawer.UserModel;
 import com.example.nav_drawer.viewdoc.Activity_Chat;
@@ -23,7 +23,7 @@ public class SearchUserRecyclerAdapter extends FirestoreRecyclerAdapter<UserMode
 
     Context context;
 
-    public SearchUserRecyclerAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options, Context context) {
+    public SearchUserRecyclerAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options, FirestoreRecyclerOptions<ChatroomModel> chatroomOptions, Context context) {
         super(options);
         this.context = context;
     }

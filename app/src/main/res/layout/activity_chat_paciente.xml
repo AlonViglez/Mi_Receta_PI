@@ -56,28 +56,31 @@
         android:id="@+id/bottom_layout">
 
         <EditText
+            android:id="@+id/chat_message_inputs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Escriba su Mensaje"
-            android:layout_centerInParent="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/input_desing_text"
-            android:elevation="4dp"
-            android:padding="10dp"
-            android:layout_toLeftOf="@id/message_send_btns"
-            android:id="@+id/chat_message_inputs"/>
-
-        <ImageButton
-            android:id="@+id/message_send_btns"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:layout_marginStart="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@id/message_send_btns"
+            android:background="@drawable/input_desing_text"
+            android:elevation="4dp"
+            android:hint="Escriba su Mensaje"
+            android:padding="10dp" />
+
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/icon_send"
-            app:tint="@color/mireceta" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/mireceta"
+            android:id="@+id/message_send_btns"
+            android:padding="8dp"
+            android:layout_marginStart="10dp"/>
 
     </RelativeLayout>
 

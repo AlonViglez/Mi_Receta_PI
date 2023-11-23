@@ -1,41 +1,40 @@
 package com.example.nav_drawer;
 
-import static com.example.nav_drawer.FirebaseUtilDoctor.currentDoctorId;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.annotation.Documented;
-
 public class FirebaseUtil {
 
-    public static String currentUserId(){
+    public static String currentUserId() {
         return FirebaseAuth.getInstance().getUid();
     }
-    public static DocumentReference currentUserDetails(){
+
+    public static DocumentReference currentUserDetails() {
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
 
-    public static CollectionReference allUserCollectionReference(){
-        return FirebaseFirestore.getInstance().collection("users");
+    // Cambios aquí: Utilizar una colección general para los chatrooms
+    public static CollectionReference allChatroomsCollectionReference() {
+        return FirebaseFirestore.getInstance().collection("chatrooms");
     }
 
-    public  static DocumentReference getChatroomReference(String chatroomId){
-        return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
+    public static DocumentReference getChatroomReference(String chatroomId) {
+        return allChatroomsCollectionReference().document(chatroomId);
     }
 
-    public static CollectionReference getChatroomMessageReference(String chatroomId){
-        return getChatroomReference(chatroomId).collection("chats");
+    // Cambios aquí: Utilizar una subcolección para los mensajes dentro de cada chatroom
+    public static CollectionReference getChatroomMessageReference(String chatroomId) {
+        return getChatroomReference(chatroomId).collection("messages");
     }
 
-    public  static String getChatroomId(String userId1,String userId2){
-        if (userId1.hashCode()<userId2.hashCode()){
-            return userId1+"_"+userId2;
-        }else {
-            return userId2+"_"+userId1;
+    // Cambios aquí: Crear un chatroomId basado en los IDs de los participantes
+    public static String getChatroomId(String participantId1, String participantId2) {
+        if (participantId1.hashCode() < participantId2.hashCode()) {
+            return participantId1 + "_" + participantId2;
+        } else {
+            return participantId2 + "_" + participantId1;
         }
     }
-
 }

@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nav_drawer.FirebaseUtil;
 import com.example.nav_drawer.R;
-import com.example.nav_drawer.adapter.SearchUserRecyclerAdapter;
 import com.example.nav_drawer.UserModel;
+import com.example.nav_drawer.ChatroomModel;
+import com.example.nav_drawer.adapter.SearchUserRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
@@ -49,13 +50,22 @@ public class Activity_search_paciente extends AppCompatActivity {
     }
 
     void setupSearchRecyclerView(String searchTerm) {
-        Query query = FirebaseUtil.allUserCollectionReference()
+        // Realizar la búsqueda de usuarios según el término de búsqueda
+        Query userQuery = FirebaseUtil.allUserCollectionReference()
                 .whereEqualTo("nombre", searchTerm);
 
-        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
-                .setQuery(query, UserModel.class).build();
+        FirestoreRecyclerOptions<UserModel> userOptions = new FirestoreRecyclerOptions.Builder<UserModel>()
+                .setQuery(userQuery, UserModel.class).build();
 
-        adapter = new SearchUserRecyclerAdapter(options, getApplicationContext());
+        // Realizar la búsqueda de chatrooms que incluyan a usuarios con el término de búsqueda
+        Query chatroomQuery = FirebaseUtil.allChatroomsCollectionReference()
+                .whereArrayContains("participantIds", searchTerm);
+
+        FirestoreRecyclerOptions<ChatroomModel> chatroomOptions = new FirestoreRecyclerOptions.Builder<ChatroomModel>()
+                .setQuery(chatroomQuery, ChatroomModel.class).build();
+
+        // Iniciar el adaptador con las opciones de búsqueda de usuarios
+        adapter = new SearchUserRecyclerAdapter(userOptions, chatroomOptions, getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.startListening();
