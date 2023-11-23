@@ -113,13 +113,14 @@ public class FragmentDoctores extends Fragment {
                             ImageView doctorIconImageView = cardView.findViewById(R.id.doctorIcon);
                             TextView doctorNameTextView = cardView.findViewById(R.id.doctorName);
                             TextView especialidadMedicaTextView = cardView.findViewById(R.id.especialidadMedica);
-                            ImageButton btnborrar = cardView.findViewById(R.id.borrarButton); // Agregar el botón de editar
+                            //ImageButton btnborrar = cardView.findViewById(R.id.borrarButton); // Agregar el botón de editar
                             // Agregar el botón de eliminar
                             // Configurar los elementos de la tarjeta
                             doctorNameTextView.setText(nombreDoctor);
                             especialidadMedicaTextView.setText(especialidadMedica);
 
-                            //BOTON BORRAR
+
+                            /*BOTON BORRAR
                             btnborrar.setOnClickListener(v -> {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirmacion, null);
@@ -132,41 +133,24 @@ public class FragmentDoctores extends Fragment {
                                 btnCancelar.setOnClickListener(v1 -> {
                                     alertDialog.dismiss();
                                 });
-                                //Toast.makeText(getContext(), "Correo" + email, Toast.LENGTH_SHORT).show();
-                                //final Task<SignInMethodQueryResult> taskCopy = mAuth.fetchSignInMethodsForEmail(email);
                                 btnEliminar.setOnClickListener(v2 -> {
-                                    /*if (taskCopy.isSuccessful()) {
-                                        SignInMethodQueryResult result = taskCopy.getResult();
-                                        Toast.makeText(getContext(), "Correo" + result, Toast.LENGTH_SHORT).show();
-                                        if (result != null && result.getSignInMethods() != null && result.getSignInMethods().size() > 0) {
-                                            String uidUsuarioAEliminar = result.getSignInMethods().get(0);*/
-                                           /* mAuth.getCurrentUser().delete()
-                                                    .addOnSuccessListener(aVoid -> {*/
-                                                        db.collection("altadoctores")//BORRAR DOCTOR DE FIRESTORE
-                                                                .document(email)
-                                                                .delete()
-                                                                .addOnSuccessListener(aVoid1 -> {
-                                                                    Toast.makeText(getContext(), "El doctor con correo " + email + " se ha eliminado con éxito", Toast.LENGTH_SHORT).show();
-                                                                })
-                                                                .addOnFailureListener(e -> {
-                                                                    Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
-                                                                });
-                                                    //});
-                                                    /*.addOnFailureListener(e -> {
-                                                        Toast.makeText(getContext(), "Error al eliminar el usuario de Authentication", Toast.LENGTH_SHORT).show();
-                                                    });
-                                        } else {
-                                            Log.d("EliminarUsuario", "Usuario con correo " + email + " no encontrado en Authentication.");
-                                            Toast.makeText(getContext(), "Usuario no encontrado en Authentication" + email, Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Log.e("EliminarUsuario", "Error al buscar usuario por correo en Authentication", taskCopy.getException());
-                                        Toast.makeText(getContext(), "Error al buscar usuario por correo en Authentication", Toast.LENGTH_SHORT).show();
-                                    }*/
+                                    db.collection("altadoctores")
+                                            .whereEqualTo("correo", email)
+                                            .get()
+                                            .addOnCompleteListener(task2 -> {
+                                                if (task2.isSuccessful()) {  // Cambiar de task a task2 aquí
+                                                    for (QueryDocumentSnapshot document2 : task2.getResult()) {
+                                                        document2.getReference().delete();
+                                                        // También puedes realizar otras acciones después de la eliminación si es necesario
+                                                    }
+                                                } else {
+                                                    // Manejar el error si la eliminación no tiene éxito
+                                                }
+                                            });
                                     alertDialog.dismiss();
                                 });
                                 alertDialog.show();
-                            });
+                            });*/
                             //BOTON EDITAR
                             /*NOSE SI IMPLEMENTARLO
                             btneditar.setOnClickListener(v -> {
