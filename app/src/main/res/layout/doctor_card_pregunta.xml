@@ -44,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:text="Pregunta del paciente"
                 android:textSize="14sp"
-                android:maxLength="30"
                 />
 
             <TextView
