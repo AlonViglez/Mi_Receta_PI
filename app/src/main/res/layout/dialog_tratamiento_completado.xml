@@ -33,7 +33,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:gravity="left"
-            android:text="¡Felicitcaciones haz completado todas tus pastillas!"
+            android:text="¡Felicitaciones haz completado todas tus pastillas!"
             android:textColor="#757575"
             android:textSize="18sp" />
         <ImageView
