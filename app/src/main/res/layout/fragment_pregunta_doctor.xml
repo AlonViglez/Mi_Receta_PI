@@ -16,12 +16,25 @@
             android:id="@+id/titleRecetar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Preguntas de los pacientes"
+            android:text="Preguntas"
             android:textSize="28sp"
             android:textColor="@android:color/black"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="35dp"/>
+        <TextView
+            android:id="@+id/textmisrecomendaciones"
+            android:layout_below="@id/btnrecomendarenviar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="20dp"
+            android:gravity="left"
+            android:text="Preguntas de los pacientes:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <!-- Contenedor de tarjetas de doctores -->
         <ScrollView

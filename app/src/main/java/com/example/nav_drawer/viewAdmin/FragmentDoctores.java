@@ -133,16 +133,16 @@ public class FragmentDoctores extends Fragment {
                                     alertDialog.dismiss();
                                 });
                                 //Toast.makeText(getContext(), "Correo" + email, Toast.LENGTH_SHORT).show();
-                                final Task<SignInMethodQueryResult> taskCopy = mAuth.fetchSignInMethodsForEmail(email);
+                                //final Task<SignInMethodQueryResult> taskCopy = mAuth.fetchSignInMethodsForEmail(email);
                                 btnEliminar.setOnClickListener(v2 -> {
-                                    if (taskCopy.isSuccessful()) {
+                                    /*if (taskCopy.isSuccessful()) {
                                         SignInMethodQueryResult result = taskCopy.getResult();
                                         Toast.makeText(getContext(), "Correo" + result, Toast.LENGTH_SHORT).show();
                                         if (result != null && result.getSignInMethods() != null && result.getSignInMethods().size() > 0) {
-                                            String uidUsuarioAEliminar = result.getSignInMethods().get(0);
-                                            mAuth.getCurrentUser().delete()
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        db.collection("altadoctores")
+                                            String uidUsuarioAEliminar = result.getSignInMethods().get(0);*/
+                                           /* mAuth.getCurrentUser().delete()
+                                                    .addOnSuccessListener(aVoid -> {*/
+                                                        db.collection("altadoctores")//BORRAR DOCTOR DE FIRESTORE
                                                                 .document(email)
                                                                 .delete()
                                                                 .addOnSuccessListener(aVoid1 -> {
@@ -151,8 +151,8 @@ public class FragmentDoctores extends Fragment {
                                                                 .addOnFailureListener(e -> {
                                                                     Toast.makeText(getContext(), "Error al eliminar el doctor", Toast.LENGTH_SHORT).show();
                                                                 });
-                                                    })
-                                                    .addOnFailureListener(e -> {
+                                                    //});
+                                                    /*.addOnFailureListener(e -> {
                                                         Toast.makeText(getContext(), "Error al eliminar el usuario de Authentication", Toast.LENGTH_SHORT).show();
                                                     });
                                         } else {
@@ -162,7 +162,7 @@ public class FragmentDoctores extends Fragment {
                                     } else {
                                         Log.e("EliminarUsuario", "Error al buscar usuario por correo en Authentication", taskCopy.getException());
                                         Toast.makeText(getContext(), "Error al buscar usuario por correo en Authentication", Toast.LENGTH_SHORT).show();
-                                    }
+                                    }*/
                                     alertDialog.dismiss();
                                 });
                                 alertDialog.show();
