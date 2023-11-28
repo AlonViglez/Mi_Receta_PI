@@ -222,7 +222,7 @@ public class FormularioRecetarPaciente extends AppCompatActivity {
                             alertDialog.dismiss();
                         });
                         alertDialog.show();
-                        scheduleNotification(intervalo * 1000, tratamientoId, userEmail,medicamento,tomada,totalTomasStr); // Convertir el intervalo a milisegundos
+                        scheduleNotification(intervalo * 3600 * 1000, tratamientoId, userEmail,medicamento,tomada,totalTomasStr); // Convertir el intervalo a milisegundos
                         editMedicamento.setText("");
                         editDosis.setText("");
                         editDuracion.setText("");
